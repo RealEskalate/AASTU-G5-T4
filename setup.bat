@@ -2,7 +2,7 @@
 :: Create Go Project Structure for A2SV_HUB with Gin, Gorm, and Neon Postgres
 :: Creates directories and initializes basic configuration
 
-set PROJECT_NAME=A2SV_HUB
+set PROJECT_NAME=A2SVHUB
 
 :: Create root folder
 mkdir %PROJECT_NAME%

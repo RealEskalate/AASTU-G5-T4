@@ -1,4 +1,4 @@
-module A2SV_HUB
+module A2SVHUB
 
 go 1.22.5
 
