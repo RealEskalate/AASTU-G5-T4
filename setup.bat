@@ -26,17 +26,17 @@ mkdir storage\migrations
 mkdir docs
 mkdir scripts
 
-@REM :: Initialize Go module
-@REM echo Initializing Go module...
-@REM go mod init %PROJECT_NAME%
+:: Initialize Go module
+echo Initializing Go module...
+go mod init %PROJECT_NAME%
 
-@REM :: Install dependencies
-@REM echo Installing dependencies...
-@REM go get -u github.com/gin-gonic/gin
-@REM go get -u gorm.io/gorm
-@REM go get -u gorm.io/driver/postgres
-@REM go get -u github.com/joho/godotenv
-@REM go get -u github.com/lib/pq
+:: Install dependencies
+echo Installing dependencies...
+go get -u github.com/gin-gonic/gin
+go get -u gorm.io/gorm
+go get -u gorm.io/driver/postgres
+go get -u github.com/joho/godotenv
+go get -u github.com/lib/pq
 
 :: Create env file
 echo Creating .env file...
