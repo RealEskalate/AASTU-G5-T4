@@ -16,14 +16,15 @@ type Config struct {
 	SSLMode    string
 	AppPort    string
 	JWTSecret  string
+	DB_URL     string
 }
 
 func LoadConfig() Config {
-<<<<<<< Updated upstream
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Fatal("Error loading .env file", err.Error())
 	}
+
 	return Config{
 		DBHost:     os.Getenv("DB_HOST"),
 		DBPort:     os.Getenv("DB_PORT"),
@@ -33,21 +34,7 @@ func LoadConfig() Config {
 		SSLMode:    os.Getenv("SSL_MODE"),
 		AppPort:    os.Getenv("APP_PORT"),
 		JWTSecret:  os.Getenv("JWT_SECRET"),
+		DB_URL:     os.Getenv("DB_URL"),
 	}
-=======
-   err := godotenv.Load()
-   if err != nil {
-       log.Fatal("Error loading .env file")
-   }
-   return Config {
-       DBHost:     os.Getenv("DB_HOST"),
-       DBPort:     os.Getenv("DB_PORT"),
-       DBUser:     os.Getenv("DB_USER"),
-       DBPassword: os.Getenv("DB_PASSWORD"),
-       DBName:     os.Getenv("DB_NAME"),
-       SSLMode:    os.Getenv("SSL_MODE"),
-       AppPort:    os.Getenv("APP_PORT"),
-       JWTSecret:  os.Getenv("JWT_SECRET"),
-   }
->>>>>>> Stashed changes
+
 }
