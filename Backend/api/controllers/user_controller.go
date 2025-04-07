@@ -1,0 +1,12 @@
+package controllers
+
+import (
+	"github.com/gin-gonic/gin"
+)
+
+func GetUser(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"user":  "John Doe",
+		"email": "johndoe@example.com",
+	})
+}
