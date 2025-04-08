@@ -7,8 +7,15 @@ environment:
   sdk: ^3.6.1
 
 dependencies:
+  dio: ^5.8.0+1
   flutter:
     sdk: flutter
+  flutter_bloc: ^9.1.0
+  flutter_svg: ^2.0.17
+  font_awesome_flutter: ^10.8.0
+  google_fonts: ^6.2.1
+  logger: ^2.5.0
+  material_table_view: ^5.1.0
 
 dev_dependencies:
   flutter_test:
@@ -17,3 +24,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets: 
+    - assets/svgs/homepage_1.svg
+    - assets/svgs/cards_svg_trend.svg
