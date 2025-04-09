@@ -1,7 +1,6 @@
 package database
 
 import (
-	"A2SVHUB/internal/domain"
 	"A2SVHUB/pkg/config"
 	"fmt"
 	"log"
@@ -39,12 +38,5 @@ func ConnectDB()  {
 		log.Fatalf("Failed to ping DB: %v", err.Error())
 	} else {
 		fmt.Println("Connected to ping DB")
-	}
-
-	err = DB.AutoMigrate(&domain.Role{})
-	if err != nil {
-		log.Fatalf("Failed to migrate database: %v", err)
-	} else {
-		fmt.Println("Database migrated successfully")
 	}
 }
