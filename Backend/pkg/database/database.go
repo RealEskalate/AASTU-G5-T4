@@ -1,6 +1,7 @@
 package database
 
 import (
+	"A2SVHUB/internal/domain"
 	"A2SVHUB/pkg/config"
 	"fmt"
 	"log"
@@ -12,7 +13,7 @@ import (
 
 var DB *gorm.DB
 
-func ConnectDB() {
+func ConnectDB()  {
 	// Load configuration
 	cfg := config.LoadConfig()
 
@@ -21,7 +22,7 @@ func ConnectDB() {
 
 	// Connect to the database
 	var err error
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info), // Set to Info level for development
 	})
 	if err != nil {
@@ -29,7 +30,7 @@ func ConnectDB() {
 	}
 
 	// Get the underlying SQL DB object
-	sqlDB, err := db.DB()
+	sqlDB, err := DB.DB()
 	if err != nil {
 		log.Fatalf("Failed to get DB object: %v", err)
 	}
@@ -38,5 +39,12 @@ func ConnectDB() {
 		log.Fatalf("Failed to ping DB: %v", err.Error())
 	} else {
 		fmt.Println("Connected to ping DB")
+	}
+
+	err = DB.AutoMigrate(&domain.Role{})
+	if err != nil {
+		log.Fatalf("Failed to migrate database: %v", err)
+	} else {
+		fmt.Println("Database migrated successfully")
 	}
 }
