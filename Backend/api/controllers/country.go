@@ -4,8 +4,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Country(c *gin.Context) {
+func SetupCountryGroup(api *gin.RouterGroup) {
+	country := api.Group("/country")
+	country.GET("", GetCountry)
+}
+
+func GetCountry(c *gin.Context) {
 	c.JSON(200, gin.H{
-		"country": "Ethiopia",
+		"country": "This is the country endpoint",
 	})
 }

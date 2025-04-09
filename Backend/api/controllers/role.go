@@ -4,8 +4,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Role(c *gin.Context) {
+func SetupRoleGroup(api *gin.RouterGroup) {
+	role := api.Group("/role")
+	role.GET("", GetRole)
+}
+
+func GetRole(c *gin.Context) {
 	c.JSON(200, gin.H{
-		"role": "Admin",
+		"role": "This is the role endpoint",
 	})
 }
