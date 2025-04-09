@@ -1,8 +1,6 @@
 package routes
 
 import (
-	"A2SVHUB/api/controllers"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,12 +9,12 @@ func SetupRoutes(r *gin.Engine) {
 	api := r.Group("/api")
 	{
 		// Setup individual groups
-		controllers.SetupUserGroup(api)
-		controllers.SetupTrackGroup(api)
-		controllers.SetupRoleGroup(api)
-		controllers.SetupCountryGroup(api)
-		controllers.SetupGroupGroup(api)
-		controllers.SetupInviteGroup(api)
-		controllers.SetupProblemGroup(api)
+		SetupUserGroup(api.Group("/user"))
+		SetupTrackGroup(api.Group("/track"))
+		SetupRoleGroup(api.Group("/group"))
+		SetupCountryGroup(api.Group("/country"))
+		SetupGroupGroup(api.Group("/group"))
+		SetupInviteGroup(api.Group("/invite"))
+		SetupProblemGroup(api.Group("/problem"))
 	}
 }
