@@ -6,6 +6,8 @@ import 'package:mobile/core/extras/quotes.dart';
 import 'package:mobile/features/Home/presentation/widgets/CustomappBar.dart';
 import 'package:mobile/features/Home/presentation/widgets/TypeWriter.dart';
 import 'package:mobile/features/Home/presentation/widgets/cards_home.dart';
+import 'package:mobile/features/Home/presentation/widgets/countDownTimer.dart';
+import 'package:mobile/features/Home/presentation/widgets/dailyProblems.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -17,6 +19,7 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   String quote = "";
   bool isLoading = true;
+  final DateTime targetDate = DateTime.now().add(const Duration(days: 7));
 
   @override
   void initState() {
@@ -51,24 +54,27 @@ class _HomepageState extends State<Homepage> {
           style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,
-        leading: Row(
-          children: [
-            IconButton(
-              icon: const Icon(Icons.menu, color: Colors.black),
-              onPressed: () {
-                // Handle menu button press
-              },
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            IconButton(
-              icon: const Icon(Icons.search, color: Colors.black),
-              onPressed: () {
-                // Handle search button press
-              },
-            )
-          ],
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.menu, color: Colors.black),
+                onPressed: () {
+                  // Handle menu button press
+                },
+              ),
+              SizedBox(
+                width: 1,
+              ),
+              IconButton(
+                icon: const Icon(Icons.search, color: Colors.black),
+                onPressed: () {
+                  // Handle search button press
+                },
+              )
+            ],
+          ),
         ),
         actions: [
           Row(
@@ -160,7 +166,7 @@ class _HomepageState extends State<Homepage> {
                       shape: BoxShape.rectangle,
                       color: Color.fromRGBO(200, 250, 205, 1)),
                   width: MediaQuery.of(context).size.width * 0.9,
-                  height: MediaQuery.of(context).size.height * 0.7,
+                  height: MediaQuery.of(context).size.height * 0.57,
                   child: Column(
                     children: [
                       Column(
@@ -184,7 +190,7 @@ class _HomepageState extends State<Homepage> {
                                       textStyle: TextStyle(
                                           fontWeight: FontWeight.w400))),
                               SizedBox(
-                                height: 10,
+                                height: 5,
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -211,7 +217,7 @@ class _HomepageState extends State<Homepage> {
                             ],
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(top: 100.0),
+                            padding: const EdgeInsets.only(top: 25.0),
                             child: SvgPicture.asset(
                               'assets/svgs/homepage_1.svg',
                               width: 200,
@@ -224,9 +230,88 @@ class _HomepageState extends State<Homepage> {
                   ),
                 ),
               ),
+              SizedBox(height: 20),
               CardsHome(text: 'Solutions', digit: '406'),
               CardsHome(text: 'Time Spent', digit: '11,979'),
               CardsHome(text: 'Rating', digit: '980'),
+              SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: LeetcodeCard(),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Card(
+                  elevation: 5,
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 8.0, bottom: 10),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Row(
+                                children: [
+                                  IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(
+                                          Icons.keyboard_arrow_left_rounded)),
+                                  Text('1/1'),
+                                  IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(
+                                          Icons.keyboard_arrow_right_rounded)),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 12.0),
+                            child: ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor: WidgetStateProperty.all(
+                                      Color.fromRGBO(31, 144, 250, 1)),
+                                  shape: WidgetStateProperty.all(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          20), // Adjust the radius here
+                                    ),
+                                  ),
+                                ),
+                                onPressed: () {},
+                                child: Text(
+                                  'Upcoming',
+                                  style: GoogleFonts.publicSans(
+                                      textStyle: TextStyle(
+                                          fontSize: 13,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold)),
+                                )),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                'uytutr',
+                                style: GoogleFonts.publicSans(
+                                    textStyle: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w700)),
+                              ),
+                              CountdownWithTarget(targetDate: targetDate)
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         ),
