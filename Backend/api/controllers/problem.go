@@ -4,8 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Problem(c *gin.Context) {
+func GetProblem(c *gin.Context) {
 	c.JSON(200, gin.H{
-		"problem": "Solve this algorithm challenge",
+		"problem": "This is the problem endpoint",
 	})
 }

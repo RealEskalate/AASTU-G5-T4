@@ -6,7 +6,6 @@ import (
 
 func GetUser(c *gin.Context) {
 	c.JSON(200, gin.H{
-		"user":  "John Doe",
-		"email": "johndoe@example.com",
+		"user": "This is the user endpoint",
 	})
 }

@@ -4,8 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Role(c *gin.Context) {
+func GetRole(c *gin.Context) {
 	c.JSON(200, gin.H{
-		"role": "Admin",
+		"role": "This is the role endpoint",
 	})
 }
