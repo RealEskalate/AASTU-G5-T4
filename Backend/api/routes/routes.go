@@ -1,21 +1,25 @@
 package routes
 
 import (
+	"A2SVHUB/pkg/config"
+
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
-func SetupRoutes(r *gin.Engine) {
-	// Group API routes
-	api := r.Group("/api")
-	{
-		// Setup individual groups
-		SetupUserGroup(api.Group("/user"))
-		SetupTrackGroup(api.Group("/track"))
-		SetupRoleGroup(api.Group("/role"))
-		SetupCountryGroup(api.Group("/country"))
-		SetupGroupGroup(api.Group("/group"))
-		SetupSuperGroupGroup(api.Group("/supergroup"))
-		SetupInviteGroup(api.Group("/invite"))
-		SetupProblemGroup(api.Group("/problem"))
-	}
+func SetupRoutes(r *gin.RouterGroup, config *config.Config, database *gorm.DB) {
+
+	// Setup individual groups
+	SetupUserGroup(r.Group("/user"))
+	SetupTrackGroup(r.Group("/track"))
+	SetupRoleGroup(r.Group("/role"))
+	SetupCountryGroup(r.Group("/country"))
+	SetupGroupGroup(r.Group("/group"))
+
+	superGroupRoute := r.Group("/supergroup")
+	SetupSuperGroupRoute(superGroupRoute, config, database)
+
+	SetupInviteGroup(r.Group("/invite"))
+	SetupProblemGroup(r.Group("/problem"))
+
 }
