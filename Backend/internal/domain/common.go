@@ -2,7 +2,10 @@ package domain
 
 // models/common.go
 
-import "time"
+import (
+	"context"
+	"time"
+)
 
 type Country struct {
 	ID        int       `gorm:"primaryKey"`
@@ -55,4 +58,13 @@ type Event struct {
 	Link      string    `gorm:"type:varchar(255)"`
 	CreatedAt time.Time `gorm:"type:timestamp"`
 	UpdatedAt time.Time `gorm:"type:timestamp"`
+}
+
+type CountryRepository interface {
+	GetAllCountries(ctx context.Context) ([]Country, error)
+	// Add other methods as needed
+}
+type CountryUseCase interface {
+	GetAllCountries(ctx context.Context) ([]Country, error)
+	// Add other methods as needed.
 }
