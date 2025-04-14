@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/core/extras/quotes.dart';
 import 'package:mobile/features/Home/presentation/widgets/CustomappBar.dart';
@@ -31,7 +32,7 @@ class _HomepageState extends State<Homepage> {
     try {
       final fetchedQuote = await GetQuotesFunc();
       setState(() {
-        print(fetchedQuote);
+        // print(fetchedQuote);
         quote = fetchedQuote;
         isLoading = false;
       });
@@ -119,35 +120,38 @@ class _HomepageState extends State<Homepage> {
                       ),
                     ))
               ]),
-              Stack(children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(50),
-                  child: GestureDetector(
-                    onTap: () {},
-                    child: Image.network(
-                        fit: BoxFit.cover,
-                        width: 40,
-                        height: 40,
-                        'https://storage.googleapis.com/a2sv_hub_bucket_2/images%2FNatnael%20Wondwoesn%20Solomon.jpeg'),
+              GestureDetector(
+                onTap: () => context.go('/profile'),
+                child: Stack(children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: GestureDetector(
+                      onTap: () {},
+                      child: Image.network(
+                          fit: BoxFit.cover,
+                          width: 40,
+                          height: 40,
+                          'https://storage.googleapis.com/a2sv_hub_bucket_2/images%2FNatnael%20Wondwoesn%20Solomon.jpeg'),
+                    ),
                   ),
-                ),
-                Positioned(
-                    right: 2,
-                    bottom: 0.01,
-                    child: Container(
-                      width: 16, // Dot size
-                      height: 16,
-                      decoration: BoxDecoration(
-                        color: Colors.green, // Dot color
-                        shape: BoxShape.circle, // Makes it circular
-                        border: Border.all(
-                          color: Colors
-                              .white, // Optional: white border for contrast
-                          width: 2,
+                  Positioned(
+                      right: 2,
+                      bottom: 0.01,
+                      child: Container(
+                        width: 16, // Dot size
+                        height: 16,
+                        decoration: BoxDecoration(
+                          color: Colors.green, // Dot color
+                          shape: BoxShape.circle, // Makes it circular
+                          border: Border.all(
+                            color: Colors
+                                .white, // Optional: white border for contrast
+                            width: 2,
+                          ),
                         ),
-                      ),
-                    ))
-              ])
+                      ))
+                ]),
+              )
             ],
           )
         ],
@@ -205,7 +209,7 @@ class _HomepageState extends State<Homepage> {
                                         ),
                                       ),
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () => context.go('/profile'),
                                     child: Text(
                                       'Problems',
                                       style: GoogleFonts.publicSans(
