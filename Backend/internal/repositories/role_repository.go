@@ -40,7 +40,7 @@ func (r *RoleRepository) CreateRole(role *domain.Role) error {
 	if err := r.DB.WithContext(r.context).Create(role).Error; err != nil {
 		return err
 	}
-	return nil
+	return role, nil
 }
 
 

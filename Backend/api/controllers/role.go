@@ -7,11 +7,11 @@ import (
 )
 
 type RoleController struct {
-	roleUseCase domain.RoleUseCaseInterface
+	roleUseCase domain.RoleUseCase
 }
 
 
-func NewRoleController(roleUseCase domain.RoleUseCaseInterface) *RoleController {
+func NewRoleController(roleUseCase domain.RoleUseCase) *RoleController {
 	return &RoleController{
 		roleUseCase: roleUseCase,
 	}
@@ -43,17 +43,20 @@ func (r RoleController) GetRole(c *gin.Context) {
 
 
 func (r RoleController) CreateRole(c *gin.Context) {
-	var role domain.Role
-	if err := c.ShouldBindJSON(&role); err != nil {
+	var request struct {
+		Type string `json:"type"`
+	}
+	if err := c.ShouldBindJSON(&request); err != nil {
 		c.JSON(400, domain.ErrorResponse{
 			Message: "Invalid input",
 			Status:  400,
 		})
 		return
 	}
-	if err := r.roleUseCase.CreateRole(&role); err != nil {
+	role , err := r.roleUseCase.CreateRole(request.Type)
+	if err != nil {
 		c.JSON(500, domain.ErrorResponse{
-			Message: "Failed to create role",
+			Message: err.Error(),
 			Status:  500,
 		})
 		return
@@ -66,18 +69,21 @@ func (r RoleController) CreateRole(c *gin.Context) {
 }
 
 func (r RoleController) UpdateRole(c *gin.Context) {
-	var role domain.Role
-	if err := c.ShouldBindJSON(&role); err != nil {
+	var request struct {
+		Type string `json:"type"`
+	}
+	roleID := c.Param("id")
+	if err := c.ShouldBindJSON(&request); err != nil {
 		c.JSON(400, domain.ErrorResponse{
 			Message: "Invalid input",
 			Status:  400,
 		})
 		return
 	}
-
-	if err := r.roleUseCase.UpdateRole(&role); err != nil {
-		c.JSON(500, domain.ErrorResponse{
-			Message: "Failed to update role",
+	role, err := r.roleUseCase.GetRoleByID(roleID)
+	if err != nil  {
+		c.JSON(404, domain.ErrorResponse{
+			Message: "Role not found",
 			Status:  500,
 		})
 		return

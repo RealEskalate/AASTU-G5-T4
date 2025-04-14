@@ -10,18 +10,19 @@ type Role struct {
 }
 
 
-type RoleRepositoryInterface interface {
+type RoleRepository interface {
 	GetAllRoles() ([]Role, error)
 	GetRoleByID(id string) (*Role, error)
-	CreateRole(role *Role) error
+	CreateRole(role Role) (Role, error)
 	UpdateRole(role *Role) error
 	DeleteRole(role *Role) error
+	GetRoleByType(roleType string) (*Role, error)
 }
 
-type RoleUseCaseInterface interface {
+type RoleUseCase interface {
 	GetAllRoles() ([]Role, error)
 	GetRoleByID(id string) (*Role, error)
-	CreateRole(role *Role) error
-	UpdateRole(role *Role) error
+	CreateRole(roleType string) (Role, error)
+	UpdateRole(roleType string, id string) (Role, error)
 	DeleteRole(id string) error
 }
