@@ -10,9 +10,7 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-var DB *gorm.DB
-
-func ConnectDB()  {
+func ConnectDB() *gorm.DB {
 	// Load configuration
 	cfg := config.LoadConfig()
 
@@ -39,4 +37,6 @@ func ConnectDB()  {
 	} else {
 		fmt.Println("Connected to ping DB")
 	}
+
+	return db
 }

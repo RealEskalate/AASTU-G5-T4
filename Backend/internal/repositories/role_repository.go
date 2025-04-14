@@ -3,22 +3,26 @@ package repositories
 import (
 	"A2SVHUB/internal/domain"
 
+	"context"
+
 	"gorm.io/gorm"
 )
 
 type RoleRepository struct {
 	DB *gorm.DB
+	context context.Context
 }
 
-func NewRoleRepository(db *gorm.DB) *RoleRepository {
+func NewRoleRepository(db *gorm.DB, context context.Context) *RoleRepository {
 	return &RoleRepository{
 		DB: db,
+		context: context,
 	}
 }
 
 func (r *RoleRepository) GetAllRoles() ([]domain.Role, error) {
 	var roles []domain.Role
-	if err := r.DB.Find(&roles).Error; err != nil {
+	if err := r.DB.WithContext(r.context).Find(&roles).Error; err != nil {
 		return nil, err
 	}
 	return roles, nil
@@ -26,14 +30,14 @@ func (r *RoleRepository) GetAllRoles() ([]domain.Role, error) {
 
 func (r *RoleRepository) GetRoleByID(id string) (*domain.Role, error) {
 	var role domain.Role
-	if err := r.DB.First(&role, id).Error; err != nil {
+	if err := r.DB.WithContext(r.context).First(&role, id).Error; err != nil {
 		return nil, err
 	}
 	return &role, nil
 }
 
 func (r *RoleRepository) CreateRole(role *domain.Role) error {
-	if err := r.DB.Create(role).Error; err != nil {
+	if err := r.DB.WithContext(r.context).Create(role).Error; err != nil {
 		return err
 	}
 	return nil
@@ -41,14 +45,14 @@ func (r *RoleRepository) CreateRole(role *domain.Role) error {
 
 
 func (r *RoleRepository) UpdateRole(role *domain.Role) error {
-	if err := r.DB.Save(role).Error; err != nil {
+	if err := r.DB.WithContext(r.context).Save(role).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
 func (r *RoleRepository) DeleteRole(role *domain.Role) error {
-	if err := r.DB.Delete(&role).Error; err != nil {
+	if err := r.DB.WithContext(r.context).Delete(&role).Error; err != nil {
 		return err
 	}
 	return nil

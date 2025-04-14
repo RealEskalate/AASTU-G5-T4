@@ -19,6 +19,13 @@ func NewRoleController(roleUseCase domain.RoleUseCaseInterface) *RoleController 
 
 func (r RoleController) GetRole(c *gin.Context) {
 	roleID := c.Param("id")
+	if roleID == "" {
+		c.JSON(400, domain.ErrorResponse{
+			Message: "Role ID is required",
+			Status:  400,
+		})
+		return
+	}
 	role, err := r.roleUseCase.GetRoleByID(roleID)
 	if err != nil {
 		c.JSON(404, domain.ErrorResponse{
