@@ -73,6 +73,13 @@ func (r RoleController) UpdateRole(c *gin.Context) {
 		Type string `json:"type"`
 	}
 	roleID := c.Param("id")
+	if roleID == "" {
+		c.JSON(400, domain.ErrorResponse{
+			Message: "Role ID is required",
+			Status:  400,
+		})
+		return
+	}
 	if err := c.ShouldBindJSON(&request); err != nil {
 		c.JSON(400, domain.ErrorResponse{
 			Message: "Invalid input",
@@ -80,10 +87,10 @@ func (r RoleController) UpdateRole(c *gin.Context) {
 		})
 		return
 	}
-	role, err := r.roleUseCase.GetRoleByID(roleID)
-	if err != nil  {
-		c.JSON(404, domain.ErrorResponse{
-			Message: "Role not found",
+	role, err := r.roleUseCase.UpdateRole(roleID, request.Type)
+	if err != nil {
+		c.JSON(500, domain.ErrorResponse{
+			Message: err.Error(),
 			Status:  500,
 		})
 		return

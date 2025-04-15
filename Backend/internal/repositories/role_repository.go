@@ -36,9 +36,17 @@ func (r *RoleRepository) GetRoleByID(id string) (*domain.Role, error) {
 	return &role, nil
 }
 
-func (r *RoleRepository) CreateRole(role *domain.Role) error {
+func (r *RoleRepository) GetRoleByType(roleType string) (*domain.Role, error) {
+	var role domain.Role
+	if err := r.DB.WithContext(r.context).Where("type = ?", roleType).First(&role).Error; err != nil {
+		return nil, err
+	}
+	return &role, nil
+}
+
+func (r *RoleRepository) CreateRole(role domain.Role) (domain.Role, error ){
 	if err := r.DB.WithContext(r.context).Create(role).Error; err != nil {
-		return err
+		return domain.Role{}, err
 	}
 	return role, nil
 }
@@ -57,4 +65,3 @@ func (r *RoleRepository) DeleteRole(role *domain.Role) error {
 	}
 	return nil
 }
-
