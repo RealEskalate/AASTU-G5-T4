@@ -59,10 +59,7 @@ func (r *RoleUseCase) UpdateRole(roleType string, id string) (domain.Role, error
 	}
 
 	existingType, err := r.roleRepository.GetRoleByType(roleType)
-	if err != nil {
-		return domain.Role{}, err
-	}
-	if existingType != nil && existingType.ID != existingRole.ID {
+	if err == nil && existingType != nil && existingType.ID != existingRole.ID {
 		return domain.Role{}, fmt.Errorf("role with type %s already exists", roleType)
 	}
 
