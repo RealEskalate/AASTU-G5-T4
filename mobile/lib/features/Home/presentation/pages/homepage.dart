@@ -48,188 +48,95 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Text(
-          '',
-          style: TextStyle(color: Colors.black),
-        ),
-        centerTitle: true,
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              IconButton(
-                icon: const Icon(Icons.menu, color: Colors.black),
-                onPressed: () {
-                  // Handle menu button press
-                },
-              ),
-              SizedBox(
-                width: 1,
-              ),
-              IconButton(
-                icon: const Icon(Icons.search, color: Colors.black),
-                onPressed: () {
-                  // Handle search button press
-                },
-              )
-            ],
-          ),
-        ),
-        actions: [
-          Row(
-            children: [
-              IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.star,
-                    color: Colors.amber,
-                  )),
-              Stack(children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: FaIcon(FontAwesomeIcons.solidBell),
-                ),
-                Positioned(
-                    top: 1,
-                    right: 2,
-                    child: Card(
-                      elevation: 10,
-                      child: Container(
-                        width: 20, // Dot size
-                        height: 20,
-                        decoration: BoxDecoration(
-                          color: Colors.red, // Dot color
-                          shape: BoxShape.circle, // Makes it circular
-                          border: Border.all(
-                            color: Colors
-                                .white, // Optional: white border for contrast
-                            width: 1,
-                          ),
-                        ),
-                        child: Center(
-                          child: Text(
-                            '6',
-                            style: GoogleFonts.lato(
-                                textStyle: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w800)),
-                          ),
-                        ),
-                      ),
-                    ))
-              ]),
-              GestureDetector(
-                onTap: () => context.go('/profile'),
-                child: Stack(children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(50),
-                    child: GestureDetector(
-                      onTap: () {},
-                      child: Image.network(
-                          fit: BoxFit.cover,
-                          width: 40,
-                          height: 40,
-                          'https://storage.googleapis.com/a2sv_hub_bucket_2/images%2FNatnael%20Wondwoesn%20Solomon.jpeg'),
-                    ),
-                  ),
-                  Positioned(
-                      right: 2,
-                      bottom: 0.01,
-                      child: Container(
-                        width: 16, // Dot size
-                        height: 16,
-                        decoration: BoxDecoration(
-                          color: Colors.green, // Dot color
-                          shape: BoxShape.circle, // Makes it circular
-                          border: Border.all(
-                            color: Colors
-                                .white, // Optional: white border for contrast
-                            width: 2,
-                          ),
-                        ),
-                      ))
-                ]),
-              )
-            ],
-          )
-        ],
-      ),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
             children: [
+              Customappbar(),
               Padding(
                 padding: const EdgeInsets.only(top: 29.0),
                 child: Container(
                   decoration: BoxDecoration(
-                      border:
-                          Border.all(color: Color.fromRGBO(200, 250, 205, 1)),
-                      borderRadius: BorderRadius.circular(20),
-                      shape: BoxShape.rectangle,
-                      color: Color.fromRGBO(200, 250, 205, 1)),
+                    border: Border.all(
+                        color: const Color.fromRGBO(200, 250, 205, 1)),
+                    borderRadius: BorderRadius.circular(20),
+                    shape: BoxShape.rectangle,
+                    color: const Color.fromRGBO(200, 250, 205, 1),
+                  ),
                   width: MediaQuery.of(context).size.width * 0.9,
-                  height: MediaQuery.of(context).size.height * 0.57,
+                  // Make the height adaptive instead of fixed
+                  constraints: BoxConstraints(
+                    minHeight: 100,
+                    maxHeight: MediaQuery.of(context).size.height * 0.6,
+                  ),
                   child: Column(
+                    mainAxisSize:
+                        MainAxisSize.min, // Important to avoid overflow
                     children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Center(
-                            child: isLoading
-                                ? Center(child: Text("|"))
-                                : Center(
-                                    child: TypewriterText(text: quote),
-                                  ),
-                          ),
-                          Column(
-                            children: [
-                              Text('Welcome Back,',
-                                  style: GoogleFonts.publicSans(
-                                      textStyle: TextStyle(
-                                          fontWeight: FontWeight.w400))),
-                              Text('Natnael',
-                                  style: GoogleFonts.publicSans(
-                                      textStyle: TextStyle(
-                                          fontWeight: FontWeight.w400))),
-                              SizedBox(
-                                height: 5,
+                      // Quote section with proper constraints
+                      Container(
+                        constraints: BoxConstraints(
+                          maxHeight: MediaQuery.of(context).size.height * 0.2,
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        child: isLoading
+                            ? const Center(child: CircularProgressIndicator())
+                            : TypewriterText(text: quote),
+                      ),
+
+                      // Welcome text
+                      Text('Welcome Back,',
+                          style: GoogleFonts.publicSans(
+                              textStyle: const TextStyle(
+                                  fontWeight: FontWeight.w400))),
+                      Text('Natnael',
+                          style: GoogleFonts.publicSans(
+                              textStyle: const TextStyle(
+                                  fontWeight: FontWeight.w400))),
+                      const SizedBox(height: 5),
+
+                      // Problems button
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(
+                                const Color.fromRGBO(0, 171, 85, 1)),
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: ElevatedButton(
-                                    style: ButtonStyle(
-                                      backgroundColor: WidgetStateProperty.all(
-                                          Color.fromRGBO(0, 171, 85, 1)),
-                                      shape: WidgetStateProperty.all(
-                                        RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              8), // Adjust the radius here
-                                        ),
-                                      ),
-                                    ),
-                                    onPressed: () => context.go('/profile'),
-                                    child: Text(
-                                      'Problems',
-                                      style: GoogleFonts.publicSans(
-                                          textStyle: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w700)),
-                                    )),
-                              )
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 25.0),
-                            child: SvgPicture.asset(
-                              'assets/svgs/homepage_1.svg',
-                              width: 200,
-                              height: 200,
                             ),
                           ),
-                        ],
+                          onPressed: () => context.go('/profile'),
+                          child: Text(
+                            'Problems',
+                            style: GoogleFonts.publicSans(
+                              textStyle: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
+
+                      // SVG image with flexible sizing
+                      Flexible(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: SvgPicture.asset(
+                            'assets/svgs/homepage_1.svg',
+                            fit: BoxFit.contain,
+                            // Responsive width and height
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            height: MediaQuery.of(context).size.height * 0.15,
+                          ),
+                        ),
+                      ),
+
+                      // Warning stripe at bottom
                     ],
                   ),
                 ),

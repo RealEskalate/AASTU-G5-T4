@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -8,12 +7,16 @@ class TypewriterText extends StatefulWidget {
   final Duration speed;
   final TextStyle style;
   final double indentWidth;
+  final int maxLines;
+  final TextAlign textAlign;
 
   const TypewriterText({
     required this.text,
     this.speed = const Duration(milliseconds: 100),
     this.style = const TextStyle(),
     this.indentWidth = 20.0,
+    this.maxLines = 5, // Limited max lines
+    this.textAlign = TextAlign.center, // Default center alignment
     Key? key,
   }) : super(key: key);
 
@@ -59,75 +62,43 @@ class _TypewriterTextState extends State<TypewriterText>
     super.dispose();
   }
 
-  List<String> _getVisibleLines(
-      String fullText, int visibleLength, BuildContext context) {
-    final textSpan = TextSpan(
-        text: fullText.substring(0, visibleLength), style: widget.style);
-    final textPainter = TextPainter(
-      text: textSpan,
-      textDirection: TextDirection.ltr,
-      maxLines: 100,
-    );
-
-    final maxWidth = MediaQuery.of(context).size.width * 0.9 -
-        2 * _containerPadding -
-        widget.indentWidth;
-    textPainter.layout(maxWidth: maxWidth);
-
-    List<String> lines = [];
-    String remainingText = fullText.substring(0, visibleLength);
-
-    while (remainingText.isNotEmpty) {
-      final textSpan = TextSpan(text: remainingText, style: widget.style);
-      final textPainter = TextPainter(
-        text: textSpan,
-        textDirection: TextDirection.ltr,
-        maxLines: 1,
-      );
-
-      textPainter.layout(maxWidth: maxWidth);
-
-      final end = textPainter.getPositionForOffset(Offset(maxWidth, 0)).offset;
-      final line = remainingText.substring(0, end);
-      lines.add(line);
-      remainingText = remainingText.substring(end).trimLeft();
-    }
-
-    return lines;
-  }
-
   @override
   Widget build(BuildContext context) {
-    final visibleLines =
-        _getVisibleLines(widget.text, _animation.value, context);
+    final visibleText = widget.text.substring(0, _animation.value);
 
     return Center(
       child: Container(
         padding: EdgeInsets.all(_containerPadding),
+        constraints: BoxConstraints(
+          maxWidth: MediaQuery.of(context).size.width * 0.85,
+        ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            for (int i = 0; i < visibleLines.length; i++)
-              Padding(
-                padding: EdgeInsets.only(left: i > 0 ? widget.indentWidth : 0),
-                child: Text(
-                  visibleLines[i],
-                  style: GoogleFonts.publicSans(
-                      textStyle:
-                          TextStyle(fontWeight: FontWeight.w700, fontSize: 20)),
-                  textAlign: i == 0 ? TextAlign.center : TextAlign.center,
+            RichText(
+              textAlign: widget.textAlign,
+              overflow: TextOverflow.ellipsis,
+              maxLines: widget.maxLines,
+              text: TextSpan(
+                text: visibleText,
+                style: GoogleFonts.publicSans(
+                  textStyle: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 20,
+                    color: Colors.black,
+                  ),
                 ),
               ),
-            if (_controller.isCompleted && visibleLines.isNotEmpty)
+            ),
+            if (_controller.isCompleted)
               AnimatedOpacity(
                 opacity: _showCursor ? 1.0 : 0.0,
                 duration: const Duration(milliseconds: 200),
                 child: Container(
                   width: 2,
-                  height: widget.style.fontSize ?? 16,
-                  margin: EdgeInsets.only(
-                      left: visibleLines.length > 1 ? widget.indentWidth : 0),
-                  color: widget.style.color ?? Colors.black,
+                  height: 20, // Fixed height
+                  color: Colors.black,
                 ),
               ),
           ],

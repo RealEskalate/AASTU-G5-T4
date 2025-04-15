@@ -44,6 +44,6 @@ Future<String> GetQuotesFunc() async {
       return 'Error: ${response.statusCode}';
     }
   } catch (e) {
-    return 'Error: $e'; // Handle any exceptions
+    return 'Cannot Retrive Quotes Try Again Later'; // Handle any exceptions
   }
 }

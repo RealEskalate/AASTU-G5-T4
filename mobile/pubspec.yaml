@@ -28,3 +28,4 @@ flutter:
   assets: 
     - assets/svgs/homepage_1.svg
     - assets/svgs/cards_svg_trend.svg
+    - assets/svgs/heatmap.svg
