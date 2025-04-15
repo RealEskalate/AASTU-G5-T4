@@ -19,7 +19,7 @@ func ConnectDB() *gorm.DB {
 
 	// Connect to the database
 	var err error
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info), // Set to Info level for development
 	})
 	if err != nil {
@@ -27,7 +27,7 @@ func ConnectDB() *gorm.DB {
 	}
 
 	// Get the underlying SQL DB object
-	sqlDB, err := db.DB()
+	sqlDB, err := DB.DB()
 	if err != nil {
 		log.Fatalf("Failed to get DB object: %v", err)
 	}
