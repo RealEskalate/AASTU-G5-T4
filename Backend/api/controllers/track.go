@@ -4,8 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Track(c *gin.Context) {
+func GetTrack(c *gin.Context) {
 	c.JSON(200, gin.H{
-		"track": "Software Engineering",
+		"track": "This is the track endpoint",
 	})
 }

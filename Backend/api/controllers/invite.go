@@ -4,8 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Invite(c *gin.Context) {
+func GetInvite(c *gin.Context) {
 	c.JSON(200, gin.H{
-		"invite": "Invitation sent successfully",
+		"invite": "This is the invite endpoint",
 	})
 }

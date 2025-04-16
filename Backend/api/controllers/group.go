@@ -6,9 +6,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Group(c *gin.Context) {
+func GetGroup(c *gin.Context) {
 	c.JSON(200, gin.H{
-		"group": "A2SV",
+		"group": "This is the group endpoint",
 	})
 }
 
