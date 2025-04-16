@@ -2,7 +2,10 @@ package domain
 
 // models/group.go
 
-import "time"
+import (
+	"context"
+	"time"
+)
 
 type Group struct {
 	ID          int       `gorm:"primaryKey"`
@@ -60,4 +63,20 @@ type GroupSession struct {
 	UpdatedAt time.Time `gorm:"type:timestamp"`
 	Group     Group     `gorm:"foreignKey:GroupID"`
 	Session   Session   `gorm:"foreignKey:SessionID"`
+}
+
+type GroupUseCase interface {
+	GetAllGroups(ctx context.Context) ([]Group, error)
+	GetGroupByID(ctx context.Context, id int) (Group, error)
+	CreateGroup(ctx context.Context, name, shortName, description string, hoaID, countryID int) (Group, error)
+	UpdateGroupByID(ctx context.Context, name, shortName, description string, hoaID, countryID, id int) (Group, error)
+	DeleteGroupByID(ctx context.Context, id int) error
+}
+
+type GroupRepository interface {
+	CreateGroup(group Group) error
+	GetGroupByID(id int) (Group, error)
+	GetAllGroups() ([]Group, error)
+	UpdateGroupByID(group Group) error
+	DeleteGroupByID(id int) error
 }
