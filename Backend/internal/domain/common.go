@@ -13,7 +13,6 @@ type Country struct {
 	ShortCode string    `gorm:"type:varchar(255)"`
 	CreatedAt time.Time `gorm:"type:timestamp"`
 	UpdatedAt time.Time `gorm:"type:timestamp"`
-	FlagURL   string    `gorm:"type:varchar(255)"`
 }
 
 type Role struct {
