@@ -9,8 +9,7 @@ import (
 
 func SetupRoutes(r *gin.RouterGroup, config *config.Config, database *gorm.DB) {
 
-	// Setup individual groups
-	SetupUserGroup(r.Group("/user"))
+	SetupUserGroup(r.Group("/user"), config, database)
 	SetupTrackGroup(r.Group("/track"))
 	SetupRoleGroup(r.Group("/role"))
 	SetupCountryGroup(r.Group("/country"))
@@ -21,5 +20,6 @@ func SetupRoutes(r *gin.RouterGroup, config *config.Config, database *gorm.DB) {
 
 	SetupInviteGroup(r.Group("/invite"))
 	SetupProblemGroup(r.Group("/problem"))
+	
 
 }

@@ -12,6 +12,7 @@ import (
 
 func main() {
 	// Load configuration
+	
 	cfg := config.LoadConfig()
 
 	// Initialize database
