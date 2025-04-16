@@ -68,9 +68,9 @@ class _TypewriterTextState extends State<TypewriterText>
 
     return Center(
       child: Container(
-        padding: EdgeInsets.all(_containerPadding),
+        padding: EdgeInsets.all(0),
         constraints: BoxConstraints(
-          maxWidth: MediaQuery.of(context).size.width * 0.85,
+          maxWidth: MediaQuery.of(context).size.width * 0.8,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,

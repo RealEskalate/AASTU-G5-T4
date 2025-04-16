@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:mobile/features/Home/presentation/pages/homepage.dart';
 import 'package:mobile/features/Profile/presentation/pages/userProfile.dart';
+import 'package:mobile/features/Tracks/presentation/pages/tracks_page.dart';
 
 // GoRouter configuration
 final router = GoRouter(
@@ -12,6 +13,10 @@ final router = GoRouter(
     GoRoute(
       path: '/profile',
       builder: (context, state) => UserprofilePage(),
-    )
+    ),
+    GoRoute(
+      path: '/tracks',
+      builder: (context, state) => TracksPage(),
+    ),
   ],
 );

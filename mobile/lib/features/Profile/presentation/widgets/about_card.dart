@@ -22,79 +22,82 @@ class AboutCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Colors.white,
-      elevation: 5,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // About section header
-            const Text(
-              'About',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.9,
+      child: Card(
+        color: Colors.white,
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // About section header
+              const Text(
+                'About',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
               ),
-            ),
-            const SizedBox(height: 12),
+              const SizedBox(height: 12),
 
-            // Tagline
-            Text(
-              tagline,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: Colors.black87,
+              // Tagline
+              Text(
+                tagline,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black87,
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
+              const SizedBox(height: 16),
 
-            // Location
-            _buildInfoRow(
-              Icons.location_on,
-              location,
-              Colors.black87,
-            ),
-            const SizedBox(height: 12),
+              // Location
+              _buildInfoRow(
+                Icons.location_on,
+                location,
+                Colors.black87,
+              ),
+              const SizedBox(height: 12),
 
-            // Email
-            _buildInfoRow(
-              Icons.email,
-              email,
-              const Color(0xFF663300), // Brown color for email
-            ),
-            const SizedBox(height: 12),
+              // Email
+              _buildInfoRow(
+                Icons.email,
+                email,
+                const Color(0xFF663300), // Brown color for email
+              ),
+              const SizedBox(height: 12),
 
-            // Programming language
-            _buildInfoRow(
-              Icons.code,
-              programmingLanguage,
-              Colors.black87,
-            ),
-            const SizedBox(height: 12),
+              // Programming language
+              _buildInfoRow(
+                Icons.code,
+                programmingLanguage,
+                Colors.black87,
+              ),
+              const SizedBox(height: 12),
 
-            // Current position
-            _buildInfoRow(
-              Icons.people,
-              currentPosition,
-              Colors.black87,
-            ),
-            const SizedBox(height: 12),
+              // Current position
+              _buildInfoRow(
+                Icons.people,
+                currentPosition,
+                Colors.black87,
+              ),
+              const SizedBox(height: 12),
 
-            // Education
-            _buildInfoRow(
-              Icons.school,
-              education,
-              Colors.black87,
-              maxLines: 2,
-            ),
-          ],
+              // Education
+              _buildInfoRow(
+                Icons.school,
+                education,
+                Colors.black87,
+                maxLines: 2,
+              ),
+            ],
+          ),
         ),
       ),
     );

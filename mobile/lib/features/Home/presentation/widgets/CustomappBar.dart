@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile/features/Home/presentation/widgets/sideBar.dart';
 
 class Customappbar extends StatefulWidget {
-  const Customappbar({super.key});
+  final VoidCallback? onMenuPressed; // Add this callback parameter
+
+  const Customappbar({
+    super.key,
+    this.onMenuPressed, // Make it optional
+  });
 
   @override
   State<Customappbar> createState() => _CustomappbarState();
 }
 
 class _CustomappbarState extends State<Customappbar> {
+  final SidebarController _sidebarController = SidebarController();
   @override
   Widget build(BuildContext context) {
     // Define the image URL
@@ -17,13 +24,12 @@ class _CustomappbarState extends State<Customappbar> {
         'https://storage.googleapis.com/a2sv_hub_bucket_2/images%2FNatnael%20Wondwoesn%20Solomon.jpeg';
     // Define the placeholder widget
     const Widget placeholder = CircleAvatar(
-      // Use CircleAvatar for consistency
-      radius: 20, // Half of the desired width/height
-      backgroundColor: Colors.grey, // Placeholder background color
+      radius: 20,
+      backgroundColor: Colors.grey,
       child: Icon(
-        Icons.person, // Default user icon
+        Icons.person,
         color: Colors.white,
-        size: 25, // Adjust size as needed
+        size: 25,
       ),
     );
 
@@ -34,28 +40,32 @@ class _CustomappbarState extends State<Customappbar> {
         style: TextStyle(color: Colors.black),
       ),
       centerTitle: true,
-
-      // FIXED: Replace leading with leadingWidth and a Container
-      leadingWidth: 120, // Provide enough width for the icons
+      leadingWidth: 120,
       leading: Container(
         padding: const EdgeInsets.only(left: 8),
         child: Row(
-          mainAxisSize: MainAxisSize.min, // Make row take minimum space
+          mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
               icon: const Icon(Icons.menu, color: Colors.black),
-              padding: EdgeInsets.zero, // Reduce padding
-              constraints: const BoxConstraints(), // Remove constraints
-              iconSize: 24, // Keep icon size reasonable
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
+              iconSize: 24,
               onPressed: () {
-                // Handle menu button press
+                // widget.onMenuPressed;
+                // Use the callback if provided, otherwise open drawer directly
+                if (widget.onMenuPressed != null) {
+                  widget.onMenuPressed!();
+                } else {
+                  _sidebarController.toggleSidebar;
+                }
               },
             ),
             IconButton(
               icon: const Icon(Icons.search, color: Colors.black),
-              padding: EdgeInsets.zero, // Reduce padding
-              constraints: const BoxConstraints(), // Remove constraints
-              iconSize: 24, // Keep icon size reasonable
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
+              iconSize: 24,
               onPressed: () {
                 // Handle search button press
               },
@@ -63,7 +73,6 @@ class _CustomappbarState extends State<Customappbar> {
           ],
         ),
       ),
-
       actions: [
         // FIXED: Using Wrap instead of Row for better flexibility
         Wrap(

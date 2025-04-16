@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
 class SocialLinksCard extends StatelessWidget {
   final List<SocialLink> links;
@@ -42,6 +43,8 @@ class SocialLinksCard extends StatelessWidget {
 
               // Social links list
               ...links.map((link) => _buildLinkItem(link)).toList(),
+              ElevatedButton(
+                  onPressed: () => context.go('/'), child: const Text('text'))
             ],
           ),
         ),

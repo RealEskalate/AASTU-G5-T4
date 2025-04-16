@@ -7,7 +7,7 @@ class LeetcodeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        width: MediaQuery.of(context).size.width * 0.949,
+        width: MediaQuery.of(context).size.width * 0.9,
         height: 400,
         decoration: BoxDecoration(
           color: const Color(0xFFD4EBD9), // Light mint green background
