@@ -11,7 +11,7 @@ func SetupRoutes(r *gin.RouterGroup, config *config.Config, database *gorm.DB) {
 
 	SetupUserGroup(r.Group("/user"), config, database)
 	SetupTrackGroup(r.Group("/track"))
-	SetupRoleGroup(r.Group("/role"))
+	SetupRoleGroup(r.Group("/role"), database)
 	SetupCountryGroup(r.Group("/country"))
 	SetupGroupGroup(r.Group("/group"))
 
