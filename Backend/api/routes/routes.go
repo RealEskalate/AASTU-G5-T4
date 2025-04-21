@@ -11,13 +11,8 @@ func SetupRoutes(r *gin.RouterGroup, config *config.Config, database *gorm.DB) {
 
 	// Setup individual groups
 	SetupUserGroup(r.Group("/user"))
-<<<<<<< Updated upstream
-	SetupTrackGroup(r.Group("/track"))
 	SetupRoleGroup(r.Group("/role"))
-=======
 
-	SetupRoleGroup(r.Group("/role"), database)
->>>>>>> Stashed changes
 	SetupCountryGroup(r.Group("/country"))
 	SetupGroupGroup(r.Group("/group"))
 
