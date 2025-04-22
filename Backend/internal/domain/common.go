@@ -15,13 +15,6 @@ type Country struct {
 	UpdatedAt time.Time `gorm:"type:timestamp"`
 }
 
-type Role struct {
-	ID        int       `gorm:"primaryKey"`
-	Type      string    `gorm:"type:varchar(255)"`
-	CreatedAt time.Time `gorm:"type:timestamp"`
-	UpdatedAt time.Time `gorm:"type:timestamp"`
-}
-
 type Division struct {
 	ID          int       `gorm:"primaryKey"`
 	Name        string    `gorm:"type:varchar(255)"`
