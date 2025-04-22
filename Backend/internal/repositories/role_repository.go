@@ -45,7 +45,7 @@ func (r *RoleRepository) GetRoleByType(roleType string) (*domain.Role, error) {
 }
 
 func (r *RoleRepository) CreateRole(role domain.Role) (domain.Role, error ){
-	if err := r.DB.WithContext(r.context).Create(role).Error; err != nil {
+	if err := r.DB.WithContext(r.context).Create(&role).Error; err != nil {
 		return domain.Role{}, err
 	}
 	return role, nil
