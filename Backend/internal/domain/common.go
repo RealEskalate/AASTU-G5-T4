@@ -2,19 +2,15 @@ package domain
 
 // models/common.go
 
-import "time"
+import (
+	"context"
+	"time"
+)
 
 type Country struct {
 	ID        int       `gorm:"primaryKey"`
 	Name      string    `gorm:"type:varchar(255)"`
 	ShortCode string    `gorm:"type:varchar(255)"`
-	CreatedAt time.Time `gorm:"type:timestamp"`
-	UpdatedAt time.Time `gorm:"type:timestamp"`
-}
-
-type Role struct {
-	ID        int       `gorm:"primaryKey"`
-	Type      string    `gorm:"type:varchar(255)"`
 	CreatedAt time.Time `gorm:"type:timestamp"`
 	UpdatedAt time.Time `gorm:"type:timestamp"`
 }
@@ -55,4 +51,19 @@ type Event struct {
 	Link      string    `gorm:"type:varchar(255)"`
 	CreatedAt time.Time `gorm:"type:timestamp"`
 	UpdatedAt time.Time `gorm:"type:timestamp"`
+}
+
+type CountryRepository interface {
+	GetAllCountries(ctx context.Context) ([]Country, error)
+	GetCountryByID(ctx context.Context, id int) (Country, error)
+	CreateCountry(ctx context.Context, name string, shortCode string) (Country, error)
+	UpdateCountryByID(ctx context.Context, name string, shortCode string, ID int) (Country, error)
+	DeleteCountryByID(ctx context.Context, ID int) error
+}
+type CountryUseCase interface {
+	GetAllCountries(ctx context.Context) ([]Country, error)
+	GetCountryByID(ctx context.Context, id int) (Country, error)
+	CreateCountry(ctx context.Context, name string, shortCode string) (Country, error)
+	UpdateCountryByID(ctx context.Context, name string, shortCode string, ID int) (Country, error)
+	DeleteCountryByID(ctx context.Context, ID int) error
 }
