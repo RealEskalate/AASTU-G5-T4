@@ -39,7 +39,6 @@ func (r *UserRepository) GetUserByID(ctx context.Context, id int) (domain.User, 
 }
 
 //
-
 func (r *UserRepository) CreateUser(ctx context.Context, user domain.User) (domain.User, error) {
 
 	var existing domain.User

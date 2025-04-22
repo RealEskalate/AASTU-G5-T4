@@ -83,6 +83,7 @@ type RecentAction struct {
 }
 
 //
+//
 
 type Notification struct {
 	ID          int       `gorm:"primaryKey"`

@@ -49,6 +49,7 @@ func (uc UserController) GetUserByID(c *gin.Context) {
 
 func (uc UserController) CreateUser(c *gin.Context) {
 	var user domain.User
+
 	if err := c.ShouldBind(&user); err != nil {
 
 		c.JSON(400, gin.H{"detail": "Invalid form data", "error": err.Error()})
