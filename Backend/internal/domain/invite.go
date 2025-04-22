@@ -1,7 +1,7 @@
 package domain
 
 import (
-	"A2SVHUB/api/dtos"
+	"A2SVHUB/internal/dtos"
 	"context"
 	"time"
 )

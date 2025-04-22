@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"A2SVHUB/api/dtos"
 	"A2SVHUB/internal/domain"
+	"A2SVHUB/internal/dtos"
 
 	"github.com/gin-gonic/gin"
 )

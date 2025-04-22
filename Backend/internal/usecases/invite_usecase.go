@@ -1,8 +1,8 @@
 package usecases
 
 import (
-	"A2SVHUB/api/dtos"
 	domain "A2SVHUB/internal/domain"
+	"A2SVHUB/internal/dtos"
 	"A2SVHUB/pkg/config"
 	"A2SVHUB/pkg/utils"
 	"context"
