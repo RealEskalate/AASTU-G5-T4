@@ -54,7 +54,6 @@ func (uc UserController) CreateUser(c *gin.Context) {
 		return
 	}
 
-	
 	file, err := c.FormFile("avatar")
 	if err == nil {
 		if !strings.HasSuffix(file.Filename, ".jpg") && !strings.HasSuffix(file.Filename, ".jpeg") && !strings.HasSuffix(file.Filename, ".png") {
@@ -93,7 +92,6 @@ func (uc UserController) UpdateUser(c *gin.Context) {
 		return
 	}
 
-	
 	file, err := c.FormFile("avatar")
 	if err == nil {
 		if !strings.HasSuffix(file.Filename, ".jpg") && !strings.HasSuffix(file.Filename, ".jpeg") && !strings.HasSuffix(file.Filename, ".png") {

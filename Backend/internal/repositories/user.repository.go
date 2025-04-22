@@ -16,6 +16,7 @@ func NewUserRepository(db gorm.DB) domain.UserRepository {
 	return &UserRepository{
 		db: db,
 	}
+
 }
 
 func (r *UserRepository) GetAllUsers(ctx context.Context) ([]domain.User, error) {

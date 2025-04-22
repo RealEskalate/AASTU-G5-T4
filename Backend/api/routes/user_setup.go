@@ -22,7 +22,6 @@ func SetupUserGroup(api *gin.RouterGroup, cfg *config.Config, db *gorm.DB) {
 	api.PUT("/:id", userController.UpdateUser)
 	api.DELETE("/:id", userController.DeleteUser)
 
-
 	api.POST("/bulk", userController.CreateUsers)
 	api.GET("/users/group/:group_id", userController.GetUsersByGroup)
 

@@ -66,5 +66,6 @@ func (u *UserUseCase) GetUsersByGroup(ctx context.Context, groupID int) ([]domai
 }
 
 func (uc *UserUseCase) UpdateAvatar(ctx context.Context, userID int, imageURL string) error {
+
 	return uc.UserRepository.UpdateAvatar(ctx, []int{userID}, imageURL)
 }

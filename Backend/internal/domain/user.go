@@ -160,4 +160,3 @@ type UserUseCase interface {
 	GetUsersByGroup(ctx context.Context, groupID int) ([]User, error)
 	UpdateAvatar(ctx context.Context, userID int, avatarURL string) error
 }
-

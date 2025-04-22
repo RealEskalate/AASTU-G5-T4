@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	cloudinaryURL = "cloudinary://792377839957387:TGv0-xMnEMvvaynYkNsOQzBmQcU@djcel1cai" 
+	cloudinaryURL = "cloudinary://792377839957387:TGv0-xMnEMvvaynYkNsOQzBmQcU@djcel1cai"
 )
 
 func UploadToCloudinary(file *multipart.FileHeader) (string, error) {
@@ -24,8 +24,8 @@ func UploadToCloudinary(file *multipart.FileHeader) (string, error) {
 	if err := saveFileLocally(file, localPath); err != nil {
 		return "", err
 	}
-	defer os.Remove(localPath) 
-	
+	defer os.Remove(localPath)
+
 	cld, err := cloudinary.NewFromURL(cloudinaryURL)
 	if err != nil {
 		return "", err
