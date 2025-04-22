@@ -11,7 +11,6 @@ func SetupRoutes(r *gin.RouterGroup, config *config.Config, database *gorm.DB) {
 
 	// Setup individual groups
 	SetupUserGroup(r.Group("/user"))
-	SetupTrackGroup(r.Group("/track"))
 
 	SetupCountryGroup(r.Group("/country"), database)
 	SetupRoleGroup(r.Group("/role"), database)
@@ -20,6 +19,8 @@ func SetupRoutes(r *gin.RouterGroup, config *config.Config, database *gorm.DB) {
 
 	superGroupRoute := r.Group("/supergroup")
 	SetupSuperGroupRoute(superGroupRoute, config, database)
+	trackGroupRoute := r.Group("/track")
+	SetupTrackGroup(trackGroupRoute, config, database)
 
 	SetupInviteGroup(r.Group("/invite"))
 	SetupProblemGroup(r.Group("/problem"))
