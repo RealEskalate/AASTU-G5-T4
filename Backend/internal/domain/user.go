@@ -82,6 +82,8 @@ type RecentAction struct {
 	User        User      `gorm:"foreignKey:UserID"`
 }
 
+//
+
 type Notification struct {
 	ID          int       `gorm:"primaryKey"`
 	Type        string    `gorm:"type:varchar(255)"`
