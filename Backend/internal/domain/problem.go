@@ -2,7 +2,10 @@ package domain
 
 // models/problem.go
 
-import "time"
+import (
+	"context"
+	"time"
+)
 
 type DailyProblem struct {
 	ID           int        `gorm:"primaryKey"`
@@ -43,6 +46,7 @@ type Submission struct {
 	User      User      `gorm:"foreignKey:UserID"`
 }
 
+
 type ProblemTrack struct {
 	ID        int       `gorm:"primaryKey"`
 	ProblemID int       `gorm:"type:integer"`
@@ -51,4 +55,19 @@ type ProblemTrack struct {
 	UpdatedAt time.Time `gorm:"type:timestamp"`
 	Problem   Problem   `gorm:"foreignKey:ProblemID"`
 	Track     Track     `gorm:"foreignKey:TrackID"`
+}
+
+type SubmissionRepository interface {
+	CreateSubmission(ctx context.Context, submission Submission) (Submission, error)
+	GetSubmissionByID(ctx context.Context, id int) (Submission, error)
+	GetSubmissionsByProblem(ctx context.Context, problemID int) ([]Submission, error)
+	UpdateSubmission(ctx context.Context, submission Submission) (Submission, error)
+	DeleteSubmission(ctx context.Context, id int) error
+}
+type SubmissionUseCase interface {
+    CreateSubmission(ctx context.Context, submission Submission) (Submission, error)
+    GetSubmissionByID(ctx context.Context, id int) (Submission, error)
+    GetSubmissionsByProblem(ctx context.Context, problemID int) ([]Submission, error)
+    UpdateSubmission(ctx context.Context, submission Submission) (Submission, error)
+    DeleteSubmission(ctx context.Context, id int) error
 }
