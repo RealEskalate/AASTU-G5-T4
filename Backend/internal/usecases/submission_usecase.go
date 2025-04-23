@@ -18,6 +18,10 @@ func (uc *SubmissionUseCase) CreateSubmission(ctx context.Context, submission do
     if submission.UserID == 0 {
         return domain.Submission{}, errors.New("user ID cannot be zero")
     }
+	// Temporarily bypass userID validation for testing
+    // if submission.UserID == 0 {
+    //     submission.UserID = -1 // Use a placeholder value for testing
+    // }
     if submission.Code == "" {
         return domain.Submission{}, errors.New("submission code cannot be empty")
     }
