@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/features/Home/presentation/widgets/CustomappBar.dart';
 import 'package:mobile/features/Home/presentation/widgets/sideBar.dart';
+import 'package:mobile/features/Tracks/presentation/pages/progress_screen.dart';
 
 class TracksPage extends StatefulWidget {
   const TracksPage({super.key});
@@ -19,7 +21,7 @@ class _TracksPageState extends State<TracksPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: Colors.amber,
+      backgroundColor: Colors.white,
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(kToolbarHeight),
           child: Customappbar(
@@ -30,9 +32,7 @@ class _TracksPageState extends State<TracksPage> {
       // drawer: HubSidebarExample(),
       body: Stack(
         children: [
-          Center(
-            child: Text("Tracks"),
-          ),
+          ProgressScreen(solved: 200, available: 100, total: 300),
           ValueListenableBuilder<bool>(
             valueListenable: _sidebarController.sidebarVisibility,
             builder: (context, isVisible, _) {
