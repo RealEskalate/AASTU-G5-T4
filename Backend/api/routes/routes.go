@@ -11,17 +11,22 @@ func SetupRoutes(r *gin.RouterGroup, config *config.Config, database *gorm.DB) {
 
 	// Setup individual groups
 	SetupUserGroup(r.Group("/user"))
-	SetupTrackGroup(r.Group("/track"))
-	SetupRoleGroup(r.Group("/role"))
-	SetupCountryGroup(r.Group("/country"))
+
+	SetupCountryGroup(r.Group("/country"), database)
+	SetupRoleGroup(r.Group("/role"), database)
+	
 	SetupGroupGroup(r.Group("/group"))
 
 	superGroupRoute := r.Group("/supergroup")
 	SetupSuperGroupRoute(superGroupRoute, config, database)
+	trackGroupRoute := r.Group("/track")
+	SetupTrackGroup(trackGroupRoute, config, database)
 
 	SetupInviteGroup(r.Group("/invite"))
 
 	ProblemRoute := r.Group("/problem")
 	SetupProblem(ProblemRoute, config, database)
+
+	SetupSubmissionGroup(r.Group("/submission"), config, database)
 
 }
