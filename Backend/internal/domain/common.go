@@ -55,9 +55,15 @@ type Event struct {
 
 type CountryRepository interface {
 	GetAllCountries(ctx context.Context) ([]Country, error)
-	// Add other methods as needed
+	GetCountryByID(ctx context.Context, id int) (Country, error)
+	CreateCountry(ctx context.Context, name string, shortCode string) (Country, error)
+	UpdateCountryByID(ctx context.Context, name string, shortCode string, ID int) (Country, error)
+	DeleteCountryByID(ctx context.Context, ID int) error
 }
 type CountryUseCase interface {
 	GetAllCountries(ctx context.Context) ([]Country, error)
-	// Add other methods as needed.
+	GetCountryByID(ctx context.Context, id int) (Country, error)
+	CreateCountry(ctx context.Context, name string, shortCode string) (Country, error)
+	UpdateCountryByID(ctx context.Context, name string, shortCode string, ID int) (Country, error)
+	DeleteCountryByID(ctx context.Context, ID int) error
 }
