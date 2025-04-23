@@ -20,6 +20,8 @@ func SetupRoutes(r *gin.RouterGroup, config *config.Config, database *gorm.DB) {
 	SetupSuperGroupRoute(superGroupRoute, config, database)
 
 	SetupInviteGroup(r.Group("/invite"))
-	SetupProblemGroup(r.Group("/problem"))
+
+	ProblemRoute := r.Group("/problem")
+	SetupProblem(ProblemRoute, config, database)
 
 }

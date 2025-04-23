@@ -26,9 +26,9 @@ func main() {
 	// Start the HTTP server
 	log.Printf("Server is running on port %s\n", cfg.AppPort)
 
-	//inside of your main function or setup function.
+	// schema update
 	// if err := migration.MigrateModels(db); err != nil {
-	// 	//handle error.
+	// 	log.Fatalf("Migration failed: %v", err)
 	// }
 
 	if err := router.Run(cfg.AppPort); err != nil {
