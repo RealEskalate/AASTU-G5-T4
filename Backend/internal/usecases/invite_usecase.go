@@ -51,14 +51,6 @@ func (i *InviteUseCase) CreateInvite(invite dtos.CreateInviteDTO) (*dtos.InviteD
 			Status:  500,
 		}
 	}
-	
-	err = i.emailService.SendInviteEmail(invite.Email, token)
-	if err != nil {
-		return &dtos.InviteDTO{}, &domain.ErrorResponse{
-			Message: err.Error(),
-			Status:  500,
-		}
-	}
 
 	newInvite, err := i.inviteRepository.CreateInvite(domain.Invite{
 		Key:       token,
@@ -68,6 +60,14 @@ func (i *InviteUseCase) CreateInvite(invite dtos.CreateInviteDTO) (*dtos.InviteD
 		Used:      false,
 	}, context.TODO())
 	
+	err = i.emailService.SendInviteEmail(invite.Email, token)
+	if err != nil {
+		return &dtos.InviteDTO{}, &domain.ErrorResponse{
+			Message: err.Error(),
+			Status:  500,
+		}
+	}
+
 	if err != nil {
 		return &dtos.InviteDTO{}, &domain.ErrorResponse{
 			Message: err.Error(),
@@ -267,14 +267,6 @@ func (i *InviteUseCase) InviteExistingUser(invite dtos.InviteExistingUserDTO) (*
 			Status:  500,
 		}
 	}
-
-	err = i.emailService.SendInviteEmail(user.Email, token)
-	if err != nil {
-		return &dtos.InviteDTO{}, &domain.ErrorResponse{
-			Message: err.Error(),
-			Status:  500,
-		}
-	}
 	newInvite, err := i.inviteRepository.CreateInvite(domain.Invite{
 		Key:       token,
 		RoleID:    invite.RoleID,
@@ -288,6 +280,15 @@ func (i *InviteUseCase) InviteExistingUser(invite dtos.InviteExistingUserDTO) (*
 			Status:  500,
 		}
 	}
+
+	err = i.emailService.SendInviteEmail(user.Email, token)
+	if err != nil {
+		return &dtos.InviteDTO{}, &domain.ErrorResponse{
+			Message: err.Error(),
+			Status:  500,
+		}
+	}
+
 	return &dtos.InviteDTO{
 		ID:        newInvite.ID,
 		Key:       newInvite.Key,
