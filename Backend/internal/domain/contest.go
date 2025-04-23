@@ -47,18 +47,3 @@ type DivisionUser struct {
 	Division   Division  `gorm:"foreignKey:DivisionID"`
 	Contest    Contest   `gorm:"foreignKey:ContestID"`
 }
-
-type Problem struct {
-	ID         int       `gorm:"primaryKey"`
-	ContestID  int       `gorm:"type:integer"`
-	TrackID    int       `gorm:"type:integer"`
-	Name       string    `gorm:"type:varchar(255)"`
-	Difficulty string    `gorm:"type:varchar(255)"`
-	Tag        string    `gorm:"type:varchar(255)"`
-	Platform   string    `gorm:"type:varchar(255)"`
-	Link       string    `gorm:"type:varchar(255)"`
-	CreatedAt  time.Time `gorm:"type:timestamp"`
-	UpdatedAt  time.Time `gorm:"type:timestamp"`
-	Contest    Contest   `gorm:"foreignKey:ContestID"`
-	Track      Track     `gorm:"foreignKey:TrackID"`
-}
