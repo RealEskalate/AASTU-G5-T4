@@ -65,7 +65,6 @@ func (r *RoleUseCase) UpdateRole(roleType string, id string) (domain.Role, error
 
 	existingRole.Type = roleType
 	existingRole.UpdatedAt = time.Now()
-
 	if err := r.roleRepository.UpdateRole(existingRole); err != nil {
 		return domain.Role{},err
 	}
