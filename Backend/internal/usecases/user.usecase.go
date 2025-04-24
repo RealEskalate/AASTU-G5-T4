@@ -32,6 +32,7 @@ func (u UserUseCase) GetUserByID(ctx context.Context, id int) (domain.User, erro
 }
 
 func (u UserUseCase) CreateUser(ctx context.Context, user domain.User) (domain.User, error) {
+	
 	return u.UserRepository.CreateUser(ctx, user)
 }
 
@@ -66,7 +67,6 @@ func (u *UserUseCase) GetUsersByGroup(ctx context.Context, groupID int) ([]domai
 }
 
 //
-
 
 func (uc *UserUseCase) UpdateAvatar(ctx context.Context, userID int, imageURL string) error {
 

@@ -1,8 +1,9 @@
 package domain
 
-// models/contest.go
-
-import "time"
+import (
+	"context"
+	"time"
+)
 
 type Contest struct {
 	ID           int        `gorm:"primaryKey"`
@@ -19,6 +20,20 @@ type Contest struct {
 	SuperGroup   SuperGroup `gorm:"foreignKey:SuperGroupID"`
 }
 
+type Submissions struct {
+	ID          int `gorm:"primaryKey"`
+	UserID      int
+	ProblemID   int
+	IsSolved    bool
+	SubmittedAt time.Time
+	Penalty     int
+}
+
+type RatingResponse struct {
+	Rating   Rating `json:"rating"`
+	Title    string `json:"title"`
+	Division int    `json:"division"`
+}
 type Rating struct {
 	ID        int       `gorm:"primaryKey"`
 	ContestID int       `gorm:"type:integer"`
@@ -61,4 +76,26 @@ type Problem struct {
 	UpdatedAt  time.Time `gorm:"type:timestamp"`
 	Contest    Contest   `gorm:"foreignKey:ContestID"`
 	Track      Track     `gorm:"foreignKey:TrackID"`
+}
+
+type ContestRepository interface {
+	GetAllContests(ctx context.Context) ([]Contest, error)
+	GetContestByID(ctx context.Context, id int) (Contest, error)
+}
+
+type ContestUseCase interface {
+	GetAllContests(ctx context.Context) ([]Contest, error)
+	GetContestByID(ctx context.Context, id int) (*Contest, error)
+}
+
+type RatingRepository interface {
+	GetAllRatings(ctx context.Context, contestID int) ([]Rating, error)
+	GetRatingByID(ctx context.Context, id int) (Rating, error)
+	CalculateAndSaveRatings(ctx context.Context, contestID int) error
+}
+
+type RatingUseCase interface {
+	GetAllRatings(ctx context.Context, contestID int) ([]Rating, error)
+	GetRatingByID(ctx context.Context, id int) (*Rating, error)
+	GenerateRatings(ctx context.Context, contestID int) error
 }

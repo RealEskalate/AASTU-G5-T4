@@ -3,6 +3,7 @@ package repositories
 import (
 	"A2SVHUB/internal/domain"
 	"context"
+	"errors"
 	"fmt"
 
 	"gorm.io/gorm"
@@ -33,12 +34,11 @@ func (r *UserRepository) GetUserByID(ctx context.Context, id int) (domain.User, 
 		if err == gorm.ErrRecordNotFound {
 			return domain.User{}, fmt.Errorf("no user found with ID %d", id)
 		}
-		return domain.User{}, err
+		return user, err
 	}
 	return user, nil
 }
 
-//
 func (r *UserRepository) CreateUser(ctx context.Context, user domain.User) (domain.User, error) {
 
 	var existing domain.User
@@ -52,27 +52,28 @@ func (r *UserRepository) CreateUser(ctx context.Context, user domain.User) (doma
 }
 
 func (r *UserRepository) UpdateUser(ctx context.Context, id int, updatedUser domain.User) (domain.User, error) {
-	var user domain.User
-	if err := r.db.WithContext(ctx).First(&user, id).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
+	var existingUser domain.User
+	if err := r.db.WithContext(ctx).First(&existingUser, id).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return domain.User{}, fmt.Errorf("no user found with ID %d", id)
 		}
 		return domain.User{}, err
 	}
 
-	var existing domain.User
-	if err := r.db.WithContext(ctx).Where("email = ? AND id != ?", updatedUser.Email, id).First(&existing).Error; err == nil {
-		return domain.User{}, fmt.Errorf("another user with email '%s' already exists", updatedUser.Email)
+	if updatedUser.Email != existingUser.Email {
+		var emailUser domain.User
+		if err := r.db.WithContext(ctx).Where("email = ? AND id != ?", updatedUser.Email, id).First(&emailUser).Error; err == nil {
+			return domain.User{}, fmt.Errorf("another user with email '%s' already exists", updatedUser.Email)
+		}
 	}
 
-	user.Name = updatedUser.Name
-	user.Email = updatedUser.Email
-	user.Role = updatedUser.Role
+	updatedUser.ID = id
 
-	if err := r.db.WithContext(ctx).Save(&user).Error; err != nil {
+	if err := r.db.WithContext(ctx).Model(&existingUser).Updates(updatedUser).Error; err != nil {
 		return domain.User{}, err
 	}
-	return user, nil
+
+	return updatedUser, nil
 }
 
 func (r *UserRepository) DeleteUser(ctx context.Context, id int) error {
