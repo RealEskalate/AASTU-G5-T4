@@ -12,7 +12,7 @@ type Group struct {
 	Name        string    `gorm:"type:varchar(255)"`
 	ShortName   string    `gorm:"type:varchar(255)"`
 	Description string    `gorm:"type:varchar(255)"`
-	HOAID       int       `gorm:"type:integer"`
+	HOAID       *int      `gorm:"type:integer"`
 	CountryID   int       `gorm:"type:integer"`
 	CreatedAt   time.Time `gorm:"type:timestamp"`
 	UpdatedAt   time.Time `gorm:"type:timestamp"`
@@ -68,8 +68,8 @@ type GroupSession struct {
 type GroupUseCase interface {
 	GetAllGroups(ctx context.Context) ([]Group, error)
 	GetGroupByID(ctx context.Context, id int) (Group, error)
-	CreateGroup(ctx context.Context, name, shortName, description string, hoaID, countryID int) (Group, error)
-	UpdateGroupByID(ctx context.Context, name, shortName, description string, hoaID, countryID, id int) (Group, error)
+	CreateGroup(ctx context.Context, name, shortName, description string, hoaID *int, countryID int) (Group, error)
+	UpdateGroupByID(ctx context.Context, name, shortName, description string, hoaID *int, countryID, id int) (Group, error)
 	DeleteGroupByID(ctx context.Context, id int) error
 }
 

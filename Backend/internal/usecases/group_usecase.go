@@ -24,7 +24,7 @@ func (uc *groupUseCase) GetGroupByID(ctx context.Context, id int) (domain.Group,
 	return uc.groupRepo.GetGroupByID(id)
 }
 
-func (uc *groupUseCase) CreateGroup(ctx context.Context, name, shortName, description string, hoaID, countryID int) (domain.Group, error) {
+func (uc *groupUseCase) CreateGroup(ctx context.Context, name, shortName, description string, hoaID *int, countryID int) (domain.Group, error) {
 	group := domain.Group{
 		Name:        name,
 		ShortName:   shortName,
@@ -36,7 +36,7 @@ func (uc *groupUseCase) CreateGroup(ctx context.Context, name, shortName, descri
 	return group, err
 }
 
-func (uc *groupUseCase) UpdateGroupByID(ctx context.Context, name, shortName, description string, hoaID, countryID, id int) (domain.Group, error) {
+func (uc *groupUseCase) UpdateGroupByID(ctx context.Context, name, shortName, description string, hoaID *int, countryID, id int) (domain.Group, error) {
 	group := domain.Group{
 		ID:          id,
 		Name:        name,
