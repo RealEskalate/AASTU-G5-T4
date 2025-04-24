@@ -1,0 +1,2 @@
+D:/RealEscalete/AASTU-G5-T4/mobile/android/app/.cxx/Debug/1w725834/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/RealEscalete/AASTU-G5-T4/mobile/android/app/.cxx/Debug/1w725834/armeabi-v7a/CMakeFiles/rebuild_cache.dir
