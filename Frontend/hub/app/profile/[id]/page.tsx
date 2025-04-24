@@ -11,6 +11,61 @@ import { ProfileLinks } from "@/components/profile-links"
 import { DataTable, DifficultyBadge, ExternalLinkButton } from "@/components/data-table"
 import { useTheme } from "@/components/theme/theme-provider"
 
+// Mock data for users
+const usersData = {
+  "1": {
+    id: "1",
+    name: "Asegid Shegaw",
+    title: "Student",
+    group: "G5D",
+    problems: 355,
+    submissions: 389,
+    dedicatedTime: "9.24k",
+    image: "/placeholder.svg?height=80&width=80",
+    about:
+      "Hi, I'm Asegid Shegaw, a 4th-year Software Engineering student at AASTU (Addis Ababa Science and Technology University). I am a hardworking and resilient individual with a passion for technology and problem solving.",
+    location: "Ethiopia",
+    email: "asegid.shegaw@a2sv.org",
+    language: "Python",
+    university: "Addis Ababa Science and Technology University (AASTU)",
+    rating: 1609,
+    division: "Knight III",
+    nextDivision: "Knight II",
+    links: [
+      { platform: "LinkedIn", url: "https://www.linkedin.com/in/asegid-shegaw/", icon: null },
+      { platform: "Telegram", url: "https://t.me/asegid", icon: null },
+      { platform: "Leetcode", url: "https://leetcode.com/asegid", icon: null },
+      { platform: "Codeforces", url: "https://codeforces.com/profile/asegid", icon: null },
+      { platform: "Github", url: "https://github.com/asegid", icon: null },
+    ],
+  },
+  "2": {
+    id: "2",
+    name: "Sifan Fita Hika",
+    title: "Student",
+    group: "G52",
+    problems: 334,
+    submissions: 337,
+    dedicatedTime: "8.73k",
+    image: "/placeholder.svg?height=80&width=80",
+    about:
+      "Hi, I'm Sifan Fita, a 3rd-year Computer Science student. I enjoy competitive programming and solving algorithmic challenges.",
+    location: "Ethiopia",
+    email: "sifan.fita@a2sv.org",
+    language: "C++",
+    university: "Addis Ababa University",
+    rating: 1520,
+    division: "Knight II",
+    nextDivision: "Knight I",
+    links: [
+      { platform: "LinkedIn", url: "https://www.linkedin.com/in/sifan-fita/", icon: null },
+      { platform: "Telegram", url: "https://t.me/sifan", icon: null },
+      { platform: "Leetcode", url: "https://leetcode.com/sifan", icon: null },
+      { platform: "Github", url: "https://github.com/sifan", icon: null },
+    ],
+  },
+}
+
 // Mock data for attendance
 const generateMockAttendanceData = () => {
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
@@ -33,133 +88,127 @@ const generateMockAttendanceData = () => {
   return data
 }
 
-export default function Profile() {
+// Mock data for problems
+const problemsData = [
+  {
+    difficulty: "Easy",
+    name: "Insertion Sort",
+    tag: "Sorting",
+    solved: "-",
+    added: "1y",
+    vote: 1,
+    link: "#",
+  },
+  {
+    difficulty: "Easy",
+    name: "Sorting the Sentence",
+    tag: "Sorting",
+    solved: "-",
+    added: "1y",
+    vote: 6,
+    link: "#",
+  },
+  {
+    difficulty: "Easy",
+    name: "How Many Numbers Are Smaller Than the Current Number",
+    tag: "Array, Hash Table",
+    solved: "-",
+    added: "1y",
+    vote: 0,
+    link: "#",
+  },
+  {
+    difficulty: "Easy",
+    name: "Find Target Indices After Sorting Array",
+    tag: "Sorting",
+    solved: "-",
+    added: "1y",
+    vote: 3,
+    link: "#",
+  },
+  {
+    difficulty: "Medium",
+    name: "Sort Colors",
+    tag: "Sorting",
+    solved: "-",
+    added: "1y",
+    vote: 2,
+    link: "#",
+  },
+]
+
+// Mock data for submissions
+const submissionsData = [
+  {
+    name: "F-OR Encryption",
+    time_spent: 8,
+    tries: 1,
+    language: "Python",
+    in_contest: 1,
+    added: "2mo",
+  },
+  {
+    name: "My Calendar I",
+    time_spent: 19,
+    tries: 3,
+    language: "Python",
+    in_contest: 0,
+    added: "5mo",
+  },
+  {
+    name: "Reach a Number",
+    time_spent: 45,
+    tries: 2,
+    language: "Python",
+    in_contest: 0,
+    added: "5mo",
+  },
+  {
+    name: "Set Matrix Zeroes",
+    time_spent: 11,
+    tries: 2,
+    language: "Python",
+    in_contest: 0,
+    added: "5mo",
+  },
+  {
+    name: "Number of Good Leaf Nodes Pairs",
+    time_spent: 19,
+    tries: 1,
+    language: "Python",
+    in_contest: 0,
+    added: "5mo",
+  },
+]
+
+// Mock data for contests
+const contestsData = [
+  {
+    id: 110,
+    name: "A2SV Remote Contest #32",
+    problems: 5,
+    time_ago: "6mo",
+    status: "unrated",
+  },
+  {
+    id: 108,
+    name: "A2SV Remote G5 Contest #31",
+    problems: 5,
+    time_ago: "7mo",
+    status: "unrated",
+  },
+]
+
+export default function UserProfilePage({ params }: { params: { id: string } }) {
   const [activeTab, setActiveTab] = useState("profile")
   const { colorPreset } = useTheme()
+
+  // Get user data based on ID
+  const userData = usersData[params.id as keyof typeof usersData] || usersData["1"]
 
   // Mock data
   const attendanceData = generateMockAttendanceData()
   const attendanceStats = { absent: 0, excused: 1, present: 294, percentage: 99 }
-
-  const profileLinks = [
-    { platform: "LinkedIn", url: "https://www.linkedin.com/in/natnael-worku-a56a18290/", icon: null },
-    { platform: "Telegram", url: "https://t.me/cephues", icon: null },
-    { platform: "Leetcode", url: "https://leetcode.com/natigold", icon: null },
-    { platform: "Codeforces", url: "https://codeforces.com/profile/natigold", icon: null },
-    { platform: "Hackerrank", url: "https://www.hackerrank.com/natiwe884", icon: null },
-    { platform: "Github", url: "https://github.com/Natigold2002", icon: null },
-  ]
-
-  // Mock data for problems tab
-  const problemsData = [
-    {
-      difficulty: "Easy",
-      name: "Insertion Sort",
-      tag: "Sorting",
-      solved: "-",
-      added: "1y",
-      vote: 1,
-      link: "#",
-    },
-    {
-      difficulty: "Easy",
-      name: "Sorting the Sentence",
-      tag: "Sorting",
-      solved: "-",
-      added: "1y",
-      vote: 6,
-      link: "#",
-    },
-    {
-      difficulty: "Easy",
-      name: "How Many Numbers Are Smaller Than the Current Number",
-      tag: "Array, Hash Table",
-      solved: "-",
-      added: "1y",
-      vote: 0,
-      link: "#",
-    },
-    {
-      difficulty: "Easy",
-      name: "Find Target Indices After Sorting Array",
-      tag: "Sorting",
-      solved: "-",
-      added: "1y",
-      vote: 3,
-      link: "#",
-    },
-    {
-      difficulty: "Medium",
-      name: "Sort Colors",
-      tag: "Sorting",
-      solved: "-",
-      added: "1y",
-      vote: 2,
-      link: "#",
-    },
-  ]
-
-  // Mock data for submissions tab
-  const submissionsData = [
-    {
-      name: "F-OR Encryption",
-      time_spent: 8,
-      tries: 1,
-      language: "Python",
-      in_contest: 1,
-      added: "2mo",
-    },
-    {
-      name: "My Calendar I",
-      time_spent: 19,
-      tries: 3,
-      language: "Python",
-      in_contest: 0,
-      added: "5mo",
-    },
-    {
-      name: "Reach a Number",
-      time_spent: 45,
-      tries: 2,
-      language: "Python",
-      in_contest: 0,
-      added: "5mo",
-    },
-    {
-      name: "Set Matrix Zeroes",
-      time_spent: 11,
-      tries: 2,
-      language: "Python",
-      in_contest: 0,
-      added: "5mo",
-    },
-    {
-      name: "Number of Good Leaf Nodes Pairs",
-      time_spent: 19,
-      tries: 1,
-      language: "Python",
-      in_contest: 0,
-      added: "5mo",
-    },
-  ]
-
-  // Mock data for contests
-  const contestsData = [
-    {
-      id: 110,
-      name: "A2SV Remote Contest #32",
-      problems: 5,
-      time_ago: "6mo",
-      status: "unrated",
-    },
-    {
-      id: 108,
-      name: "A2SV Remote G5 Contest #31",
-      problems: 5,
-      time_ago: "7mo",
-      status: "unrated",
-    },
-  ]
 
   // Column definitions for problems tab
   const problemsColumns = [
@@ -268,7 +317,7 @@ export default function Profile() {
           Users
         </Link>
         <span className="text-slate-400 dark:text-slate-600">›</span>
-        <span className="text-slate-700 dark:text-slate-300">Natnael Worku Kelkile</span>
+        <span className="text-slate-700 dark:text-slate-300">{userData.name}</span>
       </div>
 
       {/* Profile header */}
@@ -277,7 +326,7 @@ export default function Profile() {
           <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 md:left-6 md:transform-none md:translate-x-0">
             <div className="h-20 w-20 rounded-full border-4 border-white dark:border-slate-800 overflow-hidden">
               <Image
-                src="/placeholder.svg?height=80&width=80"
+                src={userData.image || "/placeholder.svg"}
                 alt="Profile"
                 width={80}
                 height={80}
@@ -286,9 +335,9 @@ export default function Profile() {
             </div>
           </div>
           <div className="mt-10 text-center md:mt-0 md:ml-24 md:text-left text-white">
-            <h1 className="text-xl font-bold">Natnael Worku Kelkile</h1>
+            <h1 className="text-xl font-bold">{userData.name}</h1>
             <div className="flex items-center justify-center md:justify-start gap-2">
-              <span>Student</span>
+              <span>{userData.title}</span>
               <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-500 text-white">
                 online
               </span>
@@ -343,11 +392,11 @@ export default function Profile() {
             {/* Stats section */}
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-white rounded-lg shadow-sm p-4 text-center dark:bg-slate-800 dark:border dark:border-slate-700">
-                <h3 className="text-3xl font-bold dark:text-white">1,609</h3>
+                <h3 className="text-3xl font-bold dark:text-white">{userData.rating || "1,609"}</h3>
                 <p className="text-sm text-slate-500 dark:text-slate-400">Rating</p>
               </div>
               <div className="bg-white rounded-lg shadow-sm p-4 text-center dark:bg-slate-800 dark:border dark:border-slate-700">
-                <h3 className="text-3xl font-bold dark:text-white">421</h3>
+                <h3 className="text-3xl font-bold dark:text-white">{userData.problems}</h3>
                 <p className="text-sm text-slate-500 dark:text-slate-400">Problems</p>
               </div>
             </div>
@@ -357,38 +406,36 @@ export default function Profile() {
           <div className="space-y-8">
             {/* Division badge */}
             <div className="bg-white rounded-lg shadow-sm p-4 text-center dark:bg-slate-800 dark:border dark:border-slate-700">
-              <h3 className="text-xl font-bold dark:text-white">Div 3</h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400">Division III</p>
+              <h3 className="text-xl font-bold dark:text-white">{userData.division || "Div 3"}</h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400">
+                Next: {userData.nextDivision || "Division II"}
+              </p>
             </div>
 
             {/* About section */}
             <div className="bg-white rounded-lg shadow-sm p-4 dark:bg-slate-800 dark:border dark:border-slate-700">
               <h2 className="text-lg font-semibold mb-4 dark:text-white">About</h2>
-              <p className="text-sm mb-4 dark:text-slate-300">
-                Hi, I'm Natnael Worku, a 4th-year Software Engineering student at AASTU (Addis Ababa Science and
-                Technology University). I am a hardworking and resilient individual with a passion for technology and
-                problem solving.
-              </p>
+              <p className="text-sm mb-4 dark:text-slate-300">{userData.about}</p>
               <div className="space-y-3">
                 <div className="flex items-center gap-2 text-sm dark:text-slate-300">
                   <MapPin className="h-4 w-4 text-slate-500 dark:text-slate-400" />
-                  <span>Ethiopia</span>
+                  <span>{userData.location}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm dark:text-slate-300">
                   <Mail className="h-4 w-4 text-slate-500 dark:text-slate-400" />
-                  <span>natnael.worku@a2sv.org</span>
+                  <span>{userData.email}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm dark:text-slate-300">
                   <Code className="h-4 w-4 text-slate-500 dark:text-slate-400" />
-                  <span>Python</span>
+                  <span>{userData.language}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm dark:text-slate-300">
                   <Users className="h-4 w-4 text-slate-500 dark:text-slate-400" />
-                  <span>Student at AASTU Group 56</span>
+                  <span>Student at {userData.group}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm dark:text-slate-300">
                   <Building className="h-4 w-4 text-slate-500 dark:text-slate-400" />
-                  <span>Studied at Addis Ababa Science and Technology University (AASTU)</span>
+                  <span>Studied at {userData.university}</span>
                 </div>
               </div>
             </div>
@@ -404,12 +451,14 @@ export default function Profile() {
                   className="object-contain"
                 />
               </div>
-              <h3 className="text-lg font-semibold dark:text-white">Knight III : 1609</h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400">Next: Knight II</p>
+              <h3 className="text-lg font-semibold dark:text-white">
+                {userData.division} : {userData.rating}
+              </h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Next: {userData.nextDivision}</p>
             </div>
 
             {/* Links section */}
-            <ProfileLinks links={profileLinks} />
+            <ProfileLinks links={userData.links} />
           </div>
         </div>
       )}
