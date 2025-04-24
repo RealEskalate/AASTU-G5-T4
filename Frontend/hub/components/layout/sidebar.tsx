@@ -34,8 +34,6 @@ interface NavItemProps {
 }
 
 const NavItem = ({ href, icon: Icon, label, isActive, hasSubmenu, badge }: NavItemProps) => {
-  const { theme, colorPreset } = useTheme()
-
   return (
     <Link
       href={href}
@@ -61,9 +59,16 @@ interface SidebarProps {
   userName?: string
   userTitle?: string
   userImage?: string
+  isMobile?: boolean
 }
 
-export function Sidebar({ userRole = "student", userName = "User", userTitle = "", userImage }: SidebarProps) {
+export function Sidebar({
+  userRole = "student",
+  userName = "User",
+  userTitle = "Student",
+  userImage,
+  isMobile = false,
+}: SidebarProps) {
   const pathname = usePathname()
   const { direction } = useTheme()
 
@@ -73,10 +78,12 @@ export function Sidebar({ userRole = "student", userName = "User", userTitle = "
   }
 
   return (
-    <aside
-      className={`w-[220px] h-screen border-r dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col sidebar fixed left-0 top-0 ${
-        direction === "rtl" ? "border-r-0 border-l" : ""
-      }`}
+    <div
+      className={cn(
+        "h-full bg-white dark:bg-slate-900 flex flex-col border-r dark:border-slate-800",
+        isMobile ? "w-full" : "w-[220px] fixed inset-y-0 left-0",
+        direction === "rtl" ? "border-r-0 border-l" : "",
+      )}
     >
       {/* Logo section */}
       <div className="p-4 border-b dark:border-slate-800">
@@ -193,6 +200,6 @@ export function Sidebar({ userRole = "student", userName = "User", userTitle = "
       <div className="p-4 border-t dark:border-slate-800">
         <div className="text-sm text-slate-500 dark:text-slate-400">Hi, {userName.split(" ")[0]}</div>
       </div>
-    </aside>
+    </div>
   )
 }

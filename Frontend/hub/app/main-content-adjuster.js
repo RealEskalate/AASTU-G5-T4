@@ -6,9 +6,11 @@ if (typeof window !== "undefined") {
     const sidebar = document.querySelector(".sidebar")
     const mainContent = document.getElementById("main-content")
 
-    if (sidebar && mainContent) {
+    if (sidebar && mainContent && window.innerWidth >= 768) {
       const sidebarWidth = sidebar.offsetWidth
       mainContent.style.marginLeft = `${sidebarWidth}px`
+    } else if (mainContent) {
+      mainContent.style.marginLeft = "0px"
     }
   }
 

@@ -144,16 +144,6 @@
   @apply left-auto right-0 border-l border-r-0;
 }
 
-[dir="rtl"] .main-content {
-  @apply ml-0 mr-[220px];
-}
-
-@media (max-width: 768px) {
-  [dir="rtl"] .main-content {
-    @apply mr-0;
-  }
-}
-
 /* Theme color application */
 .bg-theme {
   background-color: hsl(var(--theme-color));
@@ -192,26 +182,9 @@
   transition: width 0.3s ease, max-width 0.3s ease;
 }
 
-/* Fix for sidebar */
-#main-content {
-  transition: margin-left 0.3s ease;
-}
-
-.sidebar {
-  transition: width 0.3s ease;
-}
-
 /* Ensure content doesn't shift */
 .fixed-width-container {
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-}
-
-/* Add responsive adjustments */
-@media (max-width: 768px) {
-  #main-content {
-    margin-left: 0 !important;
-    width: 100% !important;
-  }
 }

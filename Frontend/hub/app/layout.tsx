@@ -7,7 +7,6 @@ import { Navbar } from "@/components/layout/navbar"
 import { ThemeProvider } from "@/components/theme/theme-provider"
 import { SettingsPanel } from "@/components/theme/settings-panel"
 import { SettingsToggle } from "@/components/theme/settings-toggle"
-import "./main-content-adjuster"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -25,13 +24,15 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ThemeProvider>
-          <div className="flex h-screen overflow-hidden">
-            <Sidebar />
-            <div
-              className="flex-1 flex flex-col h-screen overflow-hidden transition-all duration-300"
-              id="main-content"
-            >
-              <Navbar notificationCount={14} />
+          <div className="flex min-h-screen">
+            {/* Desktop sidebar - hidden on mobile */}
+            <div className="hidden md:block w-[220px] shrink-0">
+              <Sidebar />
+            </div>
+
+            {/* Main content area */}
+            <div className="flex-1 flex flex-col min-h-screen">
+              <Navbar />
               <main className="flex-1 overflow-auto bg-slate-50 dark:bg-slate-900">{children}</main>
             </div>
           </div>
