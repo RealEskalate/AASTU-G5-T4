@@ -12,19 +12,9 @@ if (typeof window !== "undefined") {
     }
   }
 
-  // Run on initial load
+  // Run on initial load and window resize
   document.addEventListener("DOMContentLoaded", adjustMainContent)
-
-  // Set up a mutation observer to watch for changes to the sidebar
-  const observer = new MutationObserver(adjustMainContent)
-
-  // Start observing the sidebar for attribute changes
-  setTimeout(() => {
-    const sidebar = document.querySelector(".sidebar")
-    if (sidebar) {
-      observer.observe(sidebar, { attributes: true })
-    }
-  }, 500)
+  window.addEventListener("resize", adjustMainContent)
 }
 
 export {}

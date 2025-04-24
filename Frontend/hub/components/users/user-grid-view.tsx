@@ -41,9 +41,9 @@ export function UserGridView({ users }: UserGridViewProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
       {users.map((user) => (
-        <div key={user.id} className="bg-white dark:bg-slate-800 rounded-lg overflow-hidden shadow-sm">
+        <div key={user.id} className="bg-white dark:bg-slate-800 rounded-lg overflow-hidden shadow-sm w-full">
           <div className={`h-48 bg-gradient-to-r ${getGradientClass()} relative`}>{/* Background gradient */}</div>
           <div className="p-4 pt-0 relative">
             <div className="flex justify-center -mt-10">

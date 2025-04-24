@@ -17,7 +17,7 @@ export function GroupCard({ group }: GroupCardProps) {
   return (
     <Link
       href={`/groups/${group.id}`}
-      className="bg-white dark:bg-slate-800 rounded-lg shadow-sm p-4 hover:shadow-md transition-shadow"
+      className="bg-white dark:bg-slate-800 rounded-lg shadow-sm p-4 hover:shadow-md transition-shadow block w-full"
     >
       <div className="mb-4">
         <h3 className="text-lg font-medium dark:text-white">{group.name}</h3>

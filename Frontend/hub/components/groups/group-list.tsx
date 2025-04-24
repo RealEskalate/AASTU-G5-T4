@@ -15,7 +15,7 @@ interface GroupListProps {
 
 export function GroupList({ groups }: GroupListProps) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
       {groups.map((group) => (
         <GroupCard key={group.id} group={group} />
       ))}

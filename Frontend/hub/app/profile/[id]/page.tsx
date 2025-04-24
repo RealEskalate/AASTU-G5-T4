@@ -21,7 +21,7 @@ const usersData = {
     problems: 355,
     submissions: 389,
     dedicatedTime: "9.24k",
-    image: "/placeholder.svg?height=80&width=80",
+    image: "/images/profile-pic.png",
     about:
       "Hi, I'm Asegid Shegaw, a 4th-year Software Engineering student at AASTU (Addis Ababa Science and Technology University). I am a hardworking and resilient individual with a passion for technology and problem solving.",
     location: "Ethiopia",
@@ -47,7 +47,7 @@ const usersData = {
     problems: 334,
     submissions: 337,
     dedicatedTime: "8.73k",
-    image: "/placeholder.svg?height=80&width=80",
+    image: "/images/profile-pic.png",
     about:
       "Hi, I'm Sifan Fita, a 3rd-year Computer Science student. I enjoy competitive programming and solving algorithmic challenges.",
     location: "Ethiopia",
@@ -88,117 +88,6 @@ const generateMockAttendanceData = () => {
   return data
 }
 
-// Mock data for problems
-const problemsData = [
-  {
-    difficulty: "Easy",
-    name: "Insertion Sort",
-    tag: "Sorting",
-    solved: "-",
-    added: "1y",
-    vote: 1,
-    link: "#",
-  },
-  {
-    difficulty: "Easy",
-    name: "Sorting the Sentence",
-    tag: "Sorting",
-    solved: "-",
-    added: "1y",
-    vote: 6,
-    link: "#",
-  },
-  {
-    difficulty: "Easy",
-    name: "How Many Numbers Are Smaller Than the Current Number",
-    tag: "Array, Hash Table",
-    solved: "-",
-    added: "1y",
-    vote: 0,
-    link: "#",
-  },
-  {
-    difficulty: "Easy",
-    name: "Find Target Indices After Sorting Array",
-    tag: "Sorting",
-    solved: "-",
-    added: "1y",
-    vote: 3,
-    link: "#",
-  },
-  {
-    difficulty: "Medium",
-    name: "Sort Colors",
-    tag: "Sorting",
-    solved: "-",
-    added: "1y",
-    vote: 2,
-    link: "#",
-  },
-]
-
-// Mock data for submissions
-const submissionsData = [
-  {
-    name: "F-OR Encryption",
-    time_spent: 8,
-    tries: 1,
-    language: "Python",
-    in_contest: 1,
-    added: "2mo",
-  },
-  {
-    name: "My Calendar I",
-    time_spent: 19,
-    tries: 3,
-    language: "Python",
-    in_contest: 0,
-    added: "5mo",
-  },
-  {
-    name: "Reach a Number",
-    time_spent: 45,
-    tries: 2,
-    language: "Python",
-    in_contest: 0,
-    added: "5mo",
-  },
-  {
-    name: "Set Matrix Zeroes",
-    time_spent: 11,
-    tries: 2,
-    language: "Python",
-    in_contest: 0,
-    added: "5mo",
-  },
-  {
-    name: "Number of Good Leaf Nodes Pairs",
-    time_spent: 19,
-    tries: 1,
-    language: "Python",
-    in_contest: 0,
-    added: "5mo",
-  },
-]
-
-// Mock data for contests
-const contestsData = [
-  {
-    id: 110,
-    name: "A2SV Remote Contest #32",
-    problems: 5,
-    time_ago: "6mo",
-    status: "unrated",
-  },
-  {
-    id: 108,
-    name: "A2SV Remote G5 Contest #31",
-    problems: 5,
-    time_ago: "7mo",
-    status: "unrated",
-  },
-]
-
 export default function UserProfilePage({ params }: { params: { id: string } }) {
   const [activeTab, setActiveTab] = useState("profile")
   const { colorPreset } = useTheme()
@@ -209,6 +98,55 @@ export default function UserProfilePage({ params }: { params: { id: string } }) 
   // Mock data
   const attendanceData = generateMockAttendanceData()
   const attendanceStats = { absent: 0, excused: 1, present: 294, percentage: 99 }
+
+  // Mock data for problems
+  const problemsData = [
+    {
+      difficulty: "Easy",
+      name: "Insertion Sort",
+      tag: "Sorting",
+      solved: "-",
+      added: "1y",
+      vote: 1,
+      link: "#",
+    },
+    {
+      difficulty: "Easy",
+      name: "Sorting the Sentence",
+      tag: "Sorting",
+      solved: "-",
+      added: "1y",
+      vote: 6,
+      link: "#",
+    },
+    {
+      difficulty: "Easy",
+      name: "How Many Numbers Are Smaller Than the Current Number",
+      tag: "Array, Hash Table",
+      solved: "-",
+      added: "1y",
+      vote: 0,
+      link: "#",
+    },
+    {
+      difficulty: "Easy",
+      name: "Find Target Indices After Sorting Array",
+      tag: "Sorting",
+      solved: "-",
+      added: "1y",
+      vote: 3,
+      link: "#",
+    },
+    {
+      difficulty: "Medium",
+      name: "Sort Colors",
+      tag: "Sorting",
+      solved: "-",
+      added: "1y",
+      vote: 2,
+      link: "#",
+    },
+  ]
 
   // Column definitions for problems tab
   const problemsColumns = [
@@ -256,6 +194,50 @@ export default function UserProfilePage({ params }: { params: { id: string } }) 
     },
   ]
 
+  // Mock data for submissions
+  const submissionsData = [
+    {
+      name: "F-OR Encryption",
+      time_spent: 8,
+      tries: 1,
+      language: "Python",
+      in_contest: 1,
+      added: "2mo",
+    },
+    {
+      name: "My Calendar I",
+      time_spent: 19,
+      tries: 3,
+      language: "Python",
+      in_contest: 0,
+      added: "5mo",
+    },
+    {
+      name: "Reach a Number",
+      time_spent: 45,
+      tries: 2,
+      language: "Python",
+      in_contest: 0,
+      added: "5mo",
+    },
+    {
+      name: "Set Matrix Zeroes",
+      time_spent: 11,
+      tries: 2,
+      language: "Python",
+      in_contest: 0,
+      added: "5mo",
+    },
+    {
+      name: "Number of Good Leaf Nodes Pairs",
+      time_spent: 19,
+      tries: 1,
+      language: "Python",
+      in_contest: 0,
+      added: "5mo",
+    },
+  ]
+
   // Column definitions for submissions tab
   const submissionsColumns = [
     {
@@ -286,6 +268,24 @@ export default function UserProfilePage({ params }: { params: { id: string } }) 
       key: "added",
       title: "Added",
       align: "right" as const,
+    },
+  ]
+
+  // Mock data for contests
+  const contestsData = [
+    {
+      id: 110,
+      name: "A2SV Remote Contest #32",
+      problems: 5,
+      time_ago: "6mo",
+      status: "unrated",
+    },
+    {
+      id: 108,
+      name: "A2SV Remote G5 Contest #31",
+      problems: 5,
+      time_ago: "7mo",
+      status: "unrated",
     },
   ]
 
@@ -326,7 +326,7 @@ export default function UserProfilePage({ params }: { params: { id: string } }) 
           <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 md:left-6 md:transform-none md:translate-x-0">
             <div className="h-20 w-20 rounded-full border-4 border-white dark:border-slate-800 overflow-hidden">
               <Image
-                src={userData.image || "/placeholder.svg"}
+                src={userData.image || "/images/profile-pic.png"}
                 alt="Profile"
                 width={80}
                 height={80}

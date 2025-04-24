@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
@@ -51,6 +51,25 @@ export function CollapsibleSidebar() {
   const [collapsed, setCollapsed] = useState(false)
   const pathname = usePathname()
 
+  // Trigger content adjustment when collapsed state changes
+  useEffect(() => {
+    // Dispatch a custom event that can be listened to by the main-content-adjuster
+    window.dispatchEvent(
+      new CustomEvent("sidebarStateChange", {
+        detail: { collapsed },
+      }),
+    )
+
+    // Add a class to the body to help with CSS targeting
+    if (collapsed) {
+      document.body.classList.add("sidebar-collapsed")
+      document.body.classList.remove("sidebar-expanded")
+    } else {
+      document.body.classList.add("sidebar-expanded")
+      document.body.classList.remove("sidebar-collapsed")
+    }
+  }, [collapsed])
+
   // Skip rendering sidebar on auth pages
   if (pathname.includes("/auth/")) {
     return null
@@ -59,9 +78,10 @@ export function CollapsibleSidebar() {
   return (
     <aside
       className={cn(
-        "h-screen border-r dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col sidebar fixed left-0 top-0 z-40 transition-all duration-300",
+        "h-screen border-r dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col sidebar fixed left-0 top-0 z-50 transition-all duration-300",
         collapsed ? "w-[60px]" : "w-[220px]",
       )}
+      data-state={collapsed ? "collapsed" : "expanded"}
     >
       {/* Toggle button */}
       <Button
