@@ -2,7 +2,10 @@ package domain
 
 // models/session.go
 
-import "time"
+import (
+	"A2SVHUB/internal/dtos"
+	"time"
+)
 
 type Session struct {
 	ID              int       `gorm:"primaryKey"`
@@ -50,4 +53,26 @@ type Stipend struct {
 	Fund      Fund      `gorm:"foreignKey:FundID"`
 	User      User      `gorm:"foreignKey:UserID"`
 	Session   Session   `gorm:"foreignKey:SessionID"`
+}
+
+
+// session usecase
+
+type SessionUseCase interface {
+	GetAllSessions() ([]dtos.SessionDTOS, *ErrorResponse)
+	GetSessionByID(id string) (*dtos.SessionDTOS, *ErrorResponse)
+	CreateSession(session dtos.CreateSessionDTOS) (*dtos.SessionDTOS, *ErrorResponse)
+	UpdateSession(id string, session dtos.UpdateSessionDTOS) (*dtos.SessionDTOS, *ErrorResponse)
+	DeleteSession(id string) *ErrorResponse
+}
+
+type SessionRepository interface {
+	GetAllSessions() ([]Session, error)
+	GetSessionByID(id string) (*Session, error)
+	GetSessionByName(name string) (*Session, error)
+	GetSessionByLecturerId(id int) (*Session, error)
+	GetSessionByLocation(location string) (*Session, error)
+	CreateSession(session dtos.CreateSessionDTOS) (Session, error)
+	UpdateSession(session *Session) error
+	DeleteSession(session *Session) error
 }
