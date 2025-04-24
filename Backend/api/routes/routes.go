@@ -23,8 +23,10 @@ func SetupRoutes(r *gin.RouterGroup, config *config.Config, database *gorm.DB) {
 	SetupTrackGroup(trackGroupRoute, config, database)
 
 	SetupInviteGroup(r.Group("/invites"), config, database)
-	SetupProblemGroup(r.Group("/problem"))
 	SetupSessionGroup(r.Group("/session"), database)
+
+	ProblemRoute := r.Group("/problem")
+	SetupProblem(ProblemRoute, config, database)
 
 	SetupSubmissionGroup(r.Group("/submission"), config, database)
 
