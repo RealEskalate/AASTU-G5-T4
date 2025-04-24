@@ -41,10 +41,12 @@ class _HomepageState extends State<Homepage> {
         isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        quote = "Failed to load quote"; // Fallback text
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          quote = "Failed to load quote"; // Fallback text
+          isLoading = false;
+        });
+      }
     }
   }
 
@@ -124,7 +126,7 @@ class _HomepageState extends State<Homepage> {
                                 ),
                               ),
                             ),
-                            onPressed: () => context.go('/profile'),
+                            onPressed: () => context.go('/problems'),
                             child: Text(
                               'Problems',
                               style: GoogleFonts.publicSans(
