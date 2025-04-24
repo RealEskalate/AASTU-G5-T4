@@ -24,16 +24,18 @@ func (uc *groupUseCase) GetGroupByID(ctx context.Context, id int) (domain.Group,
 	return uc.groupRepo.GetGroupByID(id)
 }
 
-func (uc *groupUseCase) CreateGroup(ctx context.Context, name, shortName, description string, hoaID *int, countryID int) (domain.Group, error) {
+func (uc *groupUseCase) CreateGroup(ctx context.Context, name, shortName, desc string, hoaid *int, countryID int) (domain.Group, error) {
 	group := domain.Group{
 		Name:        name,
 		ShortName:   shortName,
-		Description: description,
-		HOAID:       hoaID,
+		Description: desc,
+		HOAID:       hoaid,
 		CountryID:   countryID,
 	}
-	err := uc.groupRepo.CreateGroup(group)
-	return group, err
+	if err := uc.groupRepo.CreateGroup(&group); err != nil {
+		return domain.Group{}, err
+	}
+	return group, nil
 }
 
 func (uc *groupUseCase) UpdateGroupByID(ctx context.Context, name, shortName, description string, hoaID *int, countryID, id int) (domain.Group, error) {
@@ -45,10 +47,18 @@ func (uc *groupUseCase) UpdateGroupByID(ctx context.Context, name, shortName, de
 		HOAID:       hoaID,
 		CountryID:   countryID,
 	}
-	err := uc.groupRepo.UpdateGroupByID(group)
-	return group, err
+	if err := uc.groupRepo.UpdateGroupByID(&group); err != nil {
+		return domain.Group{}, err
+	}
+	return group, nil
 }
 
 func (uc *groupUseCase) DeleteGroupByID(ctx context.Context, id int) error {
 	return uc.groupRepo.DeleteGroupByID(id)
+}
+
+func (uc *groupUseCase) GetGroupByUniqueFields(ctx context.Context, name, shortName, description string) (domain.Group, error) {
+	var group domain.Group
+	err := uc.groupRepo.FindByUniqueFields(ctx, name, shortName, description, &group)
+	return group, err
 }

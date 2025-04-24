@@ -71,12 +71,14 @@ type GroupUseCase interface {
 	CreateGroup(ctx context.Context, name, shortName, description string, hoaID *int, countryID int) (Group, error)
 	UpdateGroupByID(ctx context.Context, name, shortName, description string, hoaID *int, countryID, id int) (Group, error)
 	DeleteGroupByID(ctx context.Context, id int) error
+	GetGroupByUniqueFields(ctx context.Context, name, shortName, description string) (Group, error)
 }
 
 type GroupRepository interface {
-	CreateGroup(group Group) error
+	CreateGroup(group *Group) error
 	GetGroupByID(id int) (Group, error)
 	GetAllGroups() ([]Group, error)
-	UpdateGroupByID(group Group) error
+	UpdateGroupByID(group *Group) error
 	DeleteGroupByID(id int) error
+	FindByUniqueFields(ctx context.Context, name, shortName, description string, group *Group) error
 }
