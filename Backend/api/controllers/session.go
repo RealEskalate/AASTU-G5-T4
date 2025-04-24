@@ -4,6 +4,7 @@ import (
 	"A2SVHUB/internal/domain"
 	"A2SVHUB/internal/dtos"
 	"fmt"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -125,7 +126,40 @@ func (r SessionController) DeleteSession(c *gin.Context) {
 }
 
 func (r SessionController) GetAllSessions(c *gin.Context) {
-	Sessions, err := r.sessionUseCase.GetAllSessions()
+	filter := make(map[string]interface{})
+	allowedFilters := []string{"start_time", "end_time", "location", "lecturer_id"}
+
+	for _, key := range allowedFilters {
+		if value := c.Query(key); value != "" {
+			filter[key] = value
+		}
+	}
+
+	limit := 50
+	page := 1
+
+	if limitStr := c.Query("limit"); limitStr != "" {
+		if parsedLimit, err := strconv.Atoi(limitStr); err == nil {
+			limit = parsedLimit
+		} else {
+			c.JSON(400, gin.H{"error": "Invalid limit value, must be a number"})
+			return
+		}
+	}
+
+	if pageStr := c.Query("page"); pageStr != "" {
+		if parsedPage, err := strconv.Atoi(pageStr); err == nil {
+			page = parsedPage
+		} else {
+			c.JSON(400, gin.H{"error": "Invalid page value, must be a number"})
+			return
+		}
+	}
+
+	filter["limit"] = limit
+	filter["page"] = page
+	
+	sessions, err := r.sessionUseCase.GetAllSessions(filter)
 	if err != nil {
 		c.JSON(err.Status, domain.ErrorResponse{
 			Message: err.Message,
@@ -135,7 +169,7 @@ func (r SessionController) GetAllSessions(c *gin.Context) {
 	}
 	c.JSON(200, domain.SuccessResponse{
 		Message: "Sessions retrieved successfully",
-		Data:    Sessions,
+		Data:    sessions,
 		Status:  200,
 	})
 }

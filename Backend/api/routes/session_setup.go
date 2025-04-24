@@ -19,6 +19,6 @@ func SetupSessionGroup(sessionRoute *gin.RouterGroup, db *gorm.DB) {
 	sessionRoute.GET("/:id", sessionController.GetSession)
 	sessionRoute.POST("/", sessionController.CreateSession)
 	sessionRoute.PUT("/:id", sessionController.UpdateSession)
-	sessionRoute.DELETE("/:id", sessionController.DeleteSession) // need to delete attendance and calendar event as well
+	sessionRoute.DELETE("/:id", sessionController.DeleteSession)
 
 }

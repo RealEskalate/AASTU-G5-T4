@@ -3,6 +3,7 @@ package repositories
 import (
 	"A2SVHUB/internal/domain"
 	"A2SVHUB/internal/dtos"
+	"fmt"
 
 	"context"
 
@@ -21,14 +22,52 @@ func NewSessionRepository(db *gorm.DB, context context.Context) *SessionReposito
 	}
 }
 
-func (r *SessionRepository) GetAllSessions() ([]domain.Session, error) {
-	var sessions []domain.Session
-	if err := r.DB.WithContext(r.context).Find(&sessions).Error; err != nil {
-		return nil, err
-	}
-	return sessions, nil
-}
+func (r *SessionRepository) GetAllSessions(filters map[string]interface{}) ([]domain.Session, error) {
+    var sessions []domain.Session
 
+    query := r.DB.WithContext(r.context)
+
+	limit, ok := filters["limit"].(int)
+    if !ok || limit <= 0 {
+        limit = 50
+    }
+
+    page, ok := filters["page"].(int)
+    if !ok || page <= 0 {
+        page = 1
+    }
+
+    delete(filters, "limit")
+    delete(filters, "page")
+
+    if startTime, ok := filters["start_time"].(string); ok {
+        if endTime, ok := filters["end_time"].(string); ok {
+            query = query.Where("start_time BETWEEN ? AND ?", startTime, endTime)
+        }
+    }
+
+    if location, ok := filters["location"].(string); ok {
+        query = query.Where("LOWER(location) = LOWER(?)", location)
+    }
+
+    if lecturerID, ok := filters["lecturer_id"].(int); ok {
+        query = query.Where("lecturer_id = ?", lecturerID)
+    }
+
+    for key, value := range filters {
+        if key != "start_time" && key != "end_time" && key != "location" && key != "lecturer_id" {
+            query = query.Where("LOWER("+key+") LIKE LOWER(?)", "%"+fmt.Sprintf("%v", value)+"%")
+        }
+    }
+
+    offset := (page - 1) * limit
+    query = query.Limit(limit).Offset(offset)
+	
+    if err := query.Find(&sessions).Error; err != nil {
+        return nil, err
+    }
+    return sessions, nil
+}
 func (r *SessionRepository) GetSessionByID(id string) (*domain.Session, error) {
 	var session domain.Session
 	if err := r.DB.WithContext(r.context).First(&session, id).Error; err != nil {

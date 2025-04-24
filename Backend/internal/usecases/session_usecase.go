@@ -18,12 +18,21 @@ func NewSessionUseCase(SessionRepository domain.SessionRepository) *SessionUseCa
 	}
 }
 
-func (r *SessionUseCase) GetAllSessions() ([]dtos.SessionDTOS, *domain.ErrorResponse) {
-	sessions, err := r.SessionRepository.GetAllSessions()
+func (r *SessionUseCase) GetAllSessions(filters map[string]interface{}) ([]dtos.SessionDTOS, *domain.ErrorResponse) {
+	fmt.Println(filters)
+	sessions, err := r.SessionRepository.GetAllSessions(filters)
+
 	if err != nil {
 		return nil, &domain.ErrorResponse{
 			Message: "Failed to retrieve sessions",
 			Status:  500,
+		}
+	}
+
+	if len(sessions) == 0 {
+		return nil, &domain.ErrorResponse{
+			Message: "No sessions found",
+			Status:  404,
 		}
 	}
 

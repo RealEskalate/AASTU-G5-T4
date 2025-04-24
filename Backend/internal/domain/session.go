@@ -59,7 +59,7 @@ type Stipend struct {
 // session usecase
 
 type SessionUseCase interface {
-	GetAllSessions() ([]dtos.SessionDTOS, *ErrorResponse)
+	GetAllSessions(filters map[string]interface{}) ([]dtos.SessionDTOS, *ErrorResponse)
 	GetSessionByID(id string) (*dtos.SessionDTOS, *ErrorResponse)
 	CreateSession(session dtos.CreateSessionDTOS) (*dtos.SessionDTOS, *ErrorResponse)
 	UpdateSession(id string, session dtos.UpdateSessionDTOS) (*dtos.SessionDTOS, *ErrorResponse)
@@ -67,7 +67,7 @@ type SessionUseCase interface {
 }
 
 type SessionRepository interface {
-	GetAllSessions() ([]Session, error)
+	GetAllSessions(filters map[string]interface{}) ([]Session, error)
 	GetSessionByID(id string) (*Session, error)
 	GetSessionByName(name string) (*Session, error)
 	GetSessionByLecturerId(id int) (*Session, error)
