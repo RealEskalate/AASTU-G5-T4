@@ -4,11 +4,10 @@ import (
 	"A2SVHUB/internal/domain"
 	"A2SVHUB/utils"
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
-	"strings"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,52 +22,69 @@ func NewUserController(uuc domain.UserUseCase) *UserController {
 	}
 }
 
-func (uc UserController) GetAllUsers(c *gin.Context) {
-	users, err := uc.UserUseCase.GetAllUsers(context.TODO())
+
+func (uc *UserController) GetAllUsers(c *gin.Context) {
+	users, err := uc.UserUseCase.GetAllUsers(c.Request.Context())
 	if err != nil {
-		c.JSON(500, gin.H{"detail": "Something went wrong"})
+		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{
+			Message: err.Error(), Status: 500,
+		})
 		return
 	}
-	c.JSON(200, gin.H{"users": users})
+	c.JSON(http.StatusOK, domain.SuccessResponse{
+		Message: "Users retrieved successfully",
+		Data:    domain.ToUserResponseList(users),
+		Status:  200,
+	})
 }
 
-func (uc UserController) GetUserByID(c *gin.Context) {
-	idStr := c.Param("id")
-	id, err := strconv.Atoi(idStr)
+func (uc *UserController) GetUserByID(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		c.JSON(400, gin.H{"detail": "Invalid ID format"})
+		c.JSON(http.StatusBadRequest, domain.ErrorResponse{
+			Message: "Invalid user ID", Status: 400,
+		})
 		return
 	}
-	user, err := uc.UserUseCase.GetUserByID(context.TODO(), id)
+	user, err := uc.UserUseCase.GetUserByID(c.Request.Context(), id)
 	if err != nil {
-		c.JSON(404, gin.H{"detail": "User not found"})
+		c.JSON(http.StatusNotFound, domain.ErrorResponse{
+			Message: err.Error(), Status: 404,
+		})
 		return
 	}
-	c.JSON(200, gin.H{"user": user})
+	c.JSON(http.StatusOK, domain.SuccessResponse{
+		Message: "User retrieved successfully",
+		Data:    domain.ToUserResponse(user),
+		Status:  200,
+	})
 }
 
 func (uc UserController) CreateUser(c *gin.Context) {
-	var user domain.User
 
-	if err := c.ShouldBind(&user); err != nil {
-
-		c.JSON(400, gin.H{"detail": "Invalid form data", "error": err.Error()})
+	data := c.PostForm("data")
+	if data == "" {
+		c.JSON(400, gin.H{"detail": "Missing 'data' field in form-data"})
 		return
 	}
 
-	file, err := c.FormFile("avatar")
-	if err == nil {
-		if !strings.HasSuffix(file.Filename, ".jpg") && !strings.HasSuffix(file.Filename, ".jpeg") && !strings.HasSuffix(file.Filename, ".png") {
-			c.JSON(400, gin.H{"detail": "Invalid avatar format. Only JPG, JPEG, or PNG allowed."})
-			return
-		}
+	var user domain.User
+	if err := json.Unmarshal([]byte(data), &user); err != nil {
+		c.JSON(400, gin.H{"detail": "Invalid JSON in 'data' field", "error": err.Error()})
+		return
+	}
 
-		path := fmt.Sprintf("uploads/avatars/%d_%s", time.Now().Unix(), file.Filename)
-		if err := c.SaveUploadedFile(file, path); err != nil {
-			c.JSON(500, gin.H{"detail": "Failed to upload avatar"})
+	file, err := c.FormFile("AvatarURL")
+	if err == nil {
+		imageURL, err := utils.UploadToCloudinary(file)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to upload image"})
 			return
 		}
-		user.AvatarURL = "/" + path
+		user.AvatarURL = imageURL
+	} else if err != http.ErrMissingFile {
+		c.JSON(500, gin.H{"error": "Failed to receive image", "details": err.Error()})
+		return
 	}
 
 	createdUser, err := uc.UserUseCase.CreateUser(context.TODO(), user)
@@ -88,25 +104,28 @@ func (uc UserController) UpdateUser(c *gin.Context) {
 		return
 	}
 
-	var user domain.User
-	if err := c.ShouldBind(&user); err != nil {
-		c.JSON(400, gin.H{"detail": "Invalid form data", "error": err.Error()})
+	data := c.PostForm("data")
+	if data == "" {
+		c.JSON(400, gin.H{"detail": "Missing 'data' field in form-data"})
 		return
 	}
 
-	file, err := c.FormFile("avatar")
-	if err == nil {
-		if !strings.HasSuffix(file.Filename, ".jpg") && !strings.HasSuffix(file.Filename, ".jpeg") && !strings.HasSuffix(file.Filename, ".png") {
-			c.JSON(400, gin.H{"detail": "Invalid avatar format. Only JPG, JPEG, or PNG allowed."})
-			return
-		}
+	var user domain.User
+	if err := json.Unmarshal([]byte(data), &user); err != nil {
+		c.JSON(400, gin.H{"detail": "Invalid JSON in 'data' field", "error": err.Error()})
+		return
+	}
 
-		path := fmt.Sprintf("uploads/avatars/%d_%s", time.Now().Unix(), file.Filename)
-		if err := c.SaveUploadedFile(file, path); err != nil {
-			c.JSON(500, gin.H{"detail": "Failed to upload avatar"})
+	user.ID = id
+
+	file, err := c.FormFile("AvatarURL")
+	if err == nil {
+		imageURL, err := utils.UploadToCloudinary(file)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to upload image"})
 			return
 		}
-		user.AvatarURL = "/" + path
+		user.AvatarURL = imageURL
 	}
 
 	updatedUser, err := uc.UserUseCase.UpdateUser(context.TODO(), id, user)
@@ -114,6 +133,7 @@ func (uc UserController) UpdateUser(c *gin.Context) {
 		c.JSON(500, gin.H{"detail": fmt.Sprintf("Failed to update user: %v", err)})
 		return
 	}
+
 	c.JSON(200, gin.H{"user": updatedUser})
 }
 
@@ -146,21 +166,34 @@ func (uc UserController) CreateUsers(c *gin.Context) {
 }
 
 func (uc *UserController) GetUsersByGroup(c *gin.Context) {
-	groupIDStr := c.Param("group_id")
-
-	groupID, err := strconv.Atoi(groupIDStr)
+	groupID, err := strconv.Atoi(c.Param("group_id"))
 	if err != nil {
-		c.JSON(400, gin.H{"detail": "Invalid group_id format"})
+		c.JSON(http.StatusBadRequest, domain.ErrorResponse{
+			Message: "Invalid group ID", Status: 400,
+		})
 		return
 	}
 
-	users, err := uc.UserUseCase.GetUsersByGroup(context.TODO(), groupID)
+	users, err := uc.UserUseCase.GetUsersByGroup(c.Request.Context(), groupID)
 	if err != nil {
-		c.JSON(500, gin.H{"detail": "Failed to fetch users"})
+		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{
+			Message: "Failed to fetch users", Status: 500,
+		})
 		return
 	}
-	c.JSON(200, gin.H{"users": users})
+
+	var userResponses []domain.UserResponse
+	for _, user := range users {
+		userResponses = append(userResponses, domain.ToUserResponse(user))
+	}
+
+	c.JSON(http.StatusOK, domain.SuccessResponse{
+		Message: "Users retrieved successfully",
+		Data:    userResponses,
+		Status:  200,
+	})
 }
+
 
 func (uc UserController) UploadUserImage(c *gin.Context) {
 	userID := c.Param("id")

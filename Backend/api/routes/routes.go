@@ -10,7 +10,7 @@ import (
 func SetupRoutes(r *gin.RouterGroup, config *config.Config, database *gorm.DB) {
 
 	SetupUserGroup(r.Group("/user"), config, database)
-	SetupCountryGroup(r.Group("/country"), database)
+	SetupContestGroup(r.Group("/contest"), config, database)
 
 	SetupRoleGroup(r.Group("/role"), database)
 	SetupGroupGroup(r.Group("/group"), database)
