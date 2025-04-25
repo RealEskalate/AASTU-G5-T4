@@ -9,14 +9,15 @@ import (
 
 func SetupRoutes(r *gin.RouterGroup, config *config.Config, database *gorm.DB) {
 
-	// Setup individual groups
-	SetupUserGroup(r.Group("/user"))
 
+	SetupUserGroup(r.Group("/user"), config, database)
 	SetupCountryGroup(r.Group("/country"), database)
+
 	SetupRoleGroup(r.Group("/role"), database)
 	SetupGroupGroup(r.Group("/group"), database)
 
 	superGroupRoute := r.Group("/supergroup")
+
 	SetupSuperGroupRoute(superGroupRoute, config, database)
 	trackGroupRoute := r.Group("/track")
 	SetupTrackGroup(trackGroupRoute, config, database)
