@@ -10,17 +10,15 @@ import (
 	"gorm.io/gorm"
 )
 
-
 func SetupContestGroup(api *gin.RouterGroup, cfg *config.Config, db *gorm.DB) {
-	
+
 	contestRepo := repositories.NewContestRepository(*db)
 
-	
 	contestUseCase := usecases.NewContestUseCase(contestRepo)
 
 	contestController := controllers.NewContestController(contestUseCase)
 
-	
 	api.GET("", contestController.GetAllContests)
-	api.GET("/:id", contestController.GetContestByID)
+	api.POST("", contestController.AddContest)
+	api.GET("/:id/standings", contestController.GetStandings)
 }
