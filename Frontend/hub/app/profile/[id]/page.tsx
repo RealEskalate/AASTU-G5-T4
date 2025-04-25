@@ -3,13 +3,14 @@
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { MapPin, Mail, Code, Users, Building, ArrowUp, ArrowDown } from "lucide-react"
+import { MapPin, Mail, Code, Users, Building, ArrowUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { AttendanceGrid } from "@/components/attendance-grid"
 import { ConsistencyCalendar } from "@/components/consistency-calendar"
 import { ProfileLinks } from "@/components/profile-links"
 import { DataTable, DifficultyBadge, ExternalLinkButton } from "@/components/data-table"
 import { useTheme } from "@/components/theme/theme-provider"
+import { useGetProblemsQuery } from "@/lib/redux/api/apiSlice"
 
 // Mock data for users
 const usersData = {
@@ -91,6 +92,7 @@ const generateMockAttendanceData = () => {
 export default function UserProfilePage({ params }: { params: { id: string } }) {
   const [activeTab, setActiveTab] = useState("profile")
   const { colorPreset } = useTheme()
+  const { data: problems, isLoading: isLoadingProblems } = useGetProblemsQuery()
 
   // Get user data based on ID
   const userData = usersData[params.id as keyof typeof usersData] || usersData["1"]
@@ -98,55 +100,6 @@ export default function UserProfilePage({ params }: { params: { id: string } }) 
   // Mock data
   const attendanceData = generateMockAttendanceData()
   const attendanceStats = { absent: 0, excused: 1, present: 294, percentage: 99 }
-
-  // Mock data for problems
-  const problemsData = [
-    {
-      difficulty: "Easy",
-      name: "Insertion Sort",
-      tag: "Sorting",
-      solved: "-",
-      added: "1y",
-      vote: 1,
-      link: "#",
-    },
-    {
-      difficulty: "Easy",
-      name: "Sorting the Sentence",
-      tag: "Sorting",
-      solved: "-",
-      added: "1y",
-      vote: 6,
-      link: "#",
-    },
-    {
-      difficulty: "Easy",
-      name: "How Many Numbers Are Smaller Than the Current Number",
-      tag: "Array, Hash Table",
-      solved: "-",
-      added: "1y",
-      vote: 0,
-      link: "#",
-    },
-    {
-      difficulty: "Easy",
-      name: "Find Target Indices After Sorting Array",
-      tag: "Sorting",
-      solved: "-",
-      added: "1y",
-      vote: 3,
-      link: "#",
-    },
-    {
-      difficulty: "Medium",
-      name: "Sort Colors",
-      tag: "Sorting",
-      solved: "-",
-      added: "1y",
-      vote: 2,
-      link: "#",
-    },
-  ]
 
   // Column definitions for problems tab
   const problemsColumns = [
@@ -165,26 +118,9 @@ export default function UserProfilePage({ params }: { params: { id: string } }) 
       align: "right" as const,
     },
     {
-      key: "solved",
-      title: "Solved",
+      key: "platform",
+      title: "Platform",
       align: "right" as const,
-    },
-    {
-      key: "added",
-      title: "Added",
-      align: "right" as const,
-    },
-    {
-      key: "vote",
-      title: "Vote",
-      align: "right" as const,
-      render: (value: number) => (
-        <div className="flex items-center justify-end gap-1">
-          <ArrowUp className="h-4 w-4 text-slate-400 dark:text-slate-500" />
-          <span>{value}</span>
-          <ArrowDown className="h-4 w-4 text-slate-400 dark:text-slate-500" />
-        </div>
-      ),
     },
     {
       key: "link",
@@ -305,6 +241,17 @@ export default function UserProfilePage({ params }: { params: { id: string } }) 
         return "bg-teal-800 dark:bg-teal-900"
     }
   }
+
+  // Transform API problems data for the problems tab
+  const problemsData = problems
+    ? problems.map((problem) => ({
+        difficulty: problem.Difficulty.toLowerCase(),
+        name: problem.Name,
+        tag: problem.Tag,
+        platform: problem.Platform,
+        link: problem.Link,
+      }))
+    : []
 
   return (
     <div className="p-4 md:p-6 max-w-7xl mx-auto">
@@ -479,7 +426,24 @@ export default function UserProfilePage({ params }: { params: { id: string } }) 
               </Button>
             </div>
           </div>
-          <DataTable columns={problemsColumns} data={problemsData} />
+
+          {isLoadingProblems ? (
+            <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm p-4">
+              <div className="animate-pulse space-y-4">
+                {[...Array(5)].map((_, i) => (
+                  <div key={i} className="flex items-center space-x-4">
+                    <div className="h-6 w-16 bg-slate-200 dark:bg-slate-700 rounded"></div>
+                    <div className="h-6 flex-1 bg-slate-200 dark:bg-slate-700 rounded"></div>
+                    <div className="h-6 w-20 bg-slate-200 dark:bg-slate-700 rounded"></div>
+                    <div className="h-6 w-20 bg-slate-200 dark:bg-slate-700 rounded"></div>
+                    <div className="h-6 w-6 bg-slate-200 dark:bg-slate-700 rounded"></div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <DataTable columns={problemsColumns} data={problemsData} />
+          )}
         </div>
       )}
 

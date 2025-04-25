@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
@@ -20,7 +19,6 @@ import {
   User,
   Layers,
 } from "lucide-react"
-
 import { cn } from "@/lib/utils"
 import { useTheme } from "@/components/theme/theme-provider"
 
@@ -40,16 +38,16 @@ const NavItem = ({ href, icon: Icon, label, isActive, hasSubmenu, badge }: NavIt
       className={cn(
         "flex items-center gap-3 px-3 py-2 text-sm rounded-md transition-colors",
         isActive
-          ? "bg-theme/10 text-theme font-medium dark:bg-theme/20"
+          ? "bg-theme/10 text-theme font-medium dark:bg-theme/20 border-l-4 border-theme pl-2"
           : "hover:bg-slate-100 text-slate-700 dark:text-slate-200 dark:hover:bg-slate-800/60",
       )}
     >
       <Icon className={cn("h-5 w-5", isActive ? "text-theme" : "text-slate-500 dark:text-slate-400")} />
       <span>{label}</span>
       {badge && (
-        <span className="ml-auto bg-slate-200 dark:bg-slate-700 text-xs px-2 py-0.5 rounded-full">{badge}</span>
+        <span className="ml-auto bg-theme text-white text-xs px-2 py-0.5 rounded-full">{badge}</span>
       )}
-      {hasSubmenu && <span className="ml-auto">›</span>}
+      {hasSubmenu && <span className="ml-auto text-slate-400">›</span>}
     </Link>
   )
 }
@@ -72,7 +70,6 @@ export function Sidebar({
   const pathname = usePathname()
   const { direction } = useTheme()
 
-  // Skip rendering sidebar on auth pages
   if (pathname.includes("/auth/")) {
     return null
   }
@@ -80,35 +77,38 @@ export function Sidebar({
   return (
     <div
       className={cn(
-        "h-full bg-white dark:bg-slate-900 flex flex-col border-r dark:border-slate-800",
+        "h-full bg-white dark:bg-slate-900 bborder-b dark:border-slate-800 order-r flex flex-col ",
         isMobile ? "w-full" : "w-[220px] fixed inset-y-0 left-0",
         direction === "rtl" ? "border-r-0 border-l" : "",
       )}
     >
       {/* Logo section */}
-      <div className="p-4 border-b dark:border-slate-800">
+      <div className="p-4 ">
         <Link href="/dashboard" className="flex items-center">
           <Image src="/images/a2sv-hub-logo.png" alt="A2SV Hub" width={80} height={30} className="h-8 w-auto" />
         </Link>
       </div>
 
       {/* User profile section */}
-      <div className="p-4 border-b dark:border-slate-800 flex items-center gap-3">
-        <div className="h-10 w-10 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
-          {userImage ? (
-            <img src={userImage || "/placeholder.svg"} alt={userName} className="h-full w-full object-cover" />
-          ) : (
-            <Image
-              src="/images/profile-pic.png"
-              alt={userName}
-              width={40}
-              height={40}
-              className="h-full w-full object-cover"
-            />
-          )}
+        <div className="p-4 flex flex-row items-center bg-slate-50 dark:bg-slate-800/50 w-[90%] gap-3 rounded-xl justify-left ml-2">
+        <div className="relative group">
+          <div className="h-10 w-10 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden transition-transform group-hover:scale-105">
+            {userImage ? (
+              <img src={userImage} alt={userName} className="h-full w-full object-cover" />
+            ) : (
+              <Image
+                src="/images/profile-pic.png"
+                alt={userName}
+                width={40}
+                height={40}
+                className="h-full w-full object-cover"
+              />
+            )}
+          </div>
+          <div className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 border-2 border-white dark:border-slate-800"></div>
         </div>
-        <div>
-          <p className="font-medium text-sm dark:text-white">{userName}</p>
+        <div className="text-center">
+          <p className="font-medium text-sm dark:text-white truncate max-w-full">{userName}</p>
           <p className="text-xs text-slate-500 dark:text-slate-400">{userTitle}</p>
         </div>
       </div>
@@ -116,7 +116,7 @@ export function Sidebar({
       {/* Navigation sections */}
       <div className="flex-1 overflow-auto py-4 px-2 space-y-6">
         {/* Student section */}
-        <div>
+        <div className="bg-slate-50 dark:bg-slate-800/50 p-1 rounded-md">
           <h3 className="px-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-2">STUDENT</h3>
           <nav className="space-y-1">
             <NavItem href="/dashboard" icon={Home} label="Home" isActive={pathname === "/dashboard"} />
@@ -144,9 +144,9 @@ export function Sidebar({
           </nav>
         </div>
 
-        {/* Head section - only visible for head role */}
+        {/* Head section */}
         {(userRole === "head" || userRole === "admin") && (
-          <div>
+          <div className="bg-slate-50 dark:bg-slate-800/50 p-1 rounded-md">
             <h3 className="px-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-2">HEAD</h3>
             <nav className="space-y-1">
               <NavItem
@@ -178,9 +178,9 @@ export function Sidebar({
           </div>
         )}
 
-        {/* Head of Academy section - only visible for head role */}
+        {/* Head of Academy section */}
         {userRole === "head" && (
-          <div>
+          <div className="bg-slate-50 dark:bg-slate-800/50 p-1 rounded-md">
             <h3 className="px-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-2">
               HEAD OF ACADEMY
             </h3>
