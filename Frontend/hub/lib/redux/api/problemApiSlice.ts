@@ -1,63 +1,76 @@
 import { baseApiSlice } from "./baseApiSlice"
-import type { Problem, ProblemsResponse, CreateProblemRequest, BaseResponse } from "./types"
+
+// Define the Problem interface based on the API response
+export interface Problem {
+  ID: number
+  ContestID: number | null
+  TrackID: number | null
+  Name: string
+  Difficulty: string
+  Tag: string
+  Platform: string
+  Link: string
+  CreatedAt: string
+  UpdatedAt: string
+  Contest: any | null
+  Track: any | null
+}
 
 export const problemApiSlice = baseApiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getProblems: builder.query<Problem[], { tag?: string; name?: string }>({
-      query: (params) => {
-        const queryParams = new URLSearchParams()
-        if (params.tag) queryParams.append("tag", params.tag)
-        if (params.name) queryParams.append("name", params.name)
+    getProblems: builder.query<Problem[], void>({
+      query: () => "/problem",
+      transformResponse: (response: any) => {
+        console.log("Raw API response:", response)
 
-        return {
-          url: "/problem",
-          params: queryParams,
+        // Check if the response has the expected structure
+        if (response && Array.isArray(response)) {
+          return response
         }
+
+        // If response has a problems property
+        if (response && Array.isArray(response.problems)) {
+          return response.problems
+        }
+
+        // If response is wrapped in a data property
+        if (response && response.data && Array.isArray(response.data)) {
+          return response.data
+        }
+
+        // If none of the above, return empty array
+        console.warn("Unexpected response format:", response)
+        return []
       },
-      transformResponse: (response: ProblemsResponse) => response.problems || [],
       providesTags: ["Problem"],
     }),
 
     getProblemById: builder.query<Problem, number>({
       query: (id) => `/problem/${id}`,
-      transformResponse: (response: { problem: Problem }) => response.problem,
+      transformResponse: (response: any) => {
+        console.log("Raw problem by ID response:", response)
+
+        // Check if response has the problem directly
+        if (response && response.ID) {
+          return response
+        }
+
+        // Check if response has a problem property
+        if (response && response.problem && response.problem.ID) {
+          return response.problem
+        }
+
+        // Check if response has data property
+        if (response && response.data && response.data.ID) {
+          return response.data
+        }
+
+        console.warn("Unexpected problem response format:", response)
+        return {} as Problem
+      },
       providesTags: (result, error, id) => [{ type: "Problem", id }],
-    }),
-
-    createProblem: builder.mutation<Problem, CreateProblemRequest>({
-      query: (data) => ({
-        url: "/problem",
-        method: "POST",
-        body: data,
-      }),
-      transformResponse: (response: BaseResponse<Problem>) => response.data as Problem,
-      invalidatesTags: ["Problem"],
-    }),
-
-    updateProblem: builder.mutation<Problem, { id: number; data: Partial<Problem> }>({
-      query: ({ id, data }) => ({
-        url: `/problem/${id}`,
-        method: "PUT",
-        body: data,
-      }),
-      transformResponse: (response: BaseResponse<Problem>) => response.data as Problem,
-      invalidatesTags: (result, error, { id }) => [{ type: "Problem", id }],
-    }),
-
-    deleteProblem: builder.mutation<void, number>({
-      query: (id) => ({
-        url: `/problem/${id}`,
-        method: "DELETE",
-      }),
-      invalidatesTags: ["Problem"],
     }),
   }),
 })
 
-export const {
-  useGetProblemsQuery,
-  useGetProblemByIdQuery,
-  useCreateProblemMutation,
-  useUpdateProblemMutation,
-  useDeleteProblemMutation,
-} = problemApiSlice
+export const { useGetProblemsQuery, useGetProblemByIdQuery } = problemApiSlice

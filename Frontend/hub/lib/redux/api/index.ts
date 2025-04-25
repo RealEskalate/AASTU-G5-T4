@@ -1,8 +1,8 @@
-// Export all API slices
+// Export all API slices for easy imports
 export * from "./baseApiSlice"
-export * from "./superGroupApiSlice"
 export * from "./problemApiSlice"
 export * from "./trackApiSlice"
+export * from "./superGroupApiSlice"
 export * from "./countryApiSlice"
 export * from "./groupApiSlice"
 export * from "./userApiSlice"
@@ -10,6 +10,3 @@ export * from "./submissionApiSlice"
 export * from "./contestApiSlice"
 export * from "./roleApiSlice"
 export * from "./inviteApiSlice"
-
-// Export types
-export * from "./types"

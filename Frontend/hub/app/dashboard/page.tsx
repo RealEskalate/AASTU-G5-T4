@@ -5,6 +5,7 @@ import { HeroSection } from "@/components/dashboard/hero-section"
 import { StatsSection } from "@/components/dashboard/stats-section"
 import { DailyProblemSection } from "@/components/dashboard/daily-problem-section"
 import { LatestProblemsSection } from "@/components/dashboard/latest-problems-section"
+import { LatestSubmissionsSection } from "@/components/dashboard/latest-submissions-section"
 
 export default function Dashboard() {
   // Mock data for stats
@@ -37,8 +38,11 @@ export default function Dashboard() {
       {/* Daily problem section */}
       <DailyProblemSection problem={dailyProblem} />
 
-      {/* Latest problems - now using RTK Query */}
+      {/* Latest problems section */}
       <LatestProblemsSection />
+
+      {/* Latest submissions section */}
+      <LatestSubmissionsSection />
     </div>
   )
 }

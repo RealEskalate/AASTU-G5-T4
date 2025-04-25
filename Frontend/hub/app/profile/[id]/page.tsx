@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { MapPin, Mail, Code, Users, Building, ArrowUp } from "lucide-react"
@@ -11,6 +11,7 @@ import { ProfileLinks } from "@/components/profile-links"
 import { DataTable, DifficultyBadge, ExternalLinkButton } from "@/components/data-table"
 import { useTheme } from "@/components/theme/theme-provider"
 import { useGetProblemsQuery } from "@/lib/redux/api/apiSlice"
+import { useGetSubmissionsQuery } from "@/lib/redux/api/submissionApiSlice" // Import the hook
 
 // Mock data for users
 const usersData = {
@@ -92,7 +93,6 @@ const generateMockAttendanceData = () => {
 export default function UserProfilePage({ params }: { params: { id: string } }) {
   const [activeTab, setActiveTab] = useState("profile")
   const { colorPreset } = useTheme()
-  const { data: problems, isLoading: isLoadingProblems } = useGetProblemsQuery()
 
   // Get user data based on ID
   const userData = usersData[params.id as keyof typeof usersData] || usersData["1"]
@@ -178,31 +178,22 @@ export default function UserProfilePage({ params }: { params: { id: string } }) 
   const submissionsColumns = [
     {
       key: "name",
-      title: "Name",
+      title: "Problem Name",
+      render: (_, row) => row.Problem?.Name || "Unknown Problem",
     },
     {
-      key: "time_spent",
-      title: "Time spent",
+      key: "userName",
+      title: "User Name",
+      render: (_, row) => row.User?.Name || "Unknown User",
+    },
+    {
+      key: "timeSpent",
+      title: "Time Spent (mins)",
       align: "right" as const,
-    },
-    {
-      key: "tries",
-      title: "Tries",
-      align: "center" as const,
     },
     {
       key: "language",
       title: "Language",
-      align: "right" as const,
-    },
-    {
-      key: "in_contest",
-      title: "In contest",
-      align: "right" as const,
-    },
-    {
-      key: "added",
-      title: "Added",
       align: "right" as const,
     },
   ]
@@ -243,6 +234,8 @@ export default function UserProfilePage({ params }: { params: { id: string } }) 
   }
 
   // Transform API problems data for the problems tab
+  const { data: problems, isLoading: isLoadingProblems } = useGetProblemsQuery()
+
   const problemsData = problems
     ? problems.map((problem) => ({
         difficulty: problem.Difficulty.toLowerCase(),
@@ -252,6 +245,66 @@ export default function UserProfilePage({ params }: { params: { id: string } }) 
         link: problem.Link,
       }))
     : []
+
+  // Fetch all submissions
+  const { data: submissions, isLoading: isLoadingSubmissions, error: submissionsError } = useGetSubmissionsQuery()
+
+  // Fetch submissions for all problem IDs
+  const [submissions, setSubmissions] = useState([])
+
+  useEffect(() => {
+    if (!problems || problems.length === 0) {
+      setSubmissions([])
+      return
+    }
+
+    const fetchSubmissions = async () => {
+      const allSubmissions = []
+      for (const problem of problems) {
+        try {
+          const response = await fetch(
+            `https://a2sv-hub-52ak.onrender.com/api/v0/submission/problem?problemID=${problem.ID}`
+          )
+          const data = await response.json()
+          if (data?.submissions && Array.isArray(data.submissions)) {
+            const mappedSubmissions = data.submissions.map((submission) => ({
+              problemName: problem.Name,
+              userName: submission.User?.Name || "Unknown User",
+              timeSpent: submission.TimeSpent || "N/A",
+              language: submission.Language || "N/A",
+            }))
+            allSubmissions.push(...mappedSubmissions)
+          }
+        } catch (error) {
+          console.warn(`Skipping problem ID ${problem.ID} due to error or no submissions.`)
+        }
+      }
+      setSubmissions(allSubmissions)
+    }
+
+    fetchSubmissions()
+  }, [problems])
+
+  const submissionsColumns = [
+    {
+      key: "problemName",
+      title: "Problem Name",
+    },
+    {
+      key: "userName",
+      title: "User Name",
+    },
+    {
+      key: "timeSpent",
+      title: "Time Spent (mins)",
+      align: "right" as const,
+    },
+    {
+      key: "language",
+      title: "Language",
+      align: "right" as const,
+    },
+  ]
 
   return (
     <div className="p-4 md:p-6 max-w-7xl mx-auto">
@@ -426,21 +479,8 @@ export default function UserProfilePage({ params }: { params: { id: string } }) 
               </Button>
             </div>
           </div>
-
           {isLoadingProblems ? (
-            <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm p-4">
-              <div className="animate-pulse space-y-4">
-                {[...Array(5)].map((_, i) => (
-                  <div key={i} className="flex items-center space-x-4">
-                    <div className="h-6 w-16 bg-slate-200 dark:bg-slate-700 rounded"></div>
-                    <div className="h-6 flex-1 bg-slate-200 dark:bg-slate-700 rounded"></div>
-                    <div className="h-6 w-20 bg-slate-200 dark:bg-slate-700 rounded"></div>
-                    <div className="h-6 w-20 bg-slate-200 dark:bg-slate-700 rounded"></div>
-                    <div className="h-6 w-6 bg-slate-200 dark:bg-slate-700 rounded"></div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <div className="text-center text-slate-500 dark:text-slate-400">Loading problems...</div>
           ) : (
             <DataTable columns={problemsColumns} data={problemsData} />
           )}
@@ -463,7 +503,15 @@ export default function UserProfilePage({ params }: { params: { id: string } }) 
               </Button>
             </div>
           </div>
-          <DataTable columns={submissionsColumns} data={submissionsData} />
+          {isLoadingProblems ? (
+            <div className="text-center text-slate-500 dark:text-slate-400">Loading problems...</div>
+          ) : problemsError ? (
+            <div className="text-center text-red-500">Error loading problems. Please try again later.</div>
+          ) : submissions.length > 0 ? (
+            <DataTable columns={submissionsColumns} data={submissions} />
+          ) : (
+            <div className="text-center text-slate-500 dark:text-slate-400">No submissions available.</div>
+          )}
         </div>
       )}
 

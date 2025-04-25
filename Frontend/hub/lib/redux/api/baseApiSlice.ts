@@ -1,11 +1,18 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 
-// Base API slice that will be extended by other API slices
+// Define the base API slice with proper configuration
 export const baseApiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL || "https://a2sv-hub-52ak.onrender.com/api/v0",
+    baseUrl: "https://a2sv-hub-52ak.onrender.com/api/v0",
+    prepareHeaders: (headers) => {
+      // Add necessary headers to avoid CORS issues
+      headers.set("Accept", "application/json")
+      headers.set("Content-Type", "application/json")
+      return headers
+    },
+    credentials: "omit", // Don't send cookies with the request
   }),
-  tagTypes: ["Problem", "Track", "SuperGroup", "Group", "Country", "User", "Submission", "Contest", "Role", "Invite"],
+  tagTypes: ["Problem", "Track", "User", "Group", "Country", "Submission", "Contest", "SuperGroup", "Role", "Invite"],
   endpoints: () => ({}),
 })

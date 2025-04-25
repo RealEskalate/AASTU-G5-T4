@@ -1,3 +1,16 @@
+// This file is a barrel export for all API slices
+import { baseApiSlice } from "./baseApiSlice"
+import { problemApiSlice } from "./problemApiSlice"
+
+// Export all API slices
+export { baseApiSlice, problemApiSlice }
+
+// Export hooks from problem API slice
+export {
+  useGetProblemsQuery,
+  useGetProblemByIdQuery,
+} from "./problemApiSlice"
+
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 
 export interface Problem {
@@ -66,4 +79,4 @@ export const apiSlice = createApi({
   }),
 })
 
-export const { useGetProblemsQuery, useGetProblemByIdQuery, useGetTracksQuery, useGetTrackByIdQuery } = apiSlice
+export const { useGetTracksQuery, useGetTrackByIdQuery } = apiSlice

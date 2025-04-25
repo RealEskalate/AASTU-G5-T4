@@ -2,16 +2,35 @@
 
 import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
-import { useGetProblemsQuery } from "@/lib/redux/api/apiSlice"
+import { useGetProblemsQuery } from "@/lib/redux/api/problemApiSlice"
 import { DifficultyBadge } from "@/components/difficulty-badge"
 
 export function LatestProblemsSection() {
   const { data: problems, isLoading, error } = useGetProblemsQuery()
 
+  console.log("LatestProblemsSection - raw problems data:", problems)
+
+  // Ensure problems is an array
+  const validProblems = Array.isArray(problems) ? problems : []
+  if (!Array.isArray(problems)) {
+    console.warn("LatestProblemsSection - problems data is not an array:", problems)
+  }
+
   // Get the latest 10 problems, sorted by creation date
-  const latestProblems = problems
-    ? [...problems].sort((a, b) => new Date(b.CreatedAt).getTime() - new Date(a.CreatedAt).getTime()).slice(0, 10)
-    : []
+  const latestProblems =
+    validProblems.length > 0
+      ? [...validProblems]
+          .filter((problem) => problem && problem.ID) // Make sure we have valid problems
+          .sort((a, b) => {
+            // Safely handle date comparison
+            const dateA = a.CreatedAt ? new Date(a.CreatedAt).getTime() : 0
+            const dateB = b.CreatedAt ? new Date(b.CreatedAt).getTime() : 0
+            return dateB - dateA
+          })
+          .slice(0, 10)
+      : []
+
+  console.log("LatestProblemsSection - processed problems:", latestProblems)
 
   if (isLoading) {
     return (
@@ -36,11 +55,24 @@ export function LatestProblemsSection() {
   }
 
   if (error) {
+    console.error("Error fetching problems:", error)
     return (
       <div className="mb-8">
         <h2 className="text-lg font-semibold mb-4 dark:text-white">Latest Problems</h2>
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm p-4 text-red-500">
           Error loading problems. Please try again later.
+          <pre className="mt-2 text-xs overflow-auto max-h-40">{JSON.stringify(error, null, 2)}</pre>
+        </div>
+      </div>
+    )
+  }
+
+  if (!latestProblems || latestProblems.length === 0) {
+    return (
+      <div className="mb-8">
+        <h2 className="text-lg font-semibold mb-4 dark:text-white">Latest Problems</h2>
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm p-4 text-slate-500 dark:text-slate-400">
+          No problems available at the moment.
         </div>
       </div>
     )
@@ -64,15 +96,19 @@ export function LatestProblemsSection() {
             {latestProblems.map((problem) => (
               <tr key={problem.ID} className="border-b dark:border-slate-700">
                 <td className="py-3 px-4">
-                  <DifficultyBadge level={problem.Difficulty.toLowerCase() as any} size="sm" />
+                  <DifficultyBadge level={(problem.Difficulty || "medium").toLowerCase() as any} size="sm" />
                 </td>
                 <td className="py-3 px-4 dark:text-slate-300">{problem.Name}</td>
                 <td className="py-3 px-4 text-right dark:text-slate-300">{problem.Tag}</td>
                 <td className="py-3 px-4 text-right dark:text-slate-300">{problem.Platform}</td>
                 <td className="py-3 px-4 text-right">
-                  <Link href={problem.Link} target="_blank" className="text-blue-500 hover:text-blue-700">
-                    <ArrowUpRight className="h-4 w-4 inline" />
-                  </Link>
+                  {problem.Link ? (
+                    <Link href={problem.Link} target="_blank" className="text-blue-500 hover:text-blue-700">
+                      <ArrowUpRight className="h-4 w-4 inline" />
+                    </Link>
+                  ) : (
+                    <span className="text-slate-400">No link</span>
+                  )}
                 </td>
               </tr>
             ))}
