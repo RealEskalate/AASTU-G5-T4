@@ -10,6 +10,7 @@ import { UserGridView } from "@/components/users/user-grid-view"
 import { UserListView } from "@/components/users/user-list-view"
 import { CountryCard } from "@/components/users/country-card"
 import { GroupList } from "@/components/groups/group-list"
+import { useGetCountriesQuery } from "@/lib/redux/api/countryApiSlice"
 
 // Mock data for users
 const usersData = [
@@ -209,6 +210,9 @@ export default function UsersPage() {
   const [expandedCountries, setExpandedCountries] = useState<Record<string, boolean>>({})
   const { colorPreset, theme } = useTheme()
 
+  // Fetch countries from the API
+  const { data: countries, isLoading: isLoadingCountries, error: countriesError } = useGetCountriesQuery()
+
   const toggleCountryExpansion = (countryId: string) => {
     setExpandedCountries((prev) => ({
       ...prev,
@@ -313,14 +317,46 @@ export default function UsersPage() {
 
         <TabsContent value="countries" className="mt-0">
           <div className="space-y-6">
-            {countriesData.map((country) => (
-              <CountryCard
-                key={country.id}
-                country={country}
-                isExpanded={!!expandedCountries[country.id]}
-                onToggle={() => toggleCountryExpansion(country.id)}
-              />
-            ))}
+            {isLoadingCountries ? (
+              <div>Loading countries...</div>
+            ) : countriesError ? (
+              <div>Error loading countries. Please try again later.</div>
+            ) : (
+              countries.map((country) => (
+                <CountryCard
+                  key={country.ID}
+                  country={{
+                    id: country.ID.toString(),
+                    name: country.Name,
+                    members: Math.floor(Math.random() * 1000), // Random member count
+                    problemsSolved: Math.floor(Math.random() * 5000).toString(), // Random problems solved
+                    timeSpent: Math.floor(Math.random() * 10000).toString(), // Random time spent
+                    avgRating: (Math.random() * 1000 + 1000).toFixed(0), // Random average rating
+                    flag: `/images/flags/${country.ShortCode.toLowerCase()}.png`,
+                    users: [
+                      {
+                        id: "dummy1",
+                        name: "Dummy User 1",
+                        problems: 100,
+                        timeSpent: "10h",
+                        rating: "1500",
+                        image: "/images/profile-pic.png",
+                      },
+                      {
+                        id: "dummy2",
+                        name: "Dummy User 2",
+                        problems: 200,
+                        timeSpent: "20h",
+                        rating: "1600",
+                        image: "/images/profile-pic.png",
+                      },
+                    ], // Dummy users for expanded data
+                  }}
+                  isExpanded={!!expandedCountries[country.ID]}
+                  onToggle={() => toggleCountryExpansion(country.ID.toString())}
+                />
+              ))
+            )}
           </div>
         </TabsContent>
       </Tabs>

@@ -11,7 +11,7 @@ export function SettingsToggle() {
     <Button
       variant="outline"
       size="icon"
-      className={`fixed bottom-4 ${
+      className={`settings-toggle fixed bottom-4 ${
         direction === "ltr" ? "right-4" : "left-4"
       } z-50 rounded-full h-10 w-10 shadow-lg bg-white dark:bg-slate-800 dark:border-slate-700`}
       onClick={() => setIsSettingsOpen(!isSettingsOpen)}

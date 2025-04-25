@@ -5,7 +5,15 @@ export const groupApiSlice = baseApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getGroups: builder.query<Group[], void>({
       query: () => "/group",
-      transformResponse: (response: GroupsResponse) => response.groups || [],
+      transformResponse: (response: { groups: any[] }) =>
+        response.groups.map((group) => ({
+          id: group.ID,
+          name: group.Name,
+          code: group.ShortName,
+          members: 0, // Placeholder as the API doesn't provide member count
+          timeSpent: "N/A", // Placeholder as the API doesn't provide this data
+          avgRating: "N/A", // Placeholder as the API doesn't provide this data
+        })),
       providesTags: ["Group"],
     }),
 

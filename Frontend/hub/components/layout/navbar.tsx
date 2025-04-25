@@ -33,16 +33,16 @@ export function Navbar({ notificationCount = 0 }: NavbarProps) {
   }, [isSearchOpen])
 
   return (
-    <header className="h-14 border-b bg-white dark:bg-slate-900 dark:border-slate-800 flex items-center px-4 sticky top-0 z-30">
-      <div className="flex items-center gap-4 w-full">
+    <header className="h-16 border-b bg-white dark:bg-slate-900 dark:border-slate-800 flex items-center px-6 sticky top-0 z-30">
+      <div className="flex items-center gap-6 w-full">
         <MobileSidebar />
 
         {isSearchOpen && (
           <div
             ref={searchRef}
-            className="absolute top-0 left-0 w-full h-14 bg-white dark:bg-slate-900 p-3 px-10 z-50 flex items-center justify-between shadow-md transition-all duration-300 border-b border-slate-200 dark:border-slate-700"
+            className="absolute top-0 left-0 w-full h-16 bg-white dark:bg-slate-900 p-4 px-12 z-50 flex items-center justify-between shadow-md transition-all duration-300 border-b border-slate-200 dark:border-slate-700"
           >
-            <Search className="h-4 w-4 text-slate-400" />
+            <Search className="h-5 w-5 text-slate-400" />
             <input
               type="text"
               className="w-full px-4 py-2 bg-transparent text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none border border-slate-300 dark:border-slate-600 rounded-md"
@@ -54,28 +54,28 @@ export function Navbar({ notificationCount = 0 }: NavbarProps) {
           </div>
         )}
 
-        <div className="flex-1 max-w-md">
+        <div className="flex-1 max-w-lg">
           <Button
             variant="ghost"
             onClick={() => setIsSearchOpen(true)}
             className="flex items-center gap-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300"
           >
-            <Search className="h-4 w-4" />
+            <Search className="h-5 w-5" />
             <span className="hidden md:inline">Search...</span>
           </Button>
         </div>
 
-        <div className="ml-auto flex items-center gap-4">
-          <Button variant="ghost" size="icon" className="h-9 w-9 text-yellow-500">
-            <Star className="h-5 w-5" />
+        <div className="ml-auto flex items-center gap-6">
+          <Button variant="ghost" size="icon" className="h-10 w-10 text-yellow-500">
+            <Star className="h-6 w-6" />
           </Button>
 
-          <Button variant="ghost" size="icon" className="relative h-9 w-9">
-            <Bell className="h-5 w-5" />
+          <Button variant="ghost" size="icon" className="relative h-10 w-10">
+            <Bell className="h-6 w-6" />
             {notificationCount > 0 && (
               <span
                 className={cn(
-                  "absolute top-0 right-0 h-4 w-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center",
+                  "absolute top-0 right-0 h-5 w-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center",
                   notificationCount > 0 && "animate-pulse"
                 )}
               >
@@ -84,12 +84,12 @@ export function Navbar({ notificationCount = 0 }: NavbarProps) {
             )}
           </Button>
 
-          <Link href="/profile" className="h-9 w-9 rounded-full bg-slate-200 overflow-hidden hover:ring-2 ring-theme transition-all">
+          <Link href="/profile" className="h-10 w-10 rounded-full bg-slate-200 overflow-hidden hover:ring-2 ring-theme transition-all">
             <Image
               src="/images/profile-pic.png"
               alt="User"
-              width={36}
-              height={36}
+              width={40}
+              height={40}
               className="h-full w-full object-cover"
             />
           </Link>

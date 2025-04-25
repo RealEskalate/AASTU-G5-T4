@@ -36,14 +36,14 @@ const NavItem = ({ href, icon: Icon, label, isActive, hasSubmenu, badge }: NavIt
     <Link
       href={href}
       className={cn(
-        "flex items-center gap-3 px-3 py-2 text-sm rounded-md transition-colors",
+        "flex items-center gap-2 px-3 py-2 text-sm rounded-md transition-colors",
         isActive
           ? "bg-theme/10 text-theme font-medium dark:bg-theme/20 border-l-4 border-theme pl-2"
           : "hover:bg-slate-100 text-slate-700 dark:text-slate-200 dark:hover:bg-slate-800/60",
       )}
     >
-      <Icon className={cn("h-5 w-5", isActive ? "text-theme" : "text-slate-500 dark:text-slate-400")} />
-      <span>{label}</span>
+      <Icon className={cn("h-4 w-4", isActive ? "text-theme" : "text-slate-500 dark:text-slate-400")} />
+      <span className="text-xs">{label}</span>
       {badge && (
         <span className="ml-auto bg-theme text-white text-xs px-2 py-0.5 rounded-full">{badge}</span>
       )}
@@ -90,35 +90,35 @@ export function Sidebar({
       </div>
 
       {/* User profile section */}
-        <div className="p-4 flex flex-row items-center bg-slate-50 dark:bg-slate-800/50 w-[90%] gap-3 rounded-xl justify-left ml-2">
-        <div className="relative group">
-          <div className="h-10 w-10 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden transition-transform group-hover:scale-105">
-            {userImage ? (
-              <img src={userImage} alt={userName} className="h-full w-full object-cover" />
-            ) : (
-              <Image
-                src="/images/profile-pic.png"
-                alt={userName}
-                width={40}
-                height={40}
-                className="h-full w-full object-cover"
-              />
-            )}
+        <div className="p-4 flex flex-row items-center bg-slate-50 dark:bg-slate-800/50 w-[95%] gap-3 rounded-lg justify-left mx-auto">
+          <div className="relative group">
+            <div className="h-12 w-12 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden transition-transform group-hover:scale-105">
+              {userImage ? (
+                <img src={userImage} alt={userName} className="h-full w-full object-cover" />
+              ) : (
+                <Image
+                  src="/images/profile-pic.png"
+                  alt={userName}
+                  width={48}
+                  height={48}
+                  className="h-full w-full object-cover"
+                />
+              )}
+            </div>
+            <div className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 border-2 border-white dark:border-slate-800"></div>
           </div>
-          <div className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 border-2 border-white dark:border-slate-800"></div>
+          <div className="text-left">
+            <p className="font-medium text-sm dark:text-white truncate max-w-full">{userName}</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">{userTitle}</p>
+          </div>
         </div>
-        <div className="text-center">
-          <p className="font-medium text-sm dark:text-white truncate max-w-full">{userName}</p>
-          <p className="text-xs text-slate-500 dark:text-slate-400">{userTitle}</p>
-        </div>
-      </div>
 
       {/* Navigation sections */}
-      <div className="flex-1 overflow-auto py-4 px-2 space-y-6">
+      <div className="flex-1 overflow-auto py-4 px-2 space-y-4">
         {/* Student section */}
-        <div className="bg-slate-50 dark:bg-slate-800/50 p-1 rounded-md">
-          <h3 className="px-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-2">STUDENT</h3>
-          <nav className="space-y-1">
+        <div className="bg-slate-50 dark:bg-slate-800/50 p-2 rounded-md">
+          <h3 className="px-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-3">STUDENT</h3>
+          <nav className="space-y-2">
             <NavItem href="/dashboard" icon={Home} label="Home" isActive={pathname === "/dashboard"} />
             <NavItem
               href="/tracks"

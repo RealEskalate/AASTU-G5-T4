@@ -1,16 +1,16 @@
-import Link from "next/link"
+import Link from "next/link";
 
 interface Group {
-  id: string
-  name: string
-  code: string
-  members: number
-  timeSpent: string
-  avgRating: string
+  id: string;
+  name: string;
+  code: string;
+  members: number;
+  timeSpent: string;
+  avgRating: string;
 }
 
 interface GroupCardProps {
-  group: Group
+  group: Group;
 }
 
 export function GroupCard({ group }: GroupCardProps) {
@@ -36,5 +36,5 @@ export function GroupCard({ group }: GroupCardProps) {
         </div>
       </div>
     </Link>
-  )
+  );
 }

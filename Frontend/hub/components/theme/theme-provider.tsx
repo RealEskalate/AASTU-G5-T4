@@ -35,6 +35,41 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   const [stretchLevel, setStretchLevel] = useState<StretchLevel>(0)
 
+  useEffect(() => {
+    const storedTheme = localStorage.getItem("theme") as Theme
+    const storedDirection = localStorage.getItem("direction") as Direction
+    const storedLayout = localStorage.getItem("layout") as Layout
+    const storedColorPreset = localStorage.getItem("colorPreset") as ColorPreset
+    const storedStretchLevel = parseInt(localStorage.getItem("stretchLevel") || "0") as StretchLevel
+
+    if (storedTheme) setTheme(storedTheme)
+    if (storedDirection) setDirection(storedDirection)
+    if (storedLayout) setLayout(storedLayout)
+    if (storedColorPreset) setColorPreset(storedColorPreset)
+    if (storedStretchLevel) setStretchLevel(storedStretchLevel)
+  }, [])
+
+  // Persist theme settings to localStorage
+  useEffect(() => {
+    localStorage.setItem("theme", theme)
+  }, [theme])
+
+  useEffect(() => {
+    localStorage.setItem("direction", direction)
+  }, [direction])
+
+  useEffect(() => {
+    localStorage.setItem("layout", layout)
+  }, [layout])
+
+  useEffect(() => {
+    localStorage.setItem("colorPreset", colorPreset)
+  }, [colorPreset])
+
+  useEffect(() => {
+    localStorage.setItem("stretchLevel", stretchLevel.toString())
+  }, [stretchLevel])
+
   // Apply theme to document
   useEffect(() => {
     const root = window.document.documentElement
@@ -42,10 +77,21 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     root.classList.add(theme)
   }, [theme])
 
-  // Apply direction to document
+  // Apply direction to document and adjust sidebar/settings toggle position
   useEffect(() => {
     const html = document.documentElement
     html.setAttribute("dir", direction)
+
+    const sidebar = document.querySelector(".sidebar")
+    const settingsToggle = document.querySelector(".settings-toggle")
+
+    if (sidebar) {
+      sidebar.classList.toggle("rtl", direction === "rtl")
+    }
+
+    if (settingsToggle) {
+      settingsToggle.classList.toggle("rtl", direction === "rtl")
+    }
   }, [direction])
 
   // Apply color preset to document
