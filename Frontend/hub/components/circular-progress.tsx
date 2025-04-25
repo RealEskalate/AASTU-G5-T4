@@ -15,7 +15,7 @@ interface CircularProgressProps {
 export function CircularProgress({
   value,
   size = 60,
-  strokeWidth = 6,
+  strokeWidth = 10,
   color = "#3b82f6",
   backgroundColor = "#e2e8f0",
   showValue = true,
@@ -36,6 +36,7 @@ export function CircularProgress({
   const radius = (size - strokeWidth) / 2
   const circumference = radius * 2 * Math.PI
   const strokeDashoffset = circumference - (progress / 100) * circumference
+  
 
   return (
     <div className="relative inline-flex items-center justify-center">
@@ -49,7 +50,7 @@ export function CircularProgress({
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke={color}
+          stroke="hsl(var(--theme-color))"
           strokeWidth={strokeWidth}
           strokeDasharray={circumference}
           strokeDashoffset={strokeDashoffset}
