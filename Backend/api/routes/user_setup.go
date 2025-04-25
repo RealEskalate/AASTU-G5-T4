@@ -9,7 +9,7 @@ import (
 )
 
 func SetupUserGroup(api *gin.RouterGroup) {
-	user := api.Group("/user")
-	user.GET("", controllers.GetUser)
+	// user := api.Group("/user")
+	// user.GET("", controllers.GetUser)
 
 }

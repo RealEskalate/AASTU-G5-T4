@@ -29,20 +29,6 @@ type HOA struct {
 	Group     Group     `gorm:"foreignKey:GroupID"`
 }
 
-type Invite struct {
-	ID        int       `gorm:"primaryKey"`
-	Key       string    `gorm:"type:varchar(255)"`
-	RoleID    int       `gorm:"type:integer"`
-	UserID    int       `gorm:"type:integer"`
-	GroupID   int       `gorm:"type:integer"`
-	Used      bool      `gorm:"default:false"`
-	CreatedAt time.Time `gorm:"type:timestamp"`
-	UpdatedAt time.Time `gorm:"type:timestamp"`
-	Role      Role      `gorm:"foreignKey:RoleID"`
-	User      User      `gorm:"foreignKey:UserID"`
-	Group     Group     `gorm:"foreignKey:GroupID"`
-}
-
 type GoogleOAuth struct {
 	ID                   int       `gorm:"primaryKey"`
 	UserID               int       `gorm:"type:integer"`
@@ -82,3 +68,4 @@ type GroupRepository interface {
 	DeleteGroupByID(id int) error
 	FindByUniqueFields(ctx context.Context, name, shortName, description string, group *Group) error
 }
+

@@ -5,12 +5,10 @@ import (
 	"A2SVHUB/internal/repositories"
 	"A2SVHUB/internal/usecases"
 
-	// "context"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
-
 func SetupGroupGroup(api *gin.RouterGroup, db *gorm.DB) {
 	GroupRepo := repositories.NewGroupRepository(db)
 	GroupUseCase := usecases.NewGroupUseCase(GroupRepo)
