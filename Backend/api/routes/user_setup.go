@@ -1,6 +1,8 @@
 package routes
 
 import (
+	// "A2SVHUB/api/controllers"
+
 	"A2SVHUB/api/controllers"
 	"A2SVHUB/internal/repositories"
 	"A2SVHUB/internal/usecases"
@@ -28,5 +30,6 @@ func SetupUserGroup(api *gin.RouterGroup, cfg *config.Config, db *gorm.DB) {
 	api.GET("/users/group/:group_id", userController.GetUsersByGroup)
 
 	api.POST("/users/:id/avatar", userController.UploadUserImage)
+
 
 }
