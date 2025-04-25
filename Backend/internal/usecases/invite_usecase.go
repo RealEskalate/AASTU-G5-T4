@@ -8,27 +8,25 @@ import (
 	"context"
 )
 
-
 type InviteUseCase struct {
 	inviteRepository domain.InviteRepository
-	config config.Config
-	tokenService *utils.TokenService
-	emailService *utils.EmailService
+	config           config.Config
+	tokenService     *utils.TokenService
+	emailService     *utils.EmailService
 }
 
 func NewInviteUseCase(inviteRepository domain.InviteRepository, config config.Config, tokenService *utils.TokenService, emailService *utils.EmailService) *InviteUseCase {
 	return &InviteUseCase{
 		inviteRepository: inviteRepository,
-		config: config,
-		tokenService: tokenService,
-		emailService: emailService,
+		config:           config,
+		tokenService:     tokenService,
+		emailService:     emailService,
 	}
 }
 
-
 func (i *InviteUseCase) CreateInvite(invite dtos.CreateInviteDTO) (*dtos.InviteDTO, *domain.ErrorResponse) {
 	user, err := i.inviteRepository.GetUserByEmail(invite.Email, context.TODO())
-	if (err == nil && user != nil){
+	if err == nil && user != nil {
 		return &dtos.InviteDTO{}, &domain.ErrorResponse{
 			Message: "User already exists",
 			Status:  409,
@@ -37,7 +35,7 @@ func (i *InviteUseCase) CreateInvite(invite dtos.CreateInviteDTO) (*dtos.InviteD
 
 	newUser, err := i.inviteRepository.CreateUser(invite, context.TODO())
 
-	if err != nil{
+	if err != nil {
 		return &dtos.InviteDTO{}, &domain.ErrorResponse{
 			Message: err.Error(),
 			Status:  500,
@@ -53,13 +51,13 @@ func (i *InviteUseCase) CreateInvite(invite dtos.CreateInviteDTO) (*dtos.InviteD
 	}
 
 	newInvite, err := i.inviteRepository.CreateInvite(domain.Invite{
-		Key:       token,
-		RoleID:    invite.RoleID,
-		UserID:    newUser.ID,
-		GroupID:   invite.GroupID,
-		Used:      false,
+		Key:     token,
+		RoleID:  invite.RoleID,
+		UserID:  newUser.ID,
+		GroupID: invite.GroupID,
+		Used:    false,
 	}, context.TODO())
-	
+
 	err = i.emailService.SendInviteEmail(invite.Email, token)
 	if err != nil {
 		return &dtos.InviteDTO{}, &domain.ErrorResponse{
@@ -104,7 +102,7 @@ func (i *InviteUseCase) CreateInvites(invites dtos.CreateBatchInviteDTO) ([]dtos
 		}
 	}
 
-	for _, user := range users{
+	for _, user := range users {
 		token, err := i.tokenService.GenerateInviteAccessToken(user.ID, invites.RoleID)
 		if err != nil {
 
@@ -122,11 +120,11 @@ func (i *InviteUseCase) CreateInvites(invites dtos.CreateBatchInviteDTO) ([]dtos
 		}
 
 		invite := domain.Invite{
-			Key:       token,
-			RoleID:    invites.RoleID,
-			UserID:    user.ID,
-			GroupID:   invites.GroupID,
-			Used:      false,
+			Key:     token,
+			RoleID:  invites.RoleID,
+			UserID:  user.ID,
+			GroupID: invites.GroupID,
+			Used:    false,
 		}
 
 		invitedUsers = append(invitedUsers, invite)
@@ -155,7 +153,6 @@ func (i *InviteUseCase) CreateInvites(invites dtos.CreateBatchInviteDTO) ([]dtos
 	}
 	return invitedUserDtos, nil
 }
-
 
 func (i *InviteUseCase) AcceptInvite(token string) (*dtos.InvitedUserDTO, *domain.ErrorResponse) {
 	invite, err := i.inviteRepository.GetInviteByKey(token, context.TODO())
@@ -192,7 +189,7 @@ func (i *InviteUseCase) AcceptInvite(token string) (*dtos.InvitedUserDTO, *domai
 			Status:  404,
 		}
 	}
- 
+
 	err = i.inviteRepository.UpdateInviteStatus(invite.ID, context.TODO())
 	if err != nil {
 		return &dtos.InvitedUserDTO{}, &domain.ErrorResponse{
@@ -211,7 +208,7 @@ func (i *InviteUseCase) AcceptInvite(token string) (*dtos.InvitedUserDTO, *domai
 		Leetcode:               user.Leetcode,
 		Codeforces:             user.Codeforces,
 		Github:                 user.Github,
-		Photo:                  user.Photo,
+		Photo:                  user.AvatarURL,
 		PreferredLanguage:      user.PreferredLanguage,
 		Hackerrank:             user.Hackerrank,
 		GroupID:                user.GroupID,
@@ -242,7 +239,6 @@ func (i *InviteUseCase) AcceptInvite(token string) (*dtos.InvitedUserDTO, *domai
 	return invitedUser, nil
 }
 
-
 func (i *InviteUseCase) InviteExistingUser(invite dtos.InviteExistingUserDTO) (*dtos.InviteDTO, *domain.ErrorResponse) {
 	user, err := i.inviteRepository.GetUserByID(invite.ID, context.TODO())
 	if err != nil {
@@ -268,11 +264,11 @@ func (i *InviteUseCase) InviteExistingUser(invite dtos.InviteExistingUserDTO) (*
 		}
 	}
 	newInvite, err := i.inviteRepository.CreateInvite(domain.Invite{
-		Key:       token,
-		RoleID:    invite.RoleID,
-		UserID:    user.ID,
-		GroupID:   invite.GroupID,
-		Used:      false,
+		Key:     token,
+		RoleID:  invite.RoleID,
+		UserID:  user.ID,
+		GroupID: invite.GroupID,
+		Used:    false,
 	}, context.TODO())
 	if err != nil {
 		return &dtos.InviteDTO{}, &domain.ErrorResponse{

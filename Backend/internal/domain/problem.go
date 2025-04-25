@@ -65,16 +65,6 @@ type ProblemUseCase interface {
 	UpdateProblem(ctx context.Context, id int, problem Problem) error
 	DeleteProblem(ctx context.Context, id int) error
 	GetProblemsByNameAndFilters(ctx context.Context, name string, filter map[string]interface{}) ([]Problem, error)
-
-type ProblemTrack struct {
-	ID        int       `gorm:"primaryKey"`
-	ProblemID int       `gorm:"type:integer"`
-	TrackID   int       `gorm:"type:integer"`
-	CreatedAt time.Time `gorm:"type:timestamp"`
-	UpdatedAt time.Time `gorm:"type:timestamp"`
-	Problem   Problem   `gorm:"foreignKey:ProblemID"`
-	Track     Track     `gorm:"foreignKey:TrackID"`
-
 }
 
 type SubmissionRepository interface {
@@ -85,9 +75,9 @@ type SubmissionRepository interface {
 	DeleteSubmission(ctx context.Context, id int) error
 }
 type SubmissionUseCase interface {
-    CreateSubmission(ctx context.Context, submission Submission) (Submission, error)
-    GetSubmissionByID(ctx context.Context, id int) (Submission, error)
-    GetSubmissionsByProblem(ctx context.Context, problemID int) ([]Submission, error)
-    UpdateSubmission(ctx context.Context, submission Submission) (Submission, error)
-    DeleteSubmission(ctx context.Context, id int) error
+	CreateSubmission(ctx context.Context, submission Submission) (Submission, error)
+	GetSubmissionByID(ctx context.Context, id int) (Submission, error)
+	GetSubmissionsByProblem(ctx context.Context, problemID int) ([]Submission, error)
+	UpdateSubmission(ctx context.Context, submission Submission) (Submission, error)
+	DeleteSubmission(ctx context.Context, id int) error
 }
