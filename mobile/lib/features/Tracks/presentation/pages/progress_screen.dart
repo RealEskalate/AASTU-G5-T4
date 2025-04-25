@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../widgets/progress_circle.dart';
 import '../widgets/progress_legend.dart';
@@ -152,6 +153,7 @@ class ProgressScreen extends StatelessWidget {
                         // Action Buttons
                         ActionButtons(
                           onExerciseTap: () {
+                            context.go("/exercise");
                             // Handle exercise tap
                           },
                           onProblemsTap: () {
