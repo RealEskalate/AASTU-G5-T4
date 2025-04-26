@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mobile/features/Home/presentation/pages/homepage.dart';
 import 'package:mobile/features/Problems/presentation/pages/problems_page.dart';
 import 'package:mobile/features/Profile/presentation/pages/userProfile.dart';
+import 'package:mobile/features/Tracks/presentation/pages/exercise_page.dart';
 import 'package:mobile/features/Tracks/presentation/pages/tracks_page.dart';
 
 // GoRouter configuration
@@ -22,6 +23,10 @@ final router = GoRouter(
     GoRoute(
       path: '/problems',
       builder: (context, state) => ProblemsPage(),
+    ),
+    GoRoute(
+      path: '/exercise',
+      builder: (context, state) => ExercisePage(),
     ),
   ],
 );

@@ -257,6 +257,30 @@ class _UserprofilePageState extends State<UserprofilePage> {
             ],
           ),
         ),
+        ValueListenableBuilder<bool>(
+          valueListenable: _sidebarController.sidebarVisibility,
+          builder: (context, isVisible, _) {
+            return AnimatedOpacity(
+              opacity: isVisible ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 300),
+              child: isVisible
+                  ? HubSidebar(
+                      username: 'Natnael Wondwoesn Solomon',
+                      userRole: 'Student',
+                      userImageUrl:
+                          'https://storage.googleapis.com/a2sv_hub_bucket_2/images%2FNatnael%20Wondwoesn%20Solomon.jpeg',
+                      selectedIndex: _selectedIndex,
+                      onItemSelected: (index) {
+                        setState(() {
+                          _selectedIndex = index;
+                        });
+                      },
+                      onClose: _sidebarController.closeSidebar,
+                    )
+                  : const SizedBox.shrink(),
+            );
+          },
+        )
       ])),
     );
   }
