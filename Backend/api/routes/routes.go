@@ -14,6 +14,7 @@ func SetupRoutes(r *gin.RouterGroup, config *config.Config, database *gorm.DB) {
 
 	SetupRoleGroup(r.Group("/role"), database)
 	SetupGroupGroup(r.Group("/group"), database)
+	SetupCountryGroup(r.Group("/country"), database)
 
 	superGroupRoute := r.Group("/supergroup")
 
