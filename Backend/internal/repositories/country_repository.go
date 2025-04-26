@@ -67,3 +67,19 @@ func (r *CountryRepository) DeleteCountryByID(ctx context.Context, ID int) error
 	}
 	return nil
 }
+func (r *CountryRepository) IsCountryExists(ctx context.Context, name string, shortCode string) (bool, error) {
+	var count int64
+	if err := r.db.WithContext(ctx).
+		Model(&domain.Country{}).
+		Where("name = ? OR short_code = ?", name, shortCode).
+		Count(&count).Error; err != nil {
+		return false, err
+	}
+	return count > 0, nil
+}
+
+func (r *UserRepository) CountOfUsersByCountry(ctx context.Context, countryID int, role string) (int, error) {
+	var count int64
+	err := r.db.WithContext(ctx).Model(&domain.User{}).Where("country_id = ? AND role = ?", countryID, role).Count(&count).Error
+	return int(count), err
+}

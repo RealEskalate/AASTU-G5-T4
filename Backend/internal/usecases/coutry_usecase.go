@@ -11,7 +11,7 @@ type CountryUseCase struct {
 }
 
 func NewCountryUseCase(CountryRepository domain.CountryRepository) domain.CountryUseCase {
-	return CountryUseCase{
+	return &CountryUseCase{
 		CountryRepository: CountryRepository,
 	}
 }
@@ -67,4 +67,21 @@ func (c CountryUseCase) DeleteCountryByID(ctx context.Context, ID int) error {
 		return fmt.Errorf("context cannot be nil")
 	}
 	return c.CountryRepository.DeleteCountryByID(ctx, ID)
+}
+
+func (uc *CountryUseCase) IsCountryExists(ctx context.Context, name string, shortCode string) (bool, error) {
+	return uc.CountryRepository.IsCountryExists(ctx, name, shortCode)
+}
+
+func (c CountryUseCase) CheckCountryExists(ctx context.Context, name string, shortCode string) (bool, error) {
+	if ctx == nil {
+		return false, fmt.Errorf("context cannot be nil")
+	}
+	if name == "" {
+		return false, fmt.Errorf("country name cannot be empty")
+	}
+	if shortCode == "" {
+		return false, fmt.Errorf("country short code cannot be empty")
+	}
+	return c.CountryRepository.IsCountryExists(ctx, name, shortCode)
 }

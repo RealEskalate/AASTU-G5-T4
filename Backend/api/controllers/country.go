@@ -53,6 +53,19 @@ func (cc *CountryController) CreateCountry(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"detail": "Invalid input"})
 		return
 	}
+
+	// Check if the country already exists
+	exists, err := cc.useCase.IsCountryExists(context.TODO(), country.Name, country.ShortCode)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"detail": "Failed to check if country exists"})
+		return
+	}
+	if exists {
+		c.JSON(http.StatusConflict, gin.H{"detail": "A country with the same Name or ShortCode already exists"})
+		return
+	}
+
+	// Create the country
 	newCountry, err := cc.useCase.CreateCountry(context.TODO(), country.Name, country.ShortCode)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"detail": "Failed to create country"})
@@ -60,7 +73,6 @@ func (cc *CountryController) CreateCountry(c *gin.Context) {
 	}
 	c.JSON(http.StatusCreated, gin.H{"country": newCountry})
 }
-
 func (cc *CountryController) UpdateCountryByID(c *gin.Context) {
 	countryID := c.Param("id")
 	id, err := strconv.Atoi(countryID)

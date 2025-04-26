@@ -15,6 +15,16 @@ type Country struct {
 	UpdatedAt time.Time `gorm:"type:timestamp"`
 }
 
+type CountryResponse struct {
+	ID                  int    `json:"id"`
+	Name                string `json:"name"`
+	ShortCode           string `json:"short_code"`
+	TotalStudents       int    `json:"total_students"`
+	TotalTimeSpent      int    `json:"total_time_spent"`
+	TotalProblemsSolved int    `json:"total_problems_solved"`
+	AverageRating       int    `json:"average_rating"`
+}
+
 type Division struct {
 	ID          int       `gorm:"primaryKey"`
 	Name        string    `gorm:"type:varchar(255)"`
@@ -59,6 +69,7 @@ type CountryRepository interface {
 	CreateCountry(ctx context.Context, name string, shortCode string) (Country, error)
 	UpdateCountryByID(ctx context.Context, name string, shortCode string, ID int) (Country, error)
 	DeleteCountryByID(ctx context.Context, ID int) error
+	IsCountryExists(ctx context.Context, name string, shortCode string) (bool, error)
 }
 type CountryUseCase interface {
 	GetAllCountries(ctx context.Context) ([]Country, error)
@@ -66,4 +77,6 @@ type CountryUseCase interface {
 	CreateCountry(ctx context.Context, name string, shortCode string) (Country, error)
 	UpdateCountryByID(ctx context.Context, name string, shortCode string, ID int) (Country, error)
 	DeleteCountryByID(ctx context.Context, ID int) error
+	CheckCountryExists(ctx context.Context, name string, shortCode string) (bool, error)
+	IsCountryExists(ctx context.Context, name string, shortCode string) (bool, error)
 }
