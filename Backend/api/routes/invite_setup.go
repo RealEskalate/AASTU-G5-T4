@@ -18,7 +18,7 @@ func SetupInviteGroup(inviteRoute *gin.RouterGroup, config *config.Config,  db *
 	inviteUseCase := usecases.NewInviteUseCase(inviteRepository, *config, tokenService, emailService)
 	inviteController := controllers.NewInviteController(inviteUseCase)
 
-	inviteRoute.POST("/", inviteController.InviteUser)
+	inviteRoute.POST("", inviteController.InviteUser)
 	inviteRoute.POST("/batch", inviteController.InviteUsers)
 	inviteRoute.POST("/user", inviteController.InviteExistingUser)
 	inviteRoute.GET("/:id", inviteController.AcceptInvite)

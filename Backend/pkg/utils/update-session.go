@@ -44,7 +44,7 @@ func UpdateSessionUtil(session *dtos.UpdateSessionDTOS,  existingSession *domain
 		existingSession.LecturerID = session.LecturerID
 	}
 
-	if session.FundID != 0 {
+	if session.FundID != nil {
 		existingSession.FundID = session.FundID
 	}
 

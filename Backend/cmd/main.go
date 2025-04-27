@@ -7,12 +7,13 @@ import (
 	"A2SVHUB/pkg/config"
 	"A2SVHUB/pkg/database"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	// Load configuration
-	
+
 	cfg := config.LoadConfig()
 
 	// Initialize database
@@ -20,6 +21,9 @@ func main() {
 
 	// Initialize Gin router
 	router := gin.Default()
+
+	// Enable CORS
+	router.Use(cors.Default())
 
 	// Setup routes
 	routes.SetupRoutes(router.Group("/api/v0"), &cfg, db)

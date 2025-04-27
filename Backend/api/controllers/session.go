@@ -3,7 +3,6 @@ package controllers
 import (
 	"A2SVHUB/internal/domain"
 	"A2SVHUB/internal/dtos"
-	"fmt"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -47,7 +46,7 @@ func (r SessionController) CreateSession(c *gin.Context) {
 	var request dtos.CreateSessionDTOS
 	if err := c.ShouldBindJSON(&request); err != nil {
 		c.JSON(400, domain.ErrorResponse{
-			Message: "Invalid input",
+			Message: "Invalid input: :" + err.Error(),
 			Status:  400,
 		})
 		return
@@ -78,9 +77,8 @@ func (r SessionController) UpdateSession(c *gin.Context) {
 		return
 	}
 	if err := c.ShouldBindJSON(&request); err != nil {
-		fmt.Println(err.Error())
 		c.JSON(400, domain.ErrorResponse{
-			Message: "Invalid input",
+			Message: "Invalid input: :" + err.Error(),
 			Status:  400,
 		})
 		return
@@ -170,6 +168,32 @@ func (r SessionController) GetAllSessions(c *gin.Context) {
 	c.JSON(200, domain.SuccessResponse{
 		Message: "Sessions retrieved successfully",
 		Data:    sessions,
+		Status:  200,
+	})
+}
+
+func (r SessionController) GetSessionByLecturer(c *gin.Context) {
+	lecturer_id := c.Query("lecturer_id")
+	if lecturer_id == ""{
+		c.JSON(400, domain.ErrorResponse{
+			Message: "Lecturer ID is required",
+			Status:  400,
+		})
+		return
+	}
+	lecturer_id_int, _ := strconv.Atoi(lecturer_id)
+
+	session, err := r.sessionUseCase.GetSessionByLecturer(lecturer_id_int)
+	if err != nil {
+		c.JSON(err.Status, domain.ErrorResponse{
+			Message: err.Message,
+			Status:  err.Status,
+		})
+		return
+	}
+	c.JSON(200, domain.SuccessResponse{
+		Message: "Sessions retrieved successfully",
+		Data:    session,
 		Status:  200,
 	})
 }

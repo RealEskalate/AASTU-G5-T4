@@ -58,7 +58,6 @@ func (i *InviteUseCase) CreateInvite(invite dtos.CreateInviteDTO) (*dtos.InviteD
 		Used:    false,
 	}, context.TODO())
 
-	err = i.emailService.SendInviteEmail(invite.Email, token)
 	if err != nil {
 		return &dtos.InviteDTO{}, &domain.ErrorResponse{
 			Message: err.Error(),
@@ -66,6 +65,7 @@ func (i *InviteUseCase) CreateInvite(invite dtos.CreateInviteDTO) (*dtos.InviteD
 		}
 	}
 
+	err = i.emailService.SendInviteEmail(invite.Email, token)
 	if err != nil {
 		return &dtos.InviteDTO{}, &domain.ErrorResponse{
 			Message: err.Error(),
@@ -105,7 +105,6 @@ func (i *InviteUseCase) CreateInvites(invites dtos.CreateBatchInviteDTO) ([]dtos
 	for _, user := range users {
 		token, err := i.tokenService.GenerateInviteAccessToken(user.ID, invites.RoleID)
 		if err != nil {
-
 			return []dtos.InviteDTO{}, &domain.ErrorResponse{
 				Message: err.Error(),
 				Status:  500,
@@ -156,16 +155,16 @@ func (i *InviteUseCase) CreateInvites(invites dtos.CreateBatchInviteDTO) ([]dtos
 
 func (i *InviteUseCase) AcceptInvite(token string) (*dtos.InvitedUserDTO, *domain.ErrorResponse) {
 	invite, err := i.inviteRepository.GetInviteByKey(token, context.TODO())
+	if err != nil && err.Error() == "record not found" {
+		return &dtos.InvitedUserDTO{}, &domain.ErrorResponse{
+			Message: "Invite not found",
+			Status:  404,
+		}
+	}
 	if err != nil {
 		return &dtos.InvitedUserDTO{}, &domain.ErrorResponse{
 			Message: err.Error(),
 			Status:  500,
-		}
-	}
-	if invite == nil {
-		return &dtos.InvitedUserDTO{}, &domain.ErrorResponse{
-			Message: "Invite not found",
-			Status:  404,
 		}
 	}
 
@@ -177,16 +176,16 @@ func (i *InviteUseCase) AcceptInvite(token string) (*dtos.InvitedUserDTO, *domai
 		}
 	}
 	user, err := i.inviteRepository.GetUserByID(userId, context.TODO())
+	if err != nil && err.Error() == "record not found" {
+		return &dtos.InvitedUserDTO{}, &domain.ErrorResponse{
+			Message: "User not found",
+			Status:  404,
+		}
+	}
 	if err != nil {
 		return &dtos.InvitedUserDTO{}, &domain.ErrorResponse{
 			Message: err.Error(),
 			Status:  500,
-		}
-	}
-	if user == nil {
-		return &dtos.InvitedUserDTO{}, &domain.ErrorResponse{
-			Message: "User not found",
-			Status:  404,
 		}
 	}
 
@@ -241,17 +240,17 @@ func (i *InviteUseCase) AcceptInvite(token string) (*dtos.InvitedUserDTO, *domai
 
 func (i *InviteUseCase) InviteExistingUser(invite dtos.InviteExistingUserDTO) (*dtos.InviteDTO, *domain.ErrorResponse) {
 	user, err := i.inviteRepository.GetUserByID(invite.ID, context.TODO())
+	if err != nil && err.Error() == "record not found" {
+		return &dtos.InviteDTO{}, &domain.ErrorResponse{
+			Message: "User not found",
+			Status:  404,
+		}
+	}
+
 	if err != nil {
 		return &dtos.InviteDTO{}, &domain.ErrorResponse{
 			Message: err.Error(),
 			Status:  500,
-		}
-	}
-
-	if user == nil {
-		return &dtos.InviteDTO{}, &domain.ErrorResponse{
-			Message: "User not found",
-			Status:  404,
 		}
 	}
 

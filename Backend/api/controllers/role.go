@@ -87,7 +87,7 @@ func (r RoleController) UpdateRole(c *gin.Context) {
 		})
 		return
 	}
-	role, err := r.roleUseCase.UpdateRole(roleID, request.Type)
+	role, err := r.roleUseCase.UpdateRole(request.Type, roleID)
 	if err != nil {
 		c.JSON(500, domain.ErrorResponse{
 			Message: err.Error(),
