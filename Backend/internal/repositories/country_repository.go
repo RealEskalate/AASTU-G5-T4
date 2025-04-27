@@ -67,8 +67,8 @@ func (r *CountryRepository) GetCountryByID(ctx context.Context, id int) (domain.
 
 		// Get total problems solved (distinct problems where IsSolved = true)
 		err = r.db.WithContext(ctx).
-			Model(&domain.Submissions{}).
-			Where("user_id = ? AND is_solved = ?", user.ID, true).
+			Model(&domain.Submission{}).
+			Where("user_id = ? AND verified = ?", user.ID, true).
 			Distinct("problem_id").
 			Count(&totalProblemsSolved).Error
 		if err != nil {
