@@ -128,3 +128,11 @@ func (r *UserRepository) UpdateAvatar(ctx context.Context, userIDs []int, imageU
 
 	return nil
 }
+func (r *UserRepository) CountUsersByCountry(ctx context.Context, countryID int) (int, error) {
+	var count int64
+	err := r.db.WithContext(ctx).
+		Model(&domain.User{}).
+		Where("country_id = ?", countryID).
+		Count(&count).Error
+	return int(count), err
+}

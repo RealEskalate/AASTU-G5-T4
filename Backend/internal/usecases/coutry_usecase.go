@@ -2,6 +2,7 @@ package usecases
 
 import (
 	"A2SVHUB/internal/domain"
+	// "A2SVHUB/internal/repositories"
 	"context"
 	"fmt"
 )
@@ -16,18 +17,28 @@ func NewCountryUseCase(CountryRepository domain.CountryRepository) domain.Countr
 	}
 }
 
-func (c CountryUseCase) GetAllCountries(ctx context.Context) ([]domain.Country, error) {
+func (c CountryUseCase) GetAllCountries(ctx context.Context) ([]domain.CountryResponse, error) {
 	if ctx == nil {
 		return nil, fmt.Errorf("context cannot be nil")
 	}
-	return c.CountryRepository.GetAllCountries(ctx)
+	countryResponses, err := c.CountryRepository.GetAllCountriesWithStats(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return countryResponses, nil
 }
 
-func (c CountryUseCase) GetCountryByID(ctx context.Context, id int) (domain.Country, error) {
+func (c CountryUseCase) GetCountryByID(ctx context.Context, id int) (domain.CountryDetailResponse, error) {
 	if ctx == nil {
-		return domain.Country{}, fmt.Errorf("context cannot be nil")
+		return domain.CountryDetailResponse{}, fmt.Errorf("context cannot be nil")
 	}
-	return c.CountryRepository.GetCountryByID(ctx, id)
+	countryDetailResponse, err := c.CountryRepository.GetCountryByID(ctx, id)
+	if err != nil {
+		return domain.CountryDetailResponse{}, err
+	}
+
+	return countryDetailResponse, nil
 }
 
 func (c CountryUseCase) CreateCountry(ctx context.Context, name string, shortCode string) (domain.Country, error) {
@@ -84,4 +95,11 @@ func (c CountryUseCase) CheckCountryExists(ctx context.Context, name string, sho
 		return false, fmt.Errorf("country short code cannot be empty")
 	}
 	return c.CountryRepository.IsCountryExists(ctx, name, shortCode)
+}
+
+func (c CountryUseCase) GetAllCountriesWithStats(ctx context.Context) ([]domain.CountryResponse, error) {
+	if ctx == nil {
+		return nil, fmt.Errorf("context cannot be nil")
+	}
+	return c.CountryRepository.GetAllCountriesWithStats(ctx)
 }
