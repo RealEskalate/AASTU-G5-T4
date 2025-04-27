@@ -15,9 +15,10 @@ func SetupSessionGroup(sessionRoute *gin.RouterGroup, db *gorm.DB) {
 	sessionUseCase := usecases.NewSessionUseCase(sessionRepository)
 	sessionController := controllers.NewSessionController(sessionUseCase)
 
-	sessionRoute.GET("/", sessionController.GetAllSessions)
+	sessionRoute.GET("", sessionController.GetAllSessions)
+	sessionRoute.GET("/lecturer", sessionController.GetSessionByLecturer)
 	sessionRoute.GET("/:id", sessionController.GetSession)
-	sessionRoute.POST("/", sessionController.CreateSession)
+	sessionRoute.POST("", sessionController.CreateSession)
 	sessionRoute.PUT("/:id", sessionController.UpdateSession)
 	sessionRoute.DELETE("/:id", sessionController.DeleteSession)
 

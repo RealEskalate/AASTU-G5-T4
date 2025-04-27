@@ -19,7 +19,7 @@ type Session struct {
 	RecordingLink   string    `gorm:"type:varchar(255)"`
 	CalendarEventID string    `gorm:"type:varchar(255)"`
 	LecturerID      int       `gorm:"type:integer"`
-	FundID          int       `gorm:"type:integer"`
+	FundID          *int      `gorm:"type:integer;null"`
 	CreatedAt       time.Time `gorm:"type:timestamp"`
 	UpdatedAt       time.Time `gorm:"type:timestamp"`
 	Lecturer        User      `gorm:"foreignKey:LecturerID"`
@@ -64,6 +64,7 @@ type SessionUseCase interface {
 	CreateSession(session dtos.CreateSessionDTOS) (*dtos.SessionDTOS, *ErrorResponse)
 	UpdateSession(id string, session dtos.UpdateSessionDTOS) (*dtos.SessionDTOS, *ErrorResponse)
 	DeleteSession(id string) *ErrorResponse
+	GetSessionByLecturer(lecturer_id int) (*dtos.SessionDTOS, *ErrorResponse) 
 }
 
 type SessionRepository interface {

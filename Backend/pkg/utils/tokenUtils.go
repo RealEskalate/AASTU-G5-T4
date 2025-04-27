@@ -23,7 +23,8 @@ func (t *TokenService) GenerateInviteAccessToken(userId int, roleId int) (string
 	claims := jwt.MapClaims{
 		"sub":     userId,                        
 		"role_id": roleId,                     
-		"iat":     time.Now().Unix(),             
+		"iat":     time.Now().Unix(),
+		"exp":     time.Now().Add(time.Hour * 24 * 10).Unix(),             
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, err := token.SignedString([]byte(t.config.JWTSecret))
