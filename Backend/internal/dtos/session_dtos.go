@@ -14,7 +14,7 @@ type SessionDTOS struct {
 	RecordingLink   string    `gorm:"type:varchar(255)"`
 	CalendarEventID string    `gorm:"type:varchar(255)"`
 	LecturerID      int       `gorm:"type:integer"`
-	FundID          int       `gorm:"type:integer"`
+	FundID          *int       `gorm:"type:integer"`
 	CreatedAt       time.Time `gorm:"type:timestamp"`
 	UpdatedAt       time.Time `gorm:"type:timestamp"`
 }
@@ -31,20 +31,20 @@ type CreateSessionDTOS struct {
 	RecordingLink   string    `json:"recording_link"`
 	CalendarEventID string    `json:"calendar_event_id"`
 	LecturerID      int       `json:"lecturer_id" binding:"required"`
-	FundID          int       `json:"fund_id" binding:"required"`
+	FundID          *int       `json:"fund_id"`
 }
 
 
 type UpdateSessionDTOS struct {
-	Name            string    `json:"name" binding:"required"`
-	Description     string    `json:"description" binding:"required"`
-	StartTime       time.Time `json:"start_time" binding:"required"`
-	EndTime         time.Time `json:"end_time" binding:"required"`
+	Name            string    `json:"name"`
+	Description     string    `json:"description"`
+	StartTime       time.Time `json:"start_time"`
+	EndTime         time.Time `json:"end_time"`
 	MeetLink        string    `json:"meet_link"`
 	Location        string    `json:"location"`
 	ResourceLink    string    `json:"resource_link"`
 	RecordingLink   string    `json:"recording_link"`
 	CalendarEventID string    `json:"calendar_event_id"`
 	LecturerID      int       `json:"lecturer_id"`
-	FundID          int       `json:"fund_id"`
+	FundID          *int       `json:"fund_id"`
 }
