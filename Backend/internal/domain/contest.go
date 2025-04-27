@@ -21,6 +21,14 @@ type Contest struct {
 	Rating       int                `gorm:"type:integer"`
 	Ratings      []Rating           `gorm:"foreignKey:ContestID"`
 	Standings    *StandingsResponse `gorm:"-"`
+	Problems     []struct {
+		ContestID int      `json:"contestId"`
+		Index     string   `json:"index"`
+		Name      string   `json:"name"`
+		Type      string   `json:"type"`
+		Rating    int      `json:"rating"`
+		Tags      []string `json:"tags"`
+	} `gorm:"-"`
 }
 
 type Submissions struct {
@@ -110,21 +118,32 @@ type StandingsResponse struct {
 	} `json:"result"`
 }
 
+type ContestStanding struct {
+	ID        int       `gorm:"primaryKey"`
+	ContestID int       `gorm:"type:integer"`
+	Data      string    `gorm:"type:text"` // JSON string of StandingsResponse
+	CreatedAt time.Time `gorm:"type:timestamp"`
+	UpdatedAt time.Time `gorm:"type:timestamp"`
+	Contest   Contest   `gorm:"foreignKey:ContestID"`
+}
+
 type ContestRepository interface {
 	GetAllContests(ctx context.Context) ([]Contest, error)
 	GetContestByID(ctx context.Context, id int) (Contest, error)
 	SaveContest(ctx context.Context, contest *Contest) error
 	GetStandings(ctx context.Context, contestID int) (*StandingsResponse, error)
+	SaveStandings(ctx context.Context, contestID int, standings *StandingsResponse) error
 	GetAllRatings(ctx context.Context, contestID int) ([]Rating, error)
 	UpdateRating(ctx context.Context, contestID, userID, newRating int) error
 }
 
 type ContestUseCase interface {
-	GetAllContests(ctx context.Context) ([]Contest, error)
+	GetAllContests(ctx context.Context) ([]*Contest, error)
 	GetContestByID(ctx context.Context, id int) (*Contest, error)
-	AddContest(ctx context.Context, name, link string) (int, error)
+	AddContest(ctx context.Context, contest *Contest) error
 	GetStandings(ctx context.Context, contestID int) (*StandingsResponse, error)
-	UpdateRatings(ctx context.Context, contestID int, standings *StandingsResponse) error
+	SaveStandings(ctx context.Context, contestID int, standings *StandingsResponse) error
+	ClearStandingsCache(ctx context.Context, contestID int) error
 }
 
 type RatingRepository interface {
@@ -137,4 +156,8 @@ type RatingUseCase interface {
 	GetAllRatings(ctx context.Context, contestID int) ([]Rating, error)
 	GetRatingByID(ctx context.Context, id int) (*Rating, error)
 	GenerateRatings(ctx context.Context, contestID int) error
+}
+
+type ContestClient interface {
+	FetchContests(ctx context.Context) ([]*Contest, error)
 }

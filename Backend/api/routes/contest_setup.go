@@ -13,12 +13,17 @@ import (
 func SetupContestGroup(api *gin.RouterGroup, cfg *config.Config, db *gorm.DB) {
 
 	contestRepo := repositories.NewContestRepository(*db)
+	cacheRepo := repositories.NewCacheRepository()
+	contestClient := repositories.NewContestClient()
+	userRepo := repositories.NewUserRepository(*db)
 
-	contestUseCase := usecases.NewContestUseCase(contestRepo)
+	contestUseCase := usecases.NewContestUseCase(contestRepo, cacheRepo, contestClient)
+	userUseCase := usecases.NewUserUseCase(userRepo)
 
-	contestController := controllers.NewContestController(contestUseCase)
+	contestController := controllers.NewContestController(contestUseCase, userUseCase)
 
 	api.GET("", contestController.GetAllContests)
 	api.POST("", contestController.AddContest)
 	api.GET("/:id/standings", contestController.GetStandings)
+	api.GET("/:id/standings/refresh", contestController.RefreshStandings)
 }

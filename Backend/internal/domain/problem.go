@@ -18,22 +18,6 @@ type DailyProblem struct {
 	SuperGroup   SuperGroup `gorm:"foreignKey:SuperGroupID"`
 }
 
-type Submission struct {
-	ID        int       `gorm:"primaryKey"`
-	ProblemID int       `gorm:"type:integer"`
-	UserID    int       `gorm:"type:integer"`
-	TimeSpent int       `gorm:"type:integer"`
-	Tries     int       `gorm:"type:integer"`
-	InContest int       `gorm:"type:integer"`
-	Code      string    `gorm:"type:text"`
-	Language  string    `gorm:"type:varchar(255)"`
-	CreatedAt time.Time `gorm:"type:timestamp"`
-	UpdatedAt time.Time `gorm:"type:timestamp"`
-	Verified  bool      `gorm:"type:boolean"`
-	Problem   Problem   `gorm:"foreignKey:ProblemID"`
-	User      User      `gorm:"foreignKey:UserID"`
-}
-
 type Problem struct {
 	ID         int       `gorm:"primaryKey"`
 	ContestID  *int      `gorm:"type:integer"`
@@ -65,19 +49,4 @@ type ProblemUseCase interface {
 	UpdateProblem(ctx context.Context, id int, problem Problem) error
 	DeleteProblem(ctx context.Context, id int) error
 	GetProblemsByNameAndFilters(ctx context.Context, name string, filter map[string]interface{}) ([]Problem, error)
-}
-
-type SubmissionRepository interface {
-	CreateSubmission(ctx context.Context, submission Submission) (Submission, error)
-	GetSubmissionByID(ctx context.Context, id int) (Submission, error)
-	GetSubmissionsByProblem(ctx context.Context, problemID int) ([]Submission, error)
-	UpdateSubmission(ctx context.Context, submission Submission) (Submission, error)
-	DeleteSubmission(ctx context.Context, id int) error
-}
-type SubmissionUseCase interface {
-	CreateSubmission(ctx context.Context, submission Submission) (Submission, error)
-	GetSubmissionByID(ctx context.Context, id int) (Submission, error)
-	GetSubmissionsByProblem(ctx context.Context, problemID int) ([]Submission, error)
-	UpdateSubmission(ctx context.Context, submission Submission) (Submission, error)
-	DeleteSubmission(ctx context.Context, id int) error
 }
