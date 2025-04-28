@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/features/Home/presentation/widgets/CustomappBar.dart';
 import 'package:mobile/features/Home/presentation/widgets/sideBar.dart';
-import 'package:mobile/features/group_display/widgets/group_card_widget.dart';
+import 'package:mobile/features/group_display/presentation/widgets/group_card_widget.dart';
 
 class GroupsPage extends StatefulWidget {
   const GroupsPage({super.key});
@@ -65,12 +66,15 @@ class _GroupsPageState extends State<GroupsPage> {
                     itemCount: groups.length,
                     itemBuilder: (context, index) {
                       final group = groups[index];
-                      return GroupCardWidget(
-                        groupName: group['groupName'],
-                        groupAbbreviation: group['groupAbbreviation'],
-                        memberCount: group['memberCount'],
-                        timeSpent: group['timeSpent'],
-                        avgRating: group['avgRating'].toString(),
+                      return GestureDetector(
+                        onTap: () => context.go('/group_details'),
+                        child: GroupCardWidget(
+                          groupName: group['groupName'],
+                          groupAbbreviation: group['groupAbbreviation'],
+                          memberCount: group['memberCount'],
+                          timeSpent: group['timeSpent'],
+                          avgRating: group['avgRating'].toString(),
+                        ),
                       );
                     },
                   )
