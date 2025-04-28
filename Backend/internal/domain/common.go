@@ -15,6 +15,30 @@ type Country struct {
 	UpdatedAt time.Time `gorm:"type:timestamp"`
 }
 
+type CountryResponse struct {
+	ID                  int    `json:"id"`
+	Name                string `json:"name"`
+	ShortCode           string `json:"short_code"`
+	TotalUsers          int    `json:"total_students"`
+	TotalTimeSpent      int    `json:"total_time_spent"`
+	TotalProblemsSolved int    `json:"total_problems_solved"`
+	AverageRating       int    `json:"average_rating"`
+}
+
+type UserStatResponse struct {
+	Name                string `json:"name"`
+	Rating              int    `json:"rating"`
+	TotalTimeSpent      int    `json:"total_time_spent"`
+	TotalProblemsSolved int    `json:"total_problems_solved"`
+}
+
+type CountryDetailResponse struct {
+	ID        int                `json:"id"`
+	Name      string             `json:"name"`
+	ShortCode string             `json:"short_code"`
+	Users     []UserStatResponse `json:"users"`
+}
+
 type Division struct {
 	ID          int       `gorm:"primaryKey"`
 	Name        string    `gorm:"type:varchar(255)"`
@@ -54,16 +78,23 @@ type Event struct {
 }
 
 type CountryRepository interface {
-	GetAllCountries(ctx context.Context) ([]Country, error)
-	GetCountryByID(ctx context.Context, id int) (Country, error)
+	GetAllCountries(ctx context.Context) ([]CountryResponse, error)
+	GetCountryByID(ctx context.Context, id int) (CountryDetailResponse, error)
 	CreateCountry(ctx context.Context, name string, shortCode string) (Country, error)
 	UpdateCountryByID(ctx context.Context, name string, shortCode string, ID int) (Country, error)
 	DeleteCountryByID(ctx context.Context, ID int) error
+	IsCountryExists(ctx context.Context, name string, shortCode string) (bool, error)
+	GetAllCountriesWithStats(ctx context.Context) ([]CountryResponse, error)
+	CountUsersByCountryID(ctx context.Context, countryID int) (int64, error)
 }
 type CountryUseCase interface {
-	GetAllCountries(ctx context.Context) ([]Country, error)
-	GetCountryByID(ctx context.Context, id int) (Country, error)
+	GetAllCountries(ctx context.Context) ([]CountryResponse, error)
+	GetCountryByID(ctx context.Context, id int) (CountryDetailResponse, error)
 	CreateCountry(ctx context.Context, name string, shortCode string) (Country, error)
 	UpdateCountryByID(ctx context.Context, name string, shortCode string, ID int) (Country, error)
 	DeleteCountryByID(ctx context.Context, ID int) error
+	CheckCountryExists(ctx context.Context, name string, shortCode string) (bool, error)
+	IsCountryExists(ctx context.Context, name string, shortCode string) (bool, error)
+	GetAllCountriesWithStats(ctx context.Context) ([]CountryResponse, error)
+	CountUsersByCountryID(ctx context.Context, countryID int) (int64, error)
 }

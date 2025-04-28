@@ -12,7 +12,7 @@ import (
 func SetupCountryGroup(api *gin.RouterGroup, db *gorm.DB) {
 	countryRepo := repositories.NewCountryRepository(*db)
 	countryUseCase := usecases.NewCountryUseCase(countryRepo)
-	countryController := controllers.NewCountryController(countryUseCase)
+	countryController := controllers.NewCountryController(countryUseCase, db)
 
 	api.GET("", countryController.GetAllCountries)
 	api.GET("/:id", countryController.GetCountryByID)
