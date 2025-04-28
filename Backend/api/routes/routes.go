@@ -8,6 +8,8 @@ import (
 )
 
 func SetupRoutes(r *gin.RouterGroup, config *config.Config, database *gorm.DB) {
+	
+	SetupAuthGroup(r.Group("/auth"), config, database)
 
 	SetupUserGroup(r.Group("/user"), config, database)
 	SetupContestGroup(r.Group("/contest"), config, database)

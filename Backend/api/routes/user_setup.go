@@ -13,7 +13,7 @@ import (
 )
 
 func SetupUserGroup(api *gin.RouterGroup, cfg *config.Config, db *gorm.DB) {
-	userRepo := repositories.NewUserRepository(*db)
+	userRepo := repositories.NewUserRepository(db)
 	submissionRepo := repositories.NewSubmissionRepository(db)
 
 	userUseCase := usecases.NewUserUseCase(userRepo)

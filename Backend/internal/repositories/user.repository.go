@@ -10,14 +10,13 @@ import (
 )
 
 type UserRepository struct {
-	db gorm.DB
+	db *gorm.DB
 }
 
-func NewUserRepository(db gorm.DB) domain.UserRepository {
+func NewUserRepository(db *gorm.DB) domain.UserRepository {
 	return &UserRepository{
 		db: db,
 	}
-
 }
 
 func (r *UserRepository) GetAllUsers(ctx context.Context) ([]domain.User, error) {
@@ -141,7 +140,6 @@ func (r *UserRepository) GetUserSubmissions(ctx context.Context, userID int) ([]
 	var submissions []domain.Submission
 	var totalTimeSpent int64
 
-	
 	if err := r.db.WithContext(ctx).
 		Where("user_id = ?", userID).
 		Find(&submissions).Error; err != nil {
@@ -155,4 +153,19 @@ func (r *UserRepository) GetUserSubmissions(ctx context.Context, userID int) ([]
 	totalProblems := len(submissions)
 
 	return submissions, float64(totalProblems), totalTimeSpent, nil
+}
+
+func (r *UserRepository) GetUserByEmail(ctx context.Context, email string) (domain.User, error) {
+	var user domain.User
+	if err := r.db.WithContext(ctx).
+		Preload("Role").
+		Preload("Country").
+		Where("email = ?", email).
+		First(&user).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return domain.User{}, fmt.Errorf("no user found with email %s", email)
+		}
+		return domain.User{}, err
+	}
+	return user, nil
 }
