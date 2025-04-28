@@ -1,44 +1,47 @@
 import { baseApiSlice } from "./baseApiSlice"
-import type { Submission, SubmissionsResponse, CreateSubmissionRequest, BaseResponse } from "./types"
+import type { SubmissionsResponse, SubmissionResponse, CreateSubmissionRequest } from "./types"
 
 export const submissionApiSlice = baseApiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getSubmissions: builder.query<Submission[], void>({
+    getSubmissions: builder.query<SubmissionsResponse, void>({
       query: () => "/submission",
-      transformResponse: (response: SubmissionsResponse) => response.submissions || [],
       providesTags: ["Submission"],
     }),
 
-    getSubmissionById: builder.query<Submission, number>({
+    getSubmissionById: builder.query<SubmissionResponse, number>({
       query: (id) => `/submission/${id}`,
-      transformResponse: (response: BaseResponse<Submission>) => response.data as Submission,
       providesTags: (result, error, id) => [{ type: "Submission", id }],
     }),
 
-    getSubmissionsByProblem: builder.query<Submission[], number>({
+    getSubmissionsByProblem: builder.query<SubmissionsResponse, number>({
       query: (problemId) => `/submission/problem?problemID=${problemId}`,
-      transformResponse: (response: SubmissionsResponse) => response.submissions || [],
       providesTags: ["Submission"],
     }),
 
-    createSubmission: builder.mutation<Submission, CreateSubmissionRequest>({
+    createSubmission: builder.mutation<SubmissionResponse, CreateSubmissionRequest>({
       query: (data) => ({
         url: "/submission",
         method: "POST",
         body: data,
       }),
-      transformResponse: (response: BaseResponse<Submission>) => response.data as Submission,
       invalidatesTags: ["Submission"],
     }),
 
-    updateSubmission: builder.mutation<Submission, { id: number; data: Partial<CreateSubmissionRequest> }>({
+    updateSubmission: builder.mutation<SubmissionResponse, { id: number; data: Partial<CreateSubmissionRequest> }>({
       query: ({ id, data }) => ({
         url: `/submission/${id}`,
         method: "PUT",
         body: data,
       }),
-      transformResponse: (response: BaseResponse<Submission>) => response.data as Submission,
       invalidatesTags: (result, error, { id }) => [{ type: "Submission", id }],
+    }),
+
+    deleteSubmission: builder.mutation<void, number>({
+      query: (id) => ({
+        url: `/submission/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Submission"],
     }),
   }),
 })
@@ -49,4 +52,5 @@ export const {
   useGetSubmissionsByProblemQuery,
   useCreateSubmissionMutation,
   useUpdateSubmissionMutation,
+  useDeleteSubmissionMutation,
 } = submissionApiSlice

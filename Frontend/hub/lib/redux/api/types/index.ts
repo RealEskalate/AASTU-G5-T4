@@ -1,91 +1,94 @@
 export interface BaseResponse<T> {
   message?: string
-  data?: T
-  status?: number
+  data: T
+  status: number
 }
 
-export interface Contest {
+export interface ContestProblem {
+  index: string
+  name: string
+  tags: string[]
+}
+
+export interface ContestMember {
+  handle: string
+  id?: number
+}
+
+export interface ContestParty {
+  members: ContestMember[]
+}
+
+export interface ProblemResult {
+  points: number
+  rejectedAttemptCount: number
+  type: string
+  bestSubmissionTimeSeconds: number
+}
+
+export interface ContestRow {
+  party: ContestParty
+  rank: number
+  points: number
+  penalty: number
+  problemResults: ProblemResult[]
+}
+
+export interface ContestDetail {
+  contest: {
+    id: number
+    name: string
+    type: string
+  }
+  problems: ContestProblem[]
+  rows: ContestRow[]
+}
+
+export interface ContestResponse {
+  status: string
+  result: ContestDetail
+}
+
+export interface ContestsListResponse extends BaseResponse<ContestResponse[]> {}
+export interface ContestDetailResponse extends BaseResponse<ContestResponse> {}
+
+export interface User {
+  id: number
+  role_id: number
+  name: string
+  country_id: number
+  university: string
+  email: string
+  AvatarURL: string
+  preferred_language: string
+  group_id: number
+  birthday: string
+  role: string
+  country: string
+}
+
+export interface UsersResponse extends BaseResponse<User[]> {}
+export interface UserResponse extends BaseResponse<User> {}
+
+export interface Session {
   ID: number
   Name: string
-  Description?: string
+  Description: string
   StartTime: string
   EndTime: string
+  MeetLink: string
+  Location: string
+  ResourceLink: string
+  RecordingLink: string
+  CalendarEventID: string
+  LecturerID: number
+  FundID: number
   CreatedAt: string
   UpdatedAt: string
 }
 
-export interface ContestsResponse {
-  contests: Contest[]
-}
-
-export interface Country {
-  ID: number
-  Name: string
-  Code: string
-  Flag: string
-  CreatedAt: string
-  UpdatedAt: string
-}
-
-export interface CountriesResponse {
-  countries: Country[]
-}
-
-export interface CreateCountryRequest {
-  Name: string
-  Code: string
-  Flag: string
-}
-
-export interface Group {
-  ID: number
-  Name: string
-  Code: string
-  CreatedAt: string
-  UpdatedAt: string
-}
-
-export interface GroupsResponse {
-  groups: Group[]
-}
-
-export interface CreateGroupRequest {
-  Name: string
-  Code: string
-}
-
-export interface Invite {
-  ID: number
-  Token: string
-  Email: string
-  RoleID: number
-  CreatedAt: string
-}
-
-export interface InviteRequest {
-  Email: string
-  RoleID: number
-}
-
-export interface BatchInviteRequest {
-  emails: string[]
-  roleID: number
-}
-
-export interface Role {
-  ID: number
-  Name: string
-  CreatedAt: string
-  UpdatedAt: string
-}
-
-export interface RolesResponse {
-  roles: Role[]
-}
-
-export interface CreateRoleRequest {
-  Name: string
-}
+export interface SessionsResponse extends BaseResponse<Session[]> {}
+export interface SessionResponse extends BaseResponse<Session> {}
 
 export interface Submission {
   ID: number
@@ -95,21 +98,64 @@ export interface Submission {
   TimeSpent: number
   Tries: number
   InContest: boolean
+  Code: string
+  Verified: boolean
   CreatedAt: string
   UpdatedAt: string
 }
 
-export interface SubmissionsResponse {
-  submissions: Submission[]
-}
+export interface SubmissionsResponse extends BaseResponse<Submission[]> {}
+export interface SubmissionResponse extends BaseResponse<Submission> {}
 
 export interface CreateSubmissionRequest {
-  ProblemID: number
-  UserID: number
+  problemID: number
+  userID: number
   Language: string
   TimeSpent: number
   Tries: number
   InContest: boolean
+  Code: string
+  Verified: boolean
+}
+
+export interface Group {
+  id: number
+  name: string
+  code: string
+  members: number
+  timeSpent: string
+  avgRating: string
+}
+
+export interface GroupsResponse extends BaseResponse<Group[]> {}
+
+export interface CreateGroupRequest {
+  name: string
+  code: string
+  members: number
+  timeSpent: string
+  avgRating: string
+}
+
+export interface Country {
+  id: number
+  name: string
+  members: number
+  problemsSolved: string
+  timeSpent: string
+  avgRating: string
+  flag: string
+}
+
+export interface CountriesResponse extends BaseResponse<Country[]> {}
+
+export interface CreateCountryRequest {
+  name: string
+  members: number
+  problemsSolved: string
+  timeSpent: string
+  avgRating: string
+  flag: string
 }
 
 export interface SuperGroup {
@@ -119,9 +165,7 @@ export interface SuperGroup {
   UpdatedAt: string
 }
 
-export interface SuperGroupsResponse {
-  supergroups: SuperGroup[]
-}
+export interface SuperGroupsResponse extends BaseResponse<SuperGroup[]> {}
 
 export interface CreateSuperGroupRequest {
   Name: string
@@ -137,9 +181,7 @@ export interface Track {
   SuperGroup: SuperGroup
 }
 
-export interface TracksResponse {
-  tracks: Track[]
-}
+export interface TracksResponse extends BaseResponse<Track[]> {}
 
 export interface CreateTrackRequest {
   Name: string
@@ -147,25 +189,30 @@ export interface CreateTrackRequest {
   SuperGroupID: number
 }
 
-export interface User {
+export interface Role {
   ID: number
-  FirstName: string
-  LastName: string
-  Email: string
-  GroupID: number
-  RoleID: number
+  Name: string
   CreatedAt: string
   UpdatedAt: string
 }
 
-export interface UsersResponse {
-  users: User[]
+export interface RolesResponse extends BaseResponse<Role[]> {}
+
+export interface CreateRoleRequest {
+  Name: string
 }
 
-export interface CreateUserRequest {
-  FirstName: string
-  LastName: string
-  Email: string
-  GroupID: number
-  RoleID: number
+export interface Invite {
+  id: number
+  email: string
+  token: string
+  expires_at: string
+}
+
+export interface InviteRequest {
+  email: string
+}
+
+export interface BatchInviteRequest {
+  emails: string[]
 }

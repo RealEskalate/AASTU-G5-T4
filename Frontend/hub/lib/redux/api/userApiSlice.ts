@@ -1,23 +1,23 @@
 import { baseApiSlice } from "./baseApiSlice"
-import type { User, UsersResponse, CreateUserRequest } from "./types"
+import type { User, UsersResponse, UserResponse, CreateUserRequest } from "./types"
 
 export const userApiSlice = baseApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getUsers: builder.query<User[], void>({
       query: () => "/user",
-      transformResponse: (response: UsersResponse) => response.users || [],
+      transformResponse: (response: UsersResponse) => response.data || [],
       providesTags: ["User"],
     }),
 
     getUserById: builder.query<User, number>({
       query: (id) => `/user/${id}`,
-      transformResponse: (response: { user: User }) => response.user,
+      transformResponse: (response: UserResponse) => response.data,
       providesTags: (result, error, id) => [{ type: "User", id }],
     }),
 
     getUsersByGroup: builder.query<User[], number>({
       query: (groupId) => `/user/users/group/${groupId}`,
-      transformResponse: (response: UsersResponse) => response.users || [],
+      transformResponse: (response: UsersResponse) => response.data || [],
       providesTags: ["User"],
     }),
 
@@ -27,7 +27,7 @@ export const userApiSlice = baseApiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      transformResponse: (response: { user: User }) => response.user,
+      transformResponse: (response: UserResponse) => response.data,
       invalidatesTags: ["User"],
     }),
 
@@ -37,7 +37,7 @@ export const userApiSlice = baseApiSlice.injectEndpoints({
         method: "PUT",
         body: data,
       }),
-      transformResponse: (response: { user: User }) => response.user,
+      transformResponse: (response: UserResponse) => response.data,
       invalidatesTags: (result, error, { id }) => [{ type: "User", id }],
     }),
 
