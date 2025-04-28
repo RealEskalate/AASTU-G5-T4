@@ -47,7 +47,7 @@ class _CustomappbarState extends State<Customappbar> {
     );
 
     return AppBar(
-      backgroundColor: colorScheme.surface,
+      backgroundColor: Colors.white,
       title: Text(
         '',
         style: TextStyle(color: colorScheme.onSurface),

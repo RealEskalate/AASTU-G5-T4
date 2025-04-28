@@ -15,7 +15,7 @@ class _TracksPageState extends State<TracksPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   // Create a sidebar controller
   final SidebarController _sidebarController = SidebarController();
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
 
   @override
   void dispose() {

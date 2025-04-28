@@ -20,7 +20,7 @@ class _ProblemsPageState extends State<ProblemsPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   // TODO: Ensure SidebarController is properly defined and potentially managed/disposed
   final SidebarController _sidebarController = SidebarController();
-  int _selectedIndex = 0; // State for sidebar selection
+  int _selectedIndex = 2; // State for sidebar selection
 
   // --- Lifecycle Methods ---
   @override

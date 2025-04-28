@@ -15,7 +15,7 @@ class _UsersPageState extends State<UsersPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   // Create a sidebar controller
   final SidebarController _sidebarController = SidebarController();
-  int _selectedIndex = 0;
+  int _selectedIndex = 5;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
