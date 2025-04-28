@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfileMenuDialog extends StatelessWidget {
   const ProfileMenuDialog({super.key});
@@ -41,10 +42,14 @@ class ProfileMenuDialog extends StatelessWidget {
               ),
             ),
             const Divider(height: 1),
-            _buildMenuItem(context, 'Home', Icons.home_outlined),
-            _buildMenuItem(context, 'Profile', Icons.person_outline),
-            _buildMenuItem(context, 'Settings', Icons.settings_outlined),
-            _buildMenuItem(context, 'Sync leetcode', Icons.sync_outlined),
+            _buildMenuItem(context, 'Home', Icons.home_outlined,
+                route: '/home'),
+            _buildMenuItem(context, 'Profile', Icons.person_outline,
+                route: '/profile'),
+            _buildMenuItem(context, 'Settings', Icons.settings_outlined,
+                route: '/settings'),
+            _buildMenuItem(context, 'Sync leetcode', Icons.sync_outlined,
+                route: '/sync-leetcode'),
             const Divider(height: 1),
             _buildMenuItem(context, 'Logout', Icons.logout_outlined,
                 textColor: Colors.red),
@@ -55,7 +60,7 @@ class ProfileMenuDialog extends StatelessWidget {
   }
 
   Widget _buildMenuItem(BuildContext context, String title, IconData icon,
-      {Color? textColor}) {
+      {Color? textColor, String? route}) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -75,7 +80,7 @@ class ProfileMenuDialog extends StatelessWidget {
         ),
       ),
       onTap: () {
-        Navigator.pop(context);
+        context.go(route ?? '/profile');
         // Handle menu item tap based on title
       },
     );
