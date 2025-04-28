@@ -103,3 +103,11 @@ func (c CountryUseCase) GetAllCountriesWithStats(ctx context.Context) ([]domain.
 	}
 	return c.CountryRepository.GetAllCountriesWithStats(ctx)
 }
+
+func (c *CountryUseCase) CountUsersByCountryID(ctx context.Context, countryID int) (int64, error) {
+	if ctx == nil {
+		return 0, fmt.Errorf("context cannot be nil")
+	}
+
+	return c.CountryRepository.CountUsersByCountryID(ctx, countryID)
+}

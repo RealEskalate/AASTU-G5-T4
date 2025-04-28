@@ -16,7 +16,6 @@ func SetupRoutes(r *gin.RouterGroup, config *config.Config, database *gorm.DB) {
 	SetupGroupGroup(r.Group("/group"), database)
 	SetupCountryGroup(r.Group("/country"), database)
 
-	SetupCountryGroup(r.Group("/country"), database)
 	superGroupRoute := r.Group("/supergroup")
 
 	SetupSuperGroupRoute(superGroupRoute, config, database)

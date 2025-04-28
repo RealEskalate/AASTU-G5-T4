@@ -85,6 +85,7 @@ type CountryRepository interface {
 	DeleteCountryByID(ctx context.Context, ID int) error
 	IsCountryExists(ctx context.Context, name string, shortCode string) (bool, error)
 	GetAllCountriesWithStats(ctx context.Context) ([]CountryResponse, error)
+	CountUsersByCountryID(ctx context.Context, countryID int) (int64, error)
 }
 type CountryUseCase interface {
 	GetAllCountries(ctx context.Context) ([]CountryResponse, error)
@@ -95,4 +96,5 @@ type CountryUseCase interface {
 	CheckCountryExists(ctx context.Context, name string, shortCode string) (bool, error)
 	IsCountryExists(ctx context.Context, name string, shortCode string) (bool, error)
 	GetAllCountriesWithStats(ctx context.Context) ([]CountryResponse, error)
+	CountUsersByCountryID(ctx context.Context, countryID int) (int64, error)
 }

@@ -223,3 +223,10 @@ func (r *CountryRepository) GetAllCountriesWithStats(ctx context.Context) ([]dom
 
 	return result, nil
 }
+func (r *CountryRepository) CountUsersByCountryID(ctx context.Context, countryID int) (int64, error) {
+	var count int64
+	err := r.db.Model(&domain.User{}).
+		Where("country_id = ?", countryID).
+		Count(&count).Error
+	return count, err
+}
