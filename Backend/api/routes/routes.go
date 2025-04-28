@@ -24,6 +24,7 @@ func SetupRoutes(r *gin.RouterGroup, config *config.Config, database *gorm.DB) {
 
 	SetupInviteGroup(r.Group("/invites"), config, database)
 	SetupSessionGroup(r.Group("/session"), database)
+	SetupAttendanceGroup(r.Group("/attendance"), database)
 
 	ProblemRoute := r.Group("/problem")
 	SetupProblem(ProblemRoute, config, database)
