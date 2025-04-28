@@ -15,7 +15,7 @@ func SetupContestGroup(api *gin.RouterGroup, cfg *config.Config, db *gorm.DB) {
 	contestRepo := repositories.NewContestRepository(*db)
 	cacheRepo := repositories.NewCacheRepository()
 	contestClient := repositories.NewContestClient()
-	userRepo := repositories.NewUserRepository(*db)
+	userRepo := repositories.NewUserRepository(db)
 
 	contestUseCase := usecases.NewContestUseCase(contestRepo, cacheRepo, contestClient)
 	userUseCase := usecases.NewUserUseCase(userRepo)

@@ -312,7 +312,6 @@ func (r *ContestRepository) GetAllContests(ctx context.Context) ([]domain.Contes
 			return performances[i].Score > performances[j].Score
 		})
 
-		
 		const (
 			initialRating = 1400
 			kFactor       = 32
@@ -648,14 +647,14 @@ func (r *ContestRepository) SaveContest(ctx context.Context, contest *domain.Con
 				return fmt.Errorf("invalid group contest ID format: %s", contest.Link)
 			}
 		} else {
-			
+
 			_, err := fmt.Sscanf(contest.Link, "https://codeforces.com/contest/%d", &contestID)
 			if err != nil {
 				return fmt.Errorf("invalid contest URL format: %s", contest.Link)
 			}
 		}
 	} else if strings.Contains(contest.Link, "/gym/") {
-		
+
 		_, err := fmt.Sscanf(contest.Link, "https://codeforces.com/gym/%d", &contestID)
 		if err != nil {
 			return fmt.Errorf("invalid gym URL format: %s", contest.Link)
@@ -670,18 +669,15 @@ func (r *ContestRepository) SaveContest(ctx context.Context, contest *domain.Con
 		return tx.Error
 	}
 
-	
 	if err := tx.Create(contest).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
 
-	
 	if err := tx.Commit().Error; err != nil {
 		return fmt.Errorf("error committing contest: %w", err)
 	}
 
-	
 	tx = r.db.WithContext(ctx).Begin()
 	if tx.Error != nil {
 		return tx.Error
