@@ -30,4 +30,5 @@ func SetupRoutes(r *gin.RouterGroup, config *config.Config, database *gorm.DB) {
 
 	SetupSubmissionGroup(r.Group("/submission"), config, database)
 
+	SetupConsistency(r.Group("/consistency"), config, database)
 }

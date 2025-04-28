@@ -1,6 +1,5 @@
 package domain
 
-
 import (
 	"context"
 	"time"
@@ -93,16 +92,6 @@ type Notification struct {
 	CreatedAt   time.Time `gorm:"type:timestamp"`
 	UpdatedAt   time.Time `gorm:"type:timestamp"`
 	User        User      `gorm:"foreignKey:UserID"`
-}
-
-type OutsideConsistency struct {
-	ID         int       `gorm:"primaryKey"`
-	UserID     int       `gorm:"type:integer"`
-	ForDate    time.Time `gorm:"type:date"`
-	SolveCount int       `gorm:"type:integer"`
-	CreatedAt  time.Time `gorm:"type:timestamp"`
-	UpdatedAt  time.Time `gorm:"type:timestamp"`
-	User       User      `gorm:"foreignKey:UserID"`
 }
 
 type UserResponse struct {
