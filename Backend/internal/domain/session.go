@@ -19,7 +19,7 @@ type Session struct {
 	RecordingLink   string    `gorm:"type:varchar(255)"`
 	CalendarEventID string    `gorm:"type:varchar(255)"`
 	LecturerID      int       `gorm:"type:integer"`
-	FundID          int       `gorm:"type:integer"`
+	FundID          *int      `gorm:"type:integer;null"`
 	CreatedAt       time.Time `gorm:"type:timestamp"`
 	UpdatedAt       time.Time `gorm:"type:timestamp"`
 	Lecturer        User      `gorm:"foreignKey:LecturerID"`
@@ -64,6 +64,7 @@ type SessionUseCase interface {
 	CreateSession(session dtos.CreateSessionDTOS) (*dtos.SessionDTOS, *ErrorResponse)
 	UpdateSession(id string, session dtos.UpdateSessionDTOS) (*dtos.SessionDTOS, *ErrorResponse)
 	DeleteSession(id string) *ErrorResponse
+	GetSessionByLecturer(lecturer_id int) (*dtos.SessionDTOS, *ErrorResponse) 
 }
 
 type SessionRepository interface {
@@ -75,4 +76,24 @@ type SessionRepository interface {
 	CreateSession(session dtos.CreateSessionDTOS) (Session, error)
 	UpdateSession(session *Session) error
 	DeleteSession(session *Session) error
+}
+
+
+type AttendanceUseCase interface {
+	TakeAttendance(attendance dtos.CreateAttendanceDTOS) (*dtos.AttendanceDTOS, *ErrorResponse)
+	TakeMassAttendance(attendances dtos.CreateMassAttendanceDTOS) ([]dtos.AttendanceDTOS, *ErrorResponse)
+	GetAllAttendances(filters map[string]interface{}) ([]dtos.AttendanceDTOS, *ErrorResponse) 
+	GetAttendanceByID(id string) (*dtos.AttendanceDTOS, *ErrorResponse)
+	UpdateAttendance(id string, attendance dtos.UpdateAttendanceDTOS) (*dtos.AttendanceDTOS, *ErrorResponse)
+	DeleteAttendance(id string) *ErrorResponse
+}
+
+type AttendanceRepository interface {
+	GetAttendanceBySessionIDAndUserID(sessionID, userID int) (*Attendance, error)
+	TakeAttendance(attendance dtos.CreateAttendanceDTOS) (*Attendance, error)
+	TakeMassAttendance(attendances dtos.CreateMassAttendanceDTOS) ([]Attendance, error)
+	GetAllAttendances(filters map[string]interface{}) ([]Attendance, error)
+	GetAttendanceByID(id string) (*Attendance, error)
+	UpdateAttendance(attendance *Attendance) error
+	DeleteAttendance(attendance *Attendance) error 
 }

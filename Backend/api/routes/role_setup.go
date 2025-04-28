@@ -15,9 +15,9 @@ func SetupRoleGroup(roleRoute *gin.RouterGroup, db *gorm.DB) {
 	roleUseCase := usecases.NewRoleUseCase(roleRepository)
 	roleController := controllers.NewRoleController(roleUseCase)
 
-	roleRoute.GET("/", roleController.GetAllRoles)
+	roleRoute.GET("", roleController.GetAllRoles)
 	roleRoute.GET("/:id", roleController.GetRole)
-	roleRoute.POST("/", roleController.CreateRole)
+	roleRoute.POST("", roleController.CreateRole)
 	roleRoute.PUT("/:id", roleController.UpdateRole)
 	roleRoute.DELETE("/:id", roleController.DeleteRole)
 
