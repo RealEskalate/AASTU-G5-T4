@@ -12,7 +12,7 @@ dependencies:
     sdk: flutter
   fl_chart: ^0.71.0
   flutter_bloc: ^9.1.0
-  flutter_svg: ^2.0.17
+  flutter_svg: ^2.0.10+1
   font_awesome_flutter: ^10.8.0
   go_router: ^14.8.1
   google_fonts: ^6.2.1
@@ -25,7 +25,10 @@ dependencies:
   get_it: ^8.0.3
   url_launcher: ^6.3.1
   video_player: ^2.9.5
-
+  data_table_2: ^2.5.10
+  google_generative_ai: ^0.4.7
+  flutter_dotenv: ^5.2.1
+  provider: ^6.1.4
 
 dev_dependencies:
   flutter_test:
@@ -35,6 +38,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets: 
+    - .env
     - assets/svgs/homepage_1.svg
     - assets/svgs/cards_svg_trend.svg
     - assets/svgs/heatmap.svg
@@ -45,3 +49,8 @@ flutter:
     - assets/svgs/sidebar_4.svg
     - assets/svgs/sidebar_5.svg
     - assets/mock_data/mock_problems.json
+    - assets/svgs/vercel_logo.svg
+    - assets/svgs/leetcode.svg
+    - assets/svgs/cf.svg
+    - assets/svgs/hackerrank.svg
+    - assets/svgs/tg.svg

@@ -54,33 +54,36 @@ class HubSidebar extends StatelessWidget {
                     padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                     child: Row(
                       children: [
-                        Container(
-                          width: 36,
-                          height: 36,
-                          decoration: BoxDecoration(
-                            color: const Color.fromRGBO(0, 171, 85, 1),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Center(
-                            child: SvgPicture.asset(
-                              'assets/svgs/hublogo.svg',
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: SizedBox(
+                            width: 100,
+                            height: 100,
+                            // decoration: BoxDecoration(
+                            //   color: const Color.fromRGBO(0, 171, 85, 1),
+                            //   borderRadius: BorderRadius.circular(8),
+                            // ),
+                            child: Center(
+                              child: SvgPicture.asset(
+                                'assets/svgs/vercel_logo.svg',
+                              ),
                             ),
                           ),
                         ),
-                        const SizedBox(width: 8),
-                        const Text(
-                          'HUB',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Color.fromRGBO(0, 171, 85, 1),
-                          ),
-                        ),
+                        // const SizedBox(width: 8),
+                        // const Text(
+                        //   'HUB',
+                        //   style: TextStyle(
+                        //     fontSize: 24,
+                        //     fontWeight: FontWeight.bold,
+                        //     color: Color.fromRGBO(0, 171, 85, 1),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
 
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 0),
 
                   // User profile section
                   GestureDetector(
@@ -152,7 +155,7 @@ class HubSidebar extends StatelessWidget {
                       child: Column(
                         children: [
                           _buildMenuItem(context, 0, Icons.home_outlined,
-                              'Home', false, '/'),
+                              'Home', false, '/home'),
                           _buildMenuItem(context, 1, Icons.apps, 'Tracks', true,
                               '/tracks'),
                           _buildMenuItem(context, 2, Icons.code_outlined,

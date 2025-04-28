@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/features/Home/presentation/widgets/sideBar.dart';
+import 'chat_dialog.dart'; // Import the new dialog widget
 
 class Customappbar extends StatefulWidget {
   final VoidCallback? onMenuPressed; // Add this callback parameter
@@ -78,8 +79,30 @@ class _CustomappbarState extends State<Customappbar> {
         Wrap(
           spacing: 8, // Horizontal space between items
           children: [
+            Builder(
+              builder: (context) => IconButton(
+                icon: const Icon(
+                  Icons.settings_outlined,
+                  color: Colors.black,
+                ),
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                tooltip: 'Settings',
+                onPressed: () {
+                  Scaffold.of(context).openEndDrawer();
+                },
+              ),
+            ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                // Show the chat dialog
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const ChatDialog();
+                  },
+                );
+              },
               icon: const Icon(
                 Icons.star,
                 color: Colors.amber,

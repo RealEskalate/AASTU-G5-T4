@@ -146,7 +146,6 @@ class _HomepageState extends State<Homepage> {
                             child: SvgPicture.asset(
                               'assets/svgs/homepage_1.svg',
                               fit: BoxFit.contain,
-                              // Responsive width and height
                               width: MediaQuery.of(context).size.width * 0.4,
                               height: MediaQuery.of(context).size.height * 0.15,
                             ),

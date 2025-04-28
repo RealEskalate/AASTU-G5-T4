@@ -4,15 +4,18 @@ import 'package:mobile/features/Problems/presentation/pages/problems_page.dart';
 import 'package:mobile/features/Profile/presentation/pages/userProfile.dart';
 import 'package:mobile/features/Tracks/presentation/pages/exercise_page.dart';
 import 'package:mobile/features/Tracks/presentation/pages/tracks_page.dart';
+import 'package:mobile/features/Users/presentation/pages/users_page.dart';
 import 'package:mobile/features/group_display/presentation/pages/group_details.dart';
 import 'package:mobile/features/group_display/presentation/pages/group_page.dart';
+import 'package:mobile/splash_screen.dart';
 
 // GoRouter configuration
 final router = GoRouter(
+  initialLocation: '/splash',
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => Homepage(),
+      builder: (context, state) => SplashScreen(),
     ),
     GoRoute(
       path: '/profile',
@@ -37,6 +40,18 @@ final router = GoRouter(
     GoRoute(
       path: '/group_details',
       builder: (context, state) => GroupDetails(),
+    ),
+    GoRoute(
+      path: '/users',
+      builder: (context, state) => UsersPage(),
+    ),
+    GoRoute(
+      path: '/splash',
+      builder: (context, state) => SplashScreen(),
+    ),
+    GoRoute(
+      path: '/home',
+      builder: (context, state) => Homepage(),
     ),
   ],
 );
