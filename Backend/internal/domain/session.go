@@ -77,3 +77,23 @@ type SessionRepository interface {
 	UpdateSession(session *Session) error
 	DeleteSession(session *Session) error
 }
+
+
+type AttendanceUseCase interface {
+	TakeAttendance(attendance dtos.CreateAttendanceDTOS) (*dtos.AttendanceDTOS, *ErrorResponse)
+	TakeMassAttendance(attendances dtos.CreateMassAttendanceDTOS) ([]dtos.AttendanceDTOS, *ErrorResponse)
+	GetAllAttendances(filters map[string]interface{}) ([]dtos.AttendanceDTOS, *ErrorResponse) 
+	GetAttendanceByID(id string) (*dtos.AttendanceDTOS, *ErrorResponse)
+	UpdateAttendance(id string, attendance dtos.UpdateAttendanceDTOS) (*dtos.AttendanceDTOS, *ErrorResponse)
+	DeleteAttendance(id string) *ErrorResponse
+}
+
+type AttendanceRepository interface {
+	GetAttendanceBySessionIDAndUserID(sessionID, userID int) (*Attendance, error)
+	TakeAttendance(attendance dtos.CreateAttendanceDTOS) (*Attendance, error)
+	TakeMassAttendance(attendances dtos.CreateMassAttendanceDTOS) ([]Attendance, error)
+	GetAllAttendances(filters map[string]interface{}) ([]Attendance, error)
+	GetAttendanceByID(id string) (*Attendance, error)
+	UpdateAttendance(attendance *Attendance) error
+	DeleteAttendance(attendance *Attendance) error 
+}
