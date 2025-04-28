@@ -92,20 +92,20 @@ class _CustomappbarState extends State<Customappbar> {
           children: [
             // Dark Mode Toggle
             ThemeToggle(useIconButton: true),
-            Builder(
-              builder: (context) => IconButton(
-                icon: Icon(
-                  Icons.settings_outlined,
-                  color: colorScheme.onSurface,
-                ),
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-                tooltip: 'Settings',
-                onPressed: () {
-                  Scaffold.of(context).openEndDrawer();
-                },
-              ),
-            ),
+            // Builder(
+            //   builder: (context) => IconButton(
+            //     icon: Icon(
+            //       Icons.settings_outlined,
+            //       color: colorScheme.onSurface,
+            //     ),
+            //     padding: EdgeInsets.zero,
+            //     constraints: const BoxConstraints(),
+            //     tooltip: 'Settings',
+            //     onPressed: () {
+            //       Scaffold.of(context).openEndDrawer();
+            //     },
+            //   ),
+            // ),
             IconButton(
               onPressed: () {
                 // Show the chat dialog
