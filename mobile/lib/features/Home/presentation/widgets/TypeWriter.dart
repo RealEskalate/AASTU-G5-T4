@@ -86,7 +86,7 @@ class _TypewriterTextState extends State<TypewriterText>
                   textStyle: TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: 20,
-                    color: Colors.black,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
               ),

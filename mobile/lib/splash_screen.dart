@@ -56,12 +56,12 @@ class _SplashScreenState extends State<SplashScreen>
               }
               return FadeTransition(
                 opacity: _animation,
-                child: SvgPicture.asset(
-                  'assets/svgs/vercel_logo.svg',
+                child: Image.asset(
+                  'assets/hub.png',
                   width: 200,
-                  height: 60,
-                  placeholderBuilder: (context) => CircularProgressIndicator(),
-                  semanticsLabel: 'Vercel Logo',
+                  height: 200,
+                  // placeholderBuilder: (context) => CircularProgressIndicator(),
+                  // semanticsLabel: 'Vercel Logo',
                 ),
               );
             }

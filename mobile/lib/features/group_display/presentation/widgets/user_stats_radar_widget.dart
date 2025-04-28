@@ -9,7 +9,7 @@ class DiamondRatingChart extends StatelessWidget {
       fourthMetric; // You can rename this based on what the 4th category is
   final Color fillColor;
   final Color borderColor;
-  final Color backgroundColor;
+  // final Color backgroundColor = ;
   final List<String> labels;
   final List<Widget>? titleIcons;
 
@@ -22,7 +22,7 @@ class DiamondRatingChart extends StatelessWidget {
     this.fillColor =
         const Color(0xFF90EEB7), // Light green color from the image
     this.borderColor = const Color(0xFF90EEB7),
-    this.backgroundColor = Colors.white,
+    // this.backgroundColor = Theme.of(context).colorScheme.surface,
     this.labels = const [
       'Performance',
       'Experience',
@@ -64,7 +64,7 @@ class DiamondRatingChart extends StatelessWidget {
               fourthMetric: fourthMetric,
               fillColor: fillColor,
               borderColor: borderColor,
-              backgroundColor: backgroundColor,
+              backgroundColor: Theme.of(context).colorScheme.surface,
               labels: labels,
             ),
           ),
@@ -229,7 +229,7 @@ class DiamondRatingPainter extends CustomPainter {
   void _drawLabels(Canvas canvas, Offset center, double radius) {
     final labelDistance = radius + 15; // Give some margin for the labels
     final labelStyle = TextStyle(
-      color: Colors.grey[600],
+      color: Colors.grey[500],
       fontSize: 12,
     );
 
@@ -268,9 +268,9 @@ class DiamondRatingPainter extends CustomPainter {
 
   void _drawScores(Canvas canvas, Offset center, double radius) {
     final scoreDistance =
-        radius * 0.75; // Place scores at 75% of the way to the edge
+        radius * 0.5; // Place scores at 75% of the way to the edge
     final scoreStyle = TextStyle(
-      color: Colors.black,
+      color: Colors.grey[500],
       fontSize: 14,
       fontWeight: FontWeight.bold,
     );

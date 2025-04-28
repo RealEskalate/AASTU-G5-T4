@@ -40,22 +40,25 @@ class ActionButtons extends StatelessWidget {
         ),
         const SizedBox(width: 16),
         Expanded(
-          child: ElevatedButton(
-            onPressed: onProblemsTap,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: theme.colorScheme.surfaceVariant,
-              foregroundColor: theme.colorScheme.onSurfaceVariant,
-              elevation: 0,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+          child: Card(
+            elevation: 3,
+            child: ElevatedButton(
+              onPressed: onProblemsTap,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: theme.colorScheme.surface,
+                foregroundColor: theme.colorScheme.onSurface,
+                elevation: 0,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
-            ),
-            child: Text(
-              'Problems',
-              style: GoogleFonts.publicSans(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
+              child: Text(
+                'Problems',
+                style: GoogleFonts.publicSans(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),

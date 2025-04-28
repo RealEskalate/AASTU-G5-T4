@@ -54,7 +54,7 @@ class HubSidebar extends StatelessWidget {
                 children: [
                   // Logo section
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                    padding: const EdgeInsets.fromLTRB(1, 0, 16, 8),
                     child: Row(
                       children: [
                         Padding(
@@ -63,12 +63,12 @@ class HubSidebar extends StatelessWidget {
                             width: 100,
                             height: 100,
                             child: Center(
-                              child: SvgPicture.asset(
-                                'assets/svgs/vercel_logo.svg',
-                                colorFilter: ColorFilter.mode(
-                                  primaryColor,
-                                  BlendMode.srcIn,
-                                ),
+                              child: Image.asset(
+                                'assets/hub.png',
+                                // colorFilter: ColorFilter.mode(
+                                //   primaryColor,
+                                //   BlendMode.srcIn,
+                                // ),
                               ),
                             ),
                           ),
