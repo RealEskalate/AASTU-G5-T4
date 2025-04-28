@@ -9,7 +9,7 @@ interface DifficultyBadgeProps {
   className?: string
 }
 
-export function DifficultyBadge({ level, size = "md", showLabel = true, className }: DifficultyBadgeProps) {
+export function DifficultyBadge({level, size = "md", showLabel = true, className }: DifficultyBadgeProps) {
   const getColor = () => {
     switch (level) {
       case "easy":
