@@ -128,3 +128,23 @@ func (r *UserRepository) UpdateAvatar(ctx context.Context, userIDs []int, imageU
 
 	return nil
 }
+
+func (r *UserRepository) GetUserSubmissions(ctx context.Context, userID int) ([]domain.Submission, float64, int64, error) {
+	var submissions []domain.Submission
+	var totalTimeSpent int64
+
+	
+	if err := r.db.WithContext(ctx).
+		Where("user_id = ?", userID).
+		Find(&submissions).Error; err != nil {
+		return nil, 0, 0, err
+	}
+
+	for _, submission := range submissions {
+		totalTimeSpent += submission.TimeSpent
+	}
+
+	totalProblems := len(submissions)
+
+	return submissions, float64(totalProblems), totalTimeSpent, nil
+}
