@@ -136,6 +136,11 @@
   }
   body {
     @apply bg-background text-foreground;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    font-family: Inter, sans-serif;
   }
 }
 
@@ -187,4 +192,34 @@
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
+}
+
+aside {
+  border-right: 1px solid #ddd;
+}
+
+main {
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.sidebar {
+  width: 16rem; /* 64px * 4 */
+  flex-shrink: 0;
+}
+
+.flex {
+  display: flex;
+}
+
+.min-h-screen {
+  min-height: 100vh;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.p-4 {
+  padding: 1rem;
 }
