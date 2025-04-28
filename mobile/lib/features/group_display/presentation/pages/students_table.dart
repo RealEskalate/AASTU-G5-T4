@@ -137,8 +137,9 @@ class _StudentDataTableState extends State<StudentDataTable>
     final theme = Theme.of(context);
 
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
       child: Container(
+        width: double.infinity,
         decoration: BoxDecoration(
           color: theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(8.0),
@@ -174,8 +175,8 @@ class _StudentDataTableState extends State<StudentDataTable>
             // Tab Content - Revert to SizedBox with fixed height
             SizedBox(
               // Revert back to SizedBox
-              height: MediaQuery.of(context).size.height *
-                  0.8, // Use the fixed height again
+              height: MediaQuery.of(context).size.height * 0.9,
+              width: double.infinity,
               child: TabBarView(
                 controller: _tabController,
                 children: [
@@ -193,134 +194,142 @@ class _StudentDataTableState extends State<StudentDataTable>
   Widget _buildStudentsTab() {
     final theme = Theme.of(context);
 
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: DataTable(
-        sortColumnIndex: _sortColumnIndex,
-        sortAscending: _sortAscending,
-        columnSpacing: 10.0,
-        horizontalMargin: 10.0,
-        headingRowHeight: 35,
-        dataRowMinHeight: 50,
-        dataRowMaxHeight: 60,
-        columns: [
-          DataColumn(
-            label: Text('Name',
-                style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.bold,
-                    color: theme.colorScheme.onSurface)),
-            onSort: _onSort,
-          ),
-          DataColumn(
-            label: Text('Problems',
-                style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.bold,
-                    color: theme.colorScheme.onSurface)),
-            numeric: true,
-            onSort: _onSort,
-          ),
-          DataColumn(
-            label: Text('Time',
-                style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.bold,
-                    color: theme.colorScheme.onSurface)),
-            numeric: true,
-            onSort: _onSort,
-          ),
-          DataColumn(
-            label: Text('Rating',
-                style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.bold,
-                    color: theme.colorScheme.onSurface)),
-            numeric: true,
-            onSort: _onSort,
-          ),
-          DataColumn(
-            label: Text('Last Seen',
-                style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.bold,
-                    color: theme.colorScheme.onSurface)),
-            onSort: _onSort,
-          ),
-        ],
-        rows: _sortedStudents.map((student) {
-          final lastSeenText = _formatLastSeen(student.lastSeen);
-          final isOnline = lastSeenText.startsWith('online');
-          final lastSeenColor = isOnline
-              ? theme.colorScheme.primary
-              : theme.colorScheme.onSurface;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minWidth: constraints.maxWidth),
+            child: DataTable(
+              sortColumnIndex: _sortColumnIndex,
+              sortAscending: _sortAscending,
+              columnSpacing: (constraints.maxWidth - 50) / 20,
+              horizontalMargin: 10.0,
+              headingRowHeight: 35,
+              dataRowMinHeight: 50,
+              dataRowMaxHeight: 60,
+              columns: [
+                DataColumn(
+                  label: Text('Name',
+                      style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                          color: theme.colorScheme.onSurface)),
+                  onSort: _onSort,
+                ),
+                DataColumn(
+                  label: Text('Problems',
+                      style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                          color: theme.colorScheme.onSurface)),
+                  numeric: true,
+                  onSort: _onSort,
+                ),
+                DataColumn(
+                  label: Text('Time',
+                      style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                          color: theme.colorScheme.onSurface)),
+                  numeric: true,
+                  onSort: _onSort,
+                ),
+                DataColumn(
+                  label: Text('Rating',
+                      style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                          color: theme.colorScheme.onSurface)),
+                  numeric: true,
+                  onSort: _onSort,
+                ),
+                DataColumn(
+                  label: Text('Last Seen',
+                      style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                          color: theme.colorScheme.onSurface)),
+                  onSort: _onSort,
+                ),
+              ],
+              rows: _sortedStudents.map((student) {
+                final lastSeenText = _formatLastSeen(student.lastSeen);
+                final isOnline = lastSeenText.startsWith('online');
+                final lastSeenColor = isOnline
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.onSurface;
 
-          final problemsCount =
-              student.meta['solvedProblems_count']?.toString() ?? '0';
-          final timeSpent = student.meta['time_spent']?.toString() ?? '0';
-          final rating = student.meta['rating']?.toString() ?? '0';
+                final problemsCount =
+                    student.meta['solvedProblems_count']?.toString() ?? '0';
+                final timeSpent = student.meta['time_spent']?.toString() ?? '0';
+                final rating = student.meta['rating']?.toString() ?? '0';
 
-          // Abbreviate name
-          String abbreviatedName = student.name.isNotEmpty
-              ? (student.name.length > 10
-                  ? "${student.name.substring(0, 5)}..."
-                  : student.name)
-              : "";
+                // Abbreviate name
+                String abbreviatedName = student.name.isNotEmpty
+                    ? (student.name.length > 10
+                        ? "${student.name.substring(0, 5)}..."
+                        : student.name)
+                    : "";
 
-          return DataRow(
-            cells: [
-              DataCell(
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CircleAvatar(
-                      radius: 15,
-                      backgroundImage: NetworkImage(student.photo),
+                return DataRow(
+                  cells: [
+                    DataCell(
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CircleAvatar(
+                            radius: 15,
+                            backgroundImage: NetworkImage(student.photo),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            student.name,
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: theme.colorScheme.onSurface,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    const SizedBox(width: 8),
-                    Text(
-                      student.name,
+                    DataCell(Text(
+                      problemsCount,
                       style: TextStyle(
                         fontSize: 13,
                         color: theme.colorScheme.onSurface,
                       ),
-                    ),
+                    )),
+                    DataCell(Text(
+                      timeSpent,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: theme.colorScheme.onSurface,
+                      ),
+                    )),
+                    DataCell(Text(
+                      rating,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: theme.colorScheme.onSurface,
+                      ),
+                    )),
+                    DataCell(Text(
+                      lastSeenText,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: lastSeenColor,
+                        fontWeight:
+                            isOnline ? FontWeight.bold : FontWeight.normal,
+                      ),
+                    )),
                   ],
-                ),
-              ),
-              DataCell(Text(
-                problemsCount,
-                style: TextStyle(
-                  fontSize: 13,
-                  color: theme.colorScheme.onSurface,
-                ),
-              )),
-              DataCell(Text(
-                timeSpent,
-                style: TextStyle(
-                  fontSize: 13,
-                  color: theme.colorScheme.onSurface,
-                ),
-              )),
-              DataCell(Text(
-                rating,
-                style: TextStyle(
-                  fontSize: 13,
-                  color: theme.colorScheme.onSurface,
-                ),
-              )),
-              DataCell(Text(
-                lastSeenText,
-                style: TextStyle(
-                  fontSize: 13,
-                  color: lastSeenColor,
-                  fontWeight: isOnline ? FontWeight.bold : FontWeight.normal,
-                ),
-              )),
-            ],
-          );
-        }).toList(),
-      ),
+                );
+              }).toList(),
+            ),
+          ),
+        );
+      },
     );
   }
 

@@ -36,12 +36,12 @@ class _GroupDetailsState extends State<GroupDetails> {
       body: Stack(
         children: [
           SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(28.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Column(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -82,129 +82,129 @@ class _GroupDetailsState extends State<GroupDetails> {
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  StatsDisplayWidget(),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    // mainAxisAlignment: MainAxisAlignment.s,
-                    children: [
-                      Column(
-                        children: [
-                          Text(
-                            'Heads',
-                            style: GoogleFonts.publicSans(
-                              textStyle: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w800,
-                                  color: theme.colorScheme.onBackground),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                StatsDisplayWidget(),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  // mainAxisAlignment: MainAxisAlignment.s,
+                  children: [
+                    Column(
+                      children: [
+                        Text(
+                          'Heads',
+                          style: GoogleFonts.publicSans(
+                            textStyle: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w800,
+                                color: theme.colorScheme.onBackground),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            CircularProfileImage(
+                              imageUrl:
+                                  'https://storage.googleapis.com/a2sv_hub_bucket_2/%2Fimages%2FWubshet%20Zeleke_g33.jpg',
+                              radius: 20,
                             ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            children: [
-                              CircularProfileImage(
-                                imageUrl:
-                                    'https://storage.googleapis.com/a2sv_hub_bucket_2/%2Fimages%2FWubshet%20Zeleke_g33.jpg',
-                                radius: 20,
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              CircularProfileImage(
-                                imageUrl:
-                                    'https://storage.googleapis.com/a2sv_hub_bucket_2/%2Fimages%2FYidnekachew%20Tebeje_g46.jpg',
-                                radius: 20,
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            'Titles',
-                            style: GoogleFonts.publicSans(
-                              textStyle: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w800,
-                                  color: theme.colorScheme.onBackground),
+                            const SizedBox(
+                              width: 10,
                             ),
+                            CircularProfileImage(
+                              imageUrl:
+                                  'https://storage.googleapis.com/a2sv_hub_bucket_2/%2Fimages%2FYidnekachew%20Tebeje_g46.jpg',
+                              radius: 20,
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Column(
+                      children: [
+                        Text(
+                          'Titles',
+                          style: GoogleFonts.publicSans(
+                            textStyle: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w800,
+                                color: theme.colorScheme.onBackground),
                           ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            children: [
-                              CircularProfileImage(
-                                imageUrl:
-                                    'https://hub.a2sv.org/illustrations/titles/coder.png',
-                                radius: 20,
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              CircularProfileImage(
-                                imageUrl:
-                                    'https://hub.a2sv.org/illustrations/titles/strategist.png',
-                                radius: 20,
-                              ),
-                            ],
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Center(
-                    child: Container(
-                      width: 200,
-                      height: 200,
-                      child: DiamondRatingChart(
-                        performance: 89.5, // Based on your image
-                        experience: 71.7, // Based on your image
-                        consistency: 60.4, // Based on your image
-                        fourthMetric: 55.7, // Based on your image
-                        // titleIcons: titleIcons,
-                        labels: [
-                          'Attendance',
-                          'Completion',
-                          'Consistency',
-                          'Progress'
-                        ],
-                      ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            CircularProfileImage(
+                              imageUrl:
+                                  'https://hub.a2sv.org/illustrations/titles/coder.png',
+                              radius: 20,
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            CircularProfileImage(
+                              imageUrl:
+                                  'https://hub.a2sv.org/illustrations/titles/strategist.png',
+                              radius: 20,
+                            ),
+                          ],
+                        )
+                      ],
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: Container(
+                    width: 200,
+                    height: 200,
+                    child: DiamondRatingChart(
+                      performance: 89.5, // Based on your image
+                      experience: 71.7, // Based on your image
+                      consistency: 60.4, // Based on your image
+                      fourthMetric: 55.7, // Based on your image
+                      // titleIcons: titleIcons,
+                      labels: [
+                        'Attendance',
+                        'Completion',
+                        'Consistency',
+                        'Progress'
+                      ],
                     ),
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  FutureBuilder<List<Student>>(
-                    future: fetchStudents(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
-                      } else if (snapshot.hasError) {
-                        return Center(child: Text('Error: ${snapshot.error}'));
-                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return const Center(child: Text('No students found'));
-                      }
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                FutureBuilder<List<Student>>(
+                  future: fetchStudents(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Center(child: Text('No students found'));
+                    }
 
-                      final students = snapshot.data!;
-                      return StudentDataTable(students: students);
-                    },
-                  ),
-                ],
-              ),
+                    final students = snapshot.data!;
+                    return StudentDataTable(students: students);
+                  },
+                ),
+              ],
             ),
           ),
           ValueListenableBuilder<bool>(
