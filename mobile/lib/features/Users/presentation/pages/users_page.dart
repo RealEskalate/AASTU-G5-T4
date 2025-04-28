@@ -18,9 +18,11 @@ class _UsersPageState extends State<UsersPage> {
   int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(kToolbarHeight),
           child: Customappbar(
@@ -43,18 +45,21 @@ class _UsersPageState extends State<UsersPage> {
                     Text(
                       'Groups & Users',
                       style: GoogleFonts.publicSans(
-                        textStyle: const TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.w800),
+                        textStyle: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w800,
+                            color: theme.colorScheme.onBackground),
                       ),
                     ),
                     const SizedBox(height: 5),
                     Text(
                       'All',
                       style: GoogleFonts.publicSans(
-                        textStyle: const TextStyle(
+                        textStyle: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
-                            color: Color.fromRGBO(145, 158, 171, 1)),
+                            color: theme.colorScheme.onBackground
+                                .withOpacity(0.6)),
                       ),
                     ),
                   ],

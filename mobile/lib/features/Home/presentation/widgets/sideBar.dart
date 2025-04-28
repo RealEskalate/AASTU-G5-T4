@@ -23,6 +23,9 @@ class HubSidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final primaryColor = theme.colorScheme.primary;
+
     return Stack(
       children: [
         // Dark blur overlay for the background
@@ -45,7 +48,7 @@ class HubSidebar extends StatelessWidget {
             child: Container(
               width: 280,
               height: double.infinity,
-              color: Colors.white,
+              color: theme.colorScheme.surface,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -59,26 +62,17 @@ class HubSidebar extends StatelessWidget {
                           child: SizedBox(
                             width: 100,
                             height: 100,
-                            // decoration: BoxDecoration(
-                            //   color: const Color.fromRGBO(0, 171, 85, 1),
-                            //   borderRadius: BorderRadius.circular(8),
-                            // ),
                             child: Center(
                               child: SvgPicture.asset(
                                 'assets/svgs/vercel_logo.svg',
+                                colorFilter: ColorFilter.mode(
+                                  primaryColor,
+                                  BlendMode.srcIn,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                        // const SizedBox(width: 8),
-                        // const Text(
-                        //   'HUB',
-                        //   style: TextStyle(
-                        //     fontSize: 24,
-                        //     fontWeight: FontWeight.bold,
-                        //     color: Color.fromRGBO(0, 171, 85, 1),
-                        //   ),
-                        // ),
                       ],
                     ),
                   ),
@@ -95,7 +89,9 @@ class HubSidebar extends StatelessWidget {
                       margin: const EdgeInsets.symmetric(horizontal: 16),
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF5F5F5),
+                        color: theme.brightness == Brightness.dark
+                            ? theme.colorScheme.surface.withOpacity(0.3)
+                            : const Color(0xFFF5F5F5),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
@@ -111,18 +107,19 @@ class HubSidebar extends StatelessWidget {
                               children: [
                                 Text(
                                   username,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
-                                    color: Colors.black87,
+                                    color: theme.colorScheme.onSurface,
                                   ),
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 Text(
                                   userRole,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 14,
-                                    color: Colors.black54,
+                                    color: theme.colorScheme.onSurface
+                                        .withOpacity(0.6),
                                   ),
                                 ),
                               ],
@@ -136,14 +133,15 @@ class HubSidebar extends StatelessWidget {
                   const SizedBox(height: 24),
 
                   // STUDENT label
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: Text(
                       'STUDENT',
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                        color: theme.colorScheme.onSurface,
                         letterSpacing: 1.2,
                       ),
                     ),
@@ -191,12 +189,12 @@ class HubSidebar extends StatelessWidget {
                           width: 32,
                           height: 32,
                           decoration: BoxDecoration(
-                            color: const Color.fromRGBO(0, 171, 85, 1),
+                            color: primaryColor,
                             borderRadius: BorderRadius.circular(4),
                           ),
-                          child: const Icon(
+                          child: Icon(
                             Icons.description_outlined,
-                            color: Colors.white,
+                            color: theme.colorScheme.onPrimary,
                             size: 18,
                           ),
                         ),
@@ -209,26 +207,28 @@ class HubSidebar extends StatelessWidget {
                                 Container(
                                   width: 8,
                                   height: 8,
-                                  decoration: const BoxDecoration(
-                                    color: Color.fromRGBO(0, 171, 85, 1),
+                                  decoration: BoxDecoration(
+                                    color: primaryColor,
                                     shape: BoxShape.circle,
                                   ),
                                 ),
                                 const SizedBox(width: 4),
-                                const Text(
+                                Text(
                                   '',
                                   style: TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w500,
+                                    color: theme.colorScheme.onSurface,
                                   ),
                                 ),
                               ],
                             ),
-                            const Text(
+                            Text(
                               '',
                               style: TextStyle(
                                 fontSize: 12,
-                                color: Colors.black54,
+                                color: theme.colorScheme.onSurface
+                                    .withOpacity(0.6),
                               ),
                             ),
                           ],
@@ -247,13 +247,21 @@ class HubSidebar extends StatelessWidget {
 
   Widget _buildMenuItem(BuildContext context, int index, IconData icon,
       String title, bool hasSubmenu, String path) {
+    final theme = Theme.of(context);
     final isSelected = index == selectedIndex;
+
+    // Use consistent color selection logic for all items
+    final primaryColor = theme.colorScheme.primary;
+
+    // Background color logic
     final backgroundColor = isSelected
-        ? const Color(0xFFE9FFF4)
-        : (index == 1 ? const Color(0xFFE9FFF4) : Colors.transparent);
-    final textColor = isSelected || index == 1
-        ? const Color.fromRGBO(0, 171, 85, 1)
-        : Colors.black87;
+        ? theme.brightness == Brightness.dark
+            ? primaryColor.withOpacity(0.2)
+            : const Color(0xFFE9FFF4)
+        : Colors.transparent;
+
+    // Text and icon color logic
+    final textColor = isSelected ? primaryColor : theme.colorScheme.onSurface;
 
     return Material(
       color: backgroundColor,
@@ -278,9 +286,8 @@ class HubSidebar extends StatelessWidget {
                   title,
                   style: TextStyle(
                     fontSize: 14,
-                    fontWeight: isSelected || index == 1
-                        ? FontWeight.w600
-                        : FontWeight.normal,
+                    fontWeight:
+                        isSelected ? FontWeight.w600 : FontWeight.normal,
                     color: textColor,
                   ),
                 ),
@@ -289,7 +296,7 @@ class HubSidebar extends StatelessWidget {
                 Icon(
                   Icons.chevron_right,
                   size: 16,
-                  color: Colors.black54,
+                  color: theme.colorScheme.onSurface.withOpacity(0.5),
                 ),
             ],
           ),
@@ -317,5 +324,9 @@ class SidebarController {
   void closeSidebar() {
     isOpen = false;
     sidebarVisibility.value = false;
+  }
+
+  void dispose() {
+    sidebarVisibility.dispose();
   }
 }

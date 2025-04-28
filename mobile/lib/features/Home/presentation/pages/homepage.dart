@@ -53,7 +53,7 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       key: _scaffoldKey,
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(kToolbarHeight),
@@ -74,10 +74,16 @@ class _HomepageState extends State<Homepage> {
                   child: Container(
                     decoration: BoxDecoration(
                       border: Border.all(
-                          color: const Color.fromRGBO(200, 250, 205, 1)),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.3)),
                       borderRadius: BorderRadius.circular(20),
                       shape: BoxShape.rectangle,
-                      color: const Color.fromRGBO(200, 250, 205, 1),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withOpacity(0.15),
                     ),
                     width: MediaQuery.of(context).size.width * 0.9,
                     // Make the height adaptive instead of fixed
@@ -172,7 +178,7 @@ class _HomepageState extends State<Homepage> {
                     width: MediaQuery.of(context).size.width * 0.9,
                     child: Card(
                       elevation: 5,
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.surface,
                       child: Padding(
                         padding: const EdgeInsets.only(top: 8.0, bottom: 10),
                         child: Center(
@@ -186,13 +192,24 @@ class _HomepageState extends State<Homepage> {
                                     children: [
                                       IconButton(
                                           onPressed: () {},
-                                          icon: Icon(Icons
-                                              .keyboard_arrow_left_rounded)),
-                                      Text('1/1'),
+                                          icon: Icon(
+                                              Icons.keyboard_arrow_left_rounded,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface)),
+                                      Text('1/1',
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface)),
                                       IconButton(
                                           onPressed: () {},
-                                          icon: Icon(Icons
-                                              .keyboard_arrow_right_rounded)),
+                                          icon: Icon(
+                                              Icons
+                                                  .keyboard_arrow_right_rounded,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface)),
                                     ],
                                   ),
                                 ],
@@ -202,11 +219,13 @@ class _HomepageState extends State<Homepage> {
                                 child: ElevatedButton(
                                     style: ButtonStyle(
                                       backgroundColor: WidgetStateProperty.all(
-                                          Color.fromRGBO(31, 144, 250, 1)),
+                                          Theme.of(context)
+                                              .colorScheme
+                                              .secondary),
                                       shape: WidgetStateProperty.all(
                                         RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              20), // Adjust the radius here
+                                          borderRadius:
+                                              BorderRadius.circular(20),
                                         ),
                                       ),
                                     ),
@@ -216,7 +235,9 @@ class _HomepageState extends State<Homepage> {
                                       style: GoogleFonts.publicSans(
                                           textStyle: TextStyle(
                                               fontSize: 13,
-                                              color: Colors.white,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSecondary,
                                               fontWeight: FontWeight.bold)),
                                     )),
                               ),
@@ -230,6 +251,9 @@ class _HomepageState extends State<Homepage> {
                                     style: GoogleFonts.publicSans(
                                         textStyle: TextStyle(
                                             fontSize: 17,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurface,
                                             fontWeight: FontWeight.w700)),
                                   ),
                                   CountdownWithTarget(targetDate: targetDate)

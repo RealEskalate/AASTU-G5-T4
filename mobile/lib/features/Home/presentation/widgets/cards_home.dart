@@ -19,13 +19,15 @@ class CardsHome extends StatefulWidget {
 class _CardsHomeState extends State<CardsHome> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8),
       child: Container(
         width: MediaQuery.of(context).size.width * 0.9,
         child: Card(
           elevation: 5,
-          color: Colors.white,
+          color: theme.colorScheme.surface,
           child: Padding(
             padding: const EdgeInsets.all(24.0),
             child: Column(
@@ -37,7 +39,9 @@ class _CardsHomeState extends State<CardsHome> {
                   child: Text(
                     widget.text,
                     style: GoogleFonts.publicSans(
-                        fontWeight: FontWeight.w600, fontSize: 14),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                        color: theme.colorScheme.onSurface),
                   ),
                 ),
                 Padding(
@@ -48,11 +52,10 @@ class _CardsHomeState extends State<CardsHome> {
                         width: 35,
                         height: 35,
                         decoration: BoxDecoration(
-                          color: Color.fromRGBO(84, 214, 14, 0.16), // Dot color
-                          shape: BoxShape.circle, // Makes it circular
+                          color: theme.colorScheme.primary.withOpacity(0.16),
+                          shape: BoxShape.circle,
                           border: Border.all(
-                            color: Colors
-                                .white, // Optional: white border for contrast
+                            color: theme.colorScheme.surface,
                             width: 1,
                           ),
                         ),
@@ -61,7 +64,7 @@ class _CardsHomeState extends State<CardsHome> {
                             'assets/svgs/cards_svg_trend.svg',
                             width: 28,
                             height: 28,
-                            color: Color.fromRGBO(84, 214, 14, 1),
+                            color: theme.colorScheme.primary,
                           ),
                         ),
                       ),
@@ -70,7 +73,9 @@ class _CardsHomeState extends State<CardsHome> {
                         child: Text(
                           '0.0 %',
                           style: GoogleFonts.publicSans(
-                              fontWeight: FontWeight.w600, fontSize: 20),
+                              fontWeight: FontWeight.w600,
+                              fontSize: 20,
+                              color: theme.colorScheme.onSurface),
                         ),
                       )
                     ],
@@ -81,7 +86,9 @@ class _CardsHomeState extends State<CardsHome> {
                   child: Text(
                     widget.digit,
                     style: GoogleFonts.publicSans(
-                        fontWeight: FontWeight.bold, fontSize: 24),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                        color: theme.colorScheme.onSurface),
                   ),
                 )
               ],

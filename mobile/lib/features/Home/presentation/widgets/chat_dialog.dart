@@ -37,7 +37,7 @@ class _ChatDialogState extends State<ChatDialog> {
     }
     _model = GenerativeModel(
       // For text-only input, use the gemini-pro model
-      model: 'gemini-pro',
+      model: 'gemini-1.5-flash',
       apiKey: apiKey, // Use the key from dotenv
     );
     _chat = _model.startChat();

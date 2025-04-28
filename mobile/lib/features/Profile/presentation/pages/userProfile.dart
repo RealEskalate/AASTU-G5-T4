@@ -21,8 +21,18 @@ class _UserprofilePageState extends State<UserprofilePage> {
   final SidebarController _sidebarController = SidebarController();
   int _selectedIndex = 0;
   bool _showDetail = false;
+
+  @override
+  void dispose() {
+    // Dispose controllers to prevent memory leaks
+    _sidebarController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(kToolbarHeight),
@@ -31,13 +41,13 @@ class _UserprofilePageState extends State<UserprofilePage> {
               _sidebarController.toggleSidebar();
             },
           )),
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: SafeArea(
           child: Stack(children: [
         SingleChildScrollView(
           child: Column(
             children: [
-              // Customappbar(),
+              // Profile header
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Padding(
@@ -49,7 +59,9 @@ class _UserprofilePageState extends State<UserprofilePage> {
                         'Profile',
                         style: GoogleFonts.publicSans(
                             textStyle: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w700)),
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700,
+                                color: theme.colorScheme.onBackground)),
                       ),
                       Row(
                         children: [
@@ -59,7 +71,7 @@ class _UserprofilePageState extends State<UserprofilePage> {
                                 textStyle: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,
-                                    color: Color.fromRGBO(33, 43, 54, 1))),
+                                    color: theme.colorScheme.onBackground)),
                           ),
                           Text(
                             ' . Natnael Wondwoesn Solomon',
@@ -67,7 +79,8 @@ class _UserprofilePageState extends State<UserprofilePage> {
                                 textStyle: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,
-                                    color: Color.fromRGBO(145, 158, 171, 1))),
+                                    color: theme.colorScheme.onBackground
+                                        .withOpacity(0.7))),
                           )
                         ],
                       )
@@ -75,8 +88,8 @@ class _UserprofilePageState extends State<UserprofilePage> {
                   ),
                 ),
               ),
+              // Main profile components
               ProfileCard(),
-              // Calendar And The Rest
               ConsistencyCalendarWidget(),
               // Attendance Heatmap
               Padding(
@@ -97,12 +110,12 @@ class _UserprofilePageState extends State<UserprofilePage> {
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.9,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: theme.colorScheme.surface,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Card(
                     elevation: 5,
-                    color: Colors.white,
+                    color: theme.colorScheme.surface,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -113,14 +126,16 @@ class _UserprofilePageState extends State<UserprofilePage> {
                               style: GoogleFonts.publicSans(
                                   textStyle: TextStyle(
                                       fontWeight: FontWeight.w700,
-                                      fontSize: 20)),
+                                      fontSize: 20,
+                                      color: theme.colorScheme.onSurface)),
                             ),
                             Text(
                               'Rating',
                               style: GoogleFonts.publicSans(
                                   textStyle: TextStyle(
                                       fontWeight: FontWeight.w400,
-                                      color: Color.fromRGBO(99, 115, 129, 1))),
+                                      color: theme.colorScheme.onSurface
+                                          .withOpacity(0.7))),
                             )
                           ],
                         ),
@@ -131,7 +146,8 @@ class _UserprofilePageState extends State<UserprofilePage> {
                             style: GoogleFonts.publicSans(
                                 fontSize: 100,
                                 fontWeight: FontWeight.w100,
-                                color: Colors.grey[100]),
+                                color: theme.colorScheme.onSurface
+                                    .withOpacity(0.2)),
                           ),
                         ),
                         Column(
@@ -141,14 +157,16 @@ class _UserprofilePageState extends State<UserprofilePage> {
                               style: GoogleFonts.publicSans(
                                   textStyle: TextStyle(
                                       fontWeight: FontWeight.w700,
-                                      fontSize: 20)),
+                                      fontSize: 20,
+                                      color: theme.colorScheme.onSurface)),
                             ),
                             Text(
                               'Problems',
                               style: GoogleFonts.publicSans(
                                   textStyle: TextStyle(
                                       fontWeight: FontWeight.w400,
-                                      color: Color.fromRGBO(99, 115, 129, 1))),
+                                      color: theme.colorScheme.onSurface
+                                          .withOpacity(0.7))),
                             )
                           ],
                         ),
@@ -162,12 +180,12 @@ class _UserprofilePageState extends State<UserprofilePage> {
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.9,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: theme.colorScheme.surface,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Card(
                     elevation: 5,
-                    color: Colors.white,
+                    color: theme.colorScheme.surface,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
@@ -185,7 +203,7 @@ class _UserprofilePageState extends State<UserprofilePage> {
                             'Coder I · 980',
                             style: GoogleFonts.publicSans(
                                 fontSize: 21,
-                                color: Color.fromRGBO(33, 43, 54, 1),
+                                color: theme.colorScheme.onSurface,
                                 fontWeight: FontWeight.w600),
                           ),
                           Padding(
@@ -194,7 +212,8 @@ class _UserprofilePageState extends State<UserprofilePage> {
                               'Next: Solver III',
                               style: GoogleFonts.publicSans(
                                   fontSize: 16,
-                                  color: Color.fromRGBO(99, 115, 129, 1),
+                                  color: theme.colorScheme.onSurface
+                                      .withOpacity(0.7),
                                   fontWeight: FontWeight.w400),
                             ),
                           ),
@@ -213,12 +232,12 @@ class _UserprofilePageState extends State<UserprofilePage> {
                   width: MediaQuery.of(context).size.width * 0.9,
                   height: MediaQuery.of(context).size.height * 0.1,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: theme.colorScheme.surface,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Card(
                     elevation: 5,
-                    color: Colors.white,
+                    color: theme.colorScheme.surface,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -227,14 +246,15 @@ class _UserprofilePageState extends State<UserprofilePage> {
                           'Div 3',
                           style: GoogleFonts.publicSans(
                               fontSize: 21,
-                              color: Color.fromRGBO(33, 43, 54, 1),
+                              color: theme.colorScheme.onSurface,
                               fontWeight: FontWeight.w600),
                         ),
                         Text(
                           'Division III',
                           style: GoogleFonts.publicSans(
                               fontSize: 16,
-                              color: Color.fromRGBO(99, 115, 129, 1),
+                              color:
+                                  theme.colorScheme.onSurface.withOpacity(0.7),
                               fontWeight: FontWeight.w400),
                         ),
                       ],
@@ -257,6 +277,8 @@ class _UserprofilePageState extends State<UserprofilePage> {
             ],
           ),
         ),
+
+        // Overlay sidebar when open
         ValueListenableBuilder<bool>(
           valueListenable: _sidebarController.sidebarVisibility,
           builder: (context, isVisible, _) {

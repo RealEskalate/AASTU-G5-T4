@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/core/theme/theme_notifier.dart';
+import 'package:mobile/core/theme/theme_toggle.dart';
 import 'package:provider/provider.dart';
 
 class SettingsDrawer extends StatelessWidget {
@@ -37,8 +38,22 @@ class SettingsDrawer extends StatelessWidget {
           ),
           const Divider(),
 
+          // Theme Toggle
+          _buildSectionHeader(context, 'Theme'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Dark Mode',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              const ThemeToggle(),
+            ],
+          ),
+          const SizedBox(height: 10),
+
           // Mode Selection
-          _buildSectionHeader(context, 'Mode'),
+          _buildSectionHeader(context, 'Mode Appearance'),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -46,15 +61,23 @@ class SettingsDrawer extends StatelessWidget {
                 context,
                 icon: Icons.wb_sunny_outlined,
                 label: 'Light',
-                isSelected: themeNotifier.themeMode == ThemeMode.light,
-                onTap: () => themeNotifier.setThemeMode(ThemeMode.light),
+                isSelected: !themeNotifier.isDarkMode,
+                onTap: () {
+                  if (themeNotifier.isDarkMode) {
+                    themeNotifier.toggleTheme();
+                  }
+                },
               ),
               _buildModeButton(
                 context,
                 icon: Icons.nightlight_outlined,
                 label: 'Dark',
-                isSelected: themeNotifier.themeMode == ThemeMode.dark,
-                onTap: () => themeNotifier.setThemeMode(ThemeMode.dark),
+                isSelected: themeNotifier.isDarkMode,
+                onTap: () {
+                  if (!themeNotifier.isDarkMode) {
+                    themeNotifier.toggleTheme();
+                  }
+                },
               ),
             ],
           ),

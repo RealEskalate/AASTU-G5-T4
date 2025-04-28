@@ -33,6 +33,7 @@ class MainApp extends StatelessWidget {
               exitButtonText: 'Exit',
               child: MaterialApp.router(
                 debugShowCheckedModeBanner: false,
+                theme: themeNotifier?.themeData ?? ThemeData.light(),
                 routerConfig: router,
               ),
             ),

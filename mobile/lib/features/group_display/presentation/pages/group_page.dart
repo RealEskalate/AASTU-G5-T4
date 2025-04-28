@@ -17,10 +17,19 @@ class _GroupsPageState extends State<GroupsPage> {
   // Create a sidebar controller
   final SidebarController _sidebarController = SidebarController();
   int _selectedIndex = 6;
+
+  @override
+  void dispose() {
+    _sidebarController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       key: _scaffoldKey,
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(kToolbarHeight),
@@ -44,17 +53,20 @@ class _GroupsPageState extends State<GroupsPage> {
                       Text(
                         'Groups',
                         style: GoogleFonts.publicSans(
-                          textStyle: const TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.w800),
+                          textStyle: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w800,
+                              color: theme.colorScheme.onBackground),
                         ),
                       ),
                       Text(
                         'All',
                         style: GoogleFonts.publicSans(
-                          textStyle: const TextStyle(
+                          textStyle: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w400,
-                              color: Color.fromRGBO(145, 158, 171, 1)),
+                              color: theme.colorScheme.onBackground
+                                  .withOpacity(0.6)),
                         ),
                       ),
                     ],
@@ -133,27 +145,6 @@ List<dynamic> groups = [
     'memberCount': 37,
     'timeSpent': '74,569 hours',
     'avgRating': 1413,
-  },
-  {
-    'groupName': 'AASTU Group 57',
-    'groupAbbreviation': 'G57',
-    'memberCount': 25,
-    'timeSpent': '256,744 hours',
-    'avgRating': 1282,
-  },
-  {
-    'groupName': 'AASTU Group 57',
-    'groupAbbreviation': 'G57',
-    'memberCount': 25,
-    'timeSpent': '256,744 hours',
-    'avgRating': 1282,
-  },
-  {
-    'groupName': 'AASTU Group 57',
-    'groupAbbreviation': 'G57',
-    'memberCount': 25,
-    'timeSpent': '256,744 hours',
-    'avgRating': 1282,
   },
   {
     'groupName': 'AASTU Group 57',

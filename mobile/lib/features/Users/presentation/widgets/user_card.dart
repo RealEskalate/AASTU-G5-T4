@@ -69,11 +69,12 @@ class UserCard extends StatelessWidget {
         : Container(
             height: 120,
             width: double.infinity,
-            color: Colors.teal[400], // Placeholder color
+            color:
+                theme.colorScheme.primary.withOpacity(0.7), // Use theme color
           );
 
     return Card(
-      color: Colors.white,
+      color: theme.colorScheme.surface, // Use theme surface color
       elevation: 2.0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       clipBehavior: Clip.antiAlias, // Clip content to card shape
@@ -104,7 +105,9 @@ class UserCard extends StatelessWidget {
                     Text(name,
                         style: GoogleFonts.publicSans(
                             textStyle: TextStyle(
-                                fontWeight: FontWeight.w400, fontSize: 16))),
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16,
+                                color: theme.colorScheme.onSurface))),
                     const SizedBox(height: 4),
                     Text(
                       '$role • $group',
@@ -112,7 +115,8 @@ class UserCard extends StatelessWidget {
                           textStyle: TextStyle(
                               fontWeight: FontWeight.w400,
                               fontSize: 14,
-                              color: Color.fromRGBO(99, 115, 129, 1))),
+                              color: theme.colorScheme.onSurface
+                                  .withOpacity(0.7))),
                     ),
                     const SizedBox(height: 12),
                     Row(
@@ -151,23 +155,23 @@ class UserCard extends StatelessWidget {
                   ],
                 ),
               ),
-              const Divider(
+              Divider(
                   height: 32.0,
                   thickness: 0.5,
                   indent: 16,
                   endIndent: 16,
-                  color: Color.fromRGBO(33, 43, 54, 0.1)),
+                  color: theme.colorScheme.onSurface.withOpacity(0.1)),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     _buildStatColumn(
-                        'Problems', problemsCount.toString(), textTheme),
-                    _buildStatColumn(
-                        'Submissions', submissionsCount.toString(), textTheme),
-                    _buildStatColumn(
-                        'Dedicated Time', dedicatedTime.toString(), textTheme),
+                        'Problems', problemsCount.toString(), textTheme, theme),
+                    _buildStatColumn('Submissions', submissionsCount.toString(),
+                        textTheme, theme),
+                    _buildStatColumn('Dedicated Time', dedicatedTime.toString(),
+                        textTheme, theme),
                   ],
                 ),
               ),
@@ -179,8 +183,8 @@ class UserCard extends StatelessWidget {
                 child: Text(
                   'View Profile',
                   style: TextStyle(
-                      color: const Color.fromRGBO(
-                          0, 171, 85, 1), // Match header color
+                      color:
+                          theme.colorScheme.primary, // Use theme primary color
                       fontWeight: FontWeight.bold),
                 ),
               ),
@@ -192,7 +196,8 @@ class UserCard extends StatelessWidget {
     );
   }
 
-  Widget _buildStatColumn(String label, String value, TextTheme textTheme) {
+  Widget _buildStatColumn(
+      String label, String value, TextTheme textTheme, ThemeData theme) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -202,7 +207,7 @@ class UserCard extends StatelessWidget {
               textStyle: TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 12,
-                  color: Color.fromRGBO(145, 158, 171, 1))),
+                  color: theme.colorScheme.onSurface.withOpacity(0.7))),
         ),
         const SizedBox(height: 4),
         Text(
@@ -213,7 +218,7 @@ class UserCard extends StatelessWidget {
               textStyle: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
-                  color: Color.fromRGBO(33, 43, 54, 1))),
+                  color: theme.colorScheme.onSurface)),
         ),
       ],
     );

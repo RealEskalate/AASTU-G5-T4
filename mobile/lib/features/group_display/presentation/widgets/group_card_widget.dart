@@ -26,7 +26,7 @@ class GroupCardWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () => context.go('/group_details'),
       child: Card(
-        color: Colors.white,
+        color: colorScheme.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.0),
         ),
@@ -42,18 +42,20 @@ class GroupCardWidget extends StatelessWidget {
                 Text(
                   groupName, // Use parameter
                   style: GoogleFonts.publicSans(
-                    textStyle: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.w800),
+                    textStyle: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                        color: colorScheme.onSurface),
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   '$groupAbbreviation • $memberCount Members', // Use parameters
                   style: GoogleFonts.publicSans(
-                    textStyle: const TextStyle(
+                    textStyle: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
-                        color: Color.fromRGBO(99, 115, 129, 1)),
+                        color: colorScheme.onSurface.withOpacity(0.6)),
                   ),
                 ),
                 const SizedBox(height: 170), // Add some space before the stats
@@ -66,7 +68,7 @@ class GroupCardWidget extends StatelessWidget {
                         thickness: 4,
                         indent: 5, // Optional top padding for divider
                         endIndent: 5, // Optional bottom padding for divider
-                        color: Color.fromRGBO(226, 226, 226, 1),
+                        color: colorScheme.surfaceVariant,
                       ),
                       Expanded(
                         child: Column(
@@ -75,27 +77,30 @@ class GroupCardWidget extends StatelessWidget {
                             Text(
                               'Time Spent',
                               style: GoogleFonts.publicSans(
-                                  textStyle: const TextStyle(
+                                  textStyle: TextStyle(
                                       fontSize: 12,
-                                      fontWeight: FontWeight.w400)),
+                                      fontWeight: FontWeight.w400,
+                                      color: colorScheme.onSurface
+                                          .withOpacity(0.8))),
                             ),
                             const SizedBox(height: 4),
                             Text(
                               timeSpent, // Use parameter
                               style: GoogleFonts.publicSans(
-                                  textStyle: const TextStyle(
+                                  textStyle: TextStyle(
                                       fontSize: 16,
-                                      fontWeight: FontWeight.w400)),
+                                      fontWeight: FontWeight.w400,
+                                      color: colorScheme.onSurface)),
                             ),
                           ],
                         ),
                       ),
-                      const VerticalDivider(
+                      VerticalDivider(
                         width: 20,
                         thickness: 4,
                         indent: 5, // Optional top padding for divider
                         endIndent: 5, // Optional bottom padding for divider
-                        color: Color.fromRGBO(226, 226, 226, 1),
+                        color: colorScheme.surfaceVariant,
                       ),
                       Expanded(
                         child: Column(
@@ -104,17 +109,20 @@ class GroupCardWidget extends StatelessWidget {
                             Text(
                               'Avg. Rating',
                               style: GoogleFonts.publicSans(
-                                  textStyle: const TextStyle(
+                                  textStyle: TextStyle(
                                       fontSize: 12,
-                                      fontWeight: FontWeight.w400)),
+                                      fontWeight: FontWeight.w400,
+                                      color: colorScheme.onSurface
+                                          .withOpacity(0.8))),
                             ),
                             const SizedBox(height: 4),
                             Text(
                               avgRating, // Use parameter
                               style: GoogleFonts.publicSans(
-                                  textStyle: const TextStyle(
+                                  textStyle: TextStyle(
                                       fontSize: 16,
-                                      fontWeight: FontWeight.w400)),
+                                      fontWeight: FontWeight.w400,
+                                      color: colorScheme.onSurface)),
                             ),
                           ],
                         ),

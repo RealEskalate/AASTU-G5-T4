@@ -12,16 +12,18 @@ class SocialLinksCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Container(
       width: MediaQuery.of(context).size.width * 0.9,
       // height: MediaQuery.of(context).size.height * 0.1,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Card(
         elevation: 5,
-        color: Colors.white,
+        color: theme.colorScheme.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -31,20 +33,25 @@ class SocialLinksCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Links header
-              const Text(
+              Text(
                 'Links',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  color: theme.colorScheme.onSurface,
                 ),
               ),
               const SizedBox(height: 16),
 
               // Social links list
-              ...links.map((link) => _buildLinkItem(link)).toList(),
+              ...links.map((link) => _buildLinkItem(context, link)).toList(),
               ElevatedButton(
-                  onPressed: () => context.go('/'), child: const Text('text'))
+                  onPressed: () => context.go('/'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: theme.colorScheme.primary,
+                    foregroundColor: theme.colorScheme.onPrimary,
+                  ),
+                  child: const Text('text'))
             ],
           ),
         ),
@@ -52,7 +59,9 @@ class SocialLinksCard extends StatelessWidget {
     );
   }
 
-  Widget _buildLinkItem(SocialLink link) {
+  Widget _buildLinkItem(BuildContext context, SocialLink link) {
+    final theme = Theme.of(context);
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
       child: Row(
@@ -79,17 +88,17 @@ class SocialLinksCard extends StatelessWidget {
               children: [
                 Text(
                   link.platform,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
-                    color: Colors.black87,
+                    color: theme.colorScheme.onSurface,
                   ),
                 ),
                 Text(
                   link.url,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
-                    color: Colors.blue,
+                    color: theme.colorScheme.primary,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),

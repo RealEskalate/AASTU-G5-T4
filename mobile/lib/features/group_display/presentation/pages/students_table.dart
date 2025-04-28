@@ -134,15 +134,13 @@ class _StudentDataTableState extends State<StudentDataTable>
 
   @override
   Widget build(BuildContext context) {
-    // Remove screen height calculation as Expanded will handle it
-    // final screenHeight = MediaQuery.of(context).size.height;
-    // final availableHeight = screenHeight - kToolbarHeight - kTextTabBarHeight - 100; // Adjust 100 based on other UI elements
+    final theme = Theme.of(context);
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(8.0),
         ),
         child: Column(
@@ -151,9 +149,9 @@ class _StudentDataTableState extends State<StudentDataTable>
           children: [
             // Tab Bar
             Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 border: Border(
-                  bottom: BorderSide(color: Colors.grey, width: 0.5),
+                  bottom: BorderSide(color: theme.dividerColor, width: 0.5),
                 ),
               ),
               child: TabBar(
@@ -162,12 +160,13 @@ class _StudentDataTableState extends State<StudentDataTable>
                   Tab(text: 'Students'),
                   Tab(text: 'Statistics'),
                 ],
-                labelColor: Colors.green,
+                labelColor: theme.colorScheme.primary,
                 labelStyle: const TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
-                unselectedLabelColor: Colors.grey,
-                indicatorColor: Colors.green,
+                unselectedLabelColor:
+                    theme.colorScheme.onSurface.withOpacity(0.6),
+                indicatorColor: theme.colorScheme.primary,
                 indicatorWeight: 3.0,
               ),
             ),
@@ -192,6 +191,8 @@ class _StudentDataTableState extends State<StudentDataTable>
   }
 
   Widget _buildStudentsTab() {
+    final theme = Theme.of(context);
+
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: DataTable(
@@ -204,38 +205,55 @@ class _StudentDataTableState extends State<StudentDataTable>
         dataRowMaxHeight: 60,
         columns: [
           DataColumn(
-            label: const Text('Name',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+            label: Text('Name',
+                style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onSurface)),
             onSort: _onSort,
           ),
           DataColumn(
-            label: const Text('Problems',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+            label: Text('Problems',
+                style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onSurface)),
             numeric: true,
             onSort: _onSort,
           ),
           DataColumn(
-            label: const Text('Time',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+            label: Text('Time',
+                style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onSurface)),
             numeric: true,
             onSort: _onSort,
           ),
           DataColumn(
-            label: const Text('Rating',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+            label: Text('Rating',
+                style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onSurface)),
             numeric: true,
             onSort: _onSort,
           ),
           DataColumn(
-            label: const Text('Last Seen',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+            label: Text('Last Seen',
+                style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onSurface)),
             onSort: _onSort,
           ),
         ],
         rows: _sortedStudents.map((student) {
           final lastSeenText = _formatLastSeen(student.lastSeen);
           final isOnline = lastSeenText.startsWith('online');
-          final lastSeenColor = isOnline ? Colors.green : Colors.black;
+          final lastSeenColor = isOnline
+              ? theme.colorScheme.primary
+              : theme.colorScheme.onSurface;
 
           final problemsCount =
               student.meta['solvedProblems_count']?.toString() ?? '0';
@@ -251,42 +269,54 @@ class _StudentDataTableState extends State<StudentDataTable>
 
           return DataRow(
             cells: [
-              // Restore Row structure for Name cell with abbreviation
               DataCell(
                 Row(
-                  mainAxisSize: MainAxisSize.min, // Keep this
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     CircleAvatar(
-                      radius: 16,
+                      radius: 15,
                       backgroundImage: NetworkImage(student.photo),
-                      onBackgroundImageError: (exception, stackTrace) {
-                        print('Error loading image: $exception');
-                      },
                     ),
-                    const SizedBox(width: 6),
+                    const SizedBox(width: 8),
                     Text(
-                      abbreviatedName, // Use abbreviated name
-                      // overflow: TextOverflow.ellipsis, // Ellipsis is now part of the string
-                      softWrap: false,
-                      style: const TextStyle(fontSize: 13),
+                      student.name,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: theme.colorScheme.onSurface,
+                      ),
                     ),
                   ],
                 ),
               ),
-              DataCell(
-                  Text(problemsCount, style: const TextStyle(fontSize: 13))),
-              DataCell(Text(timeSpent, style: const TextStyle(fontSize: 13))),
-              DataCell(Text(rating, style: const TextStyle(fontSize: 13))),
-              DataCell(
-                Text(
-                  lastSeenText,
-                  style: TextStyle(
-                      fontSize: 13,
-                      color: lastSeenColor,
-                      fontWeight:
-                          isOnline ? FontWeight.bold : FontWeight.normal),
+              DataCell(Text(
+                problemsCount,
+                style: TextStyle(
+                  fontSize: 13,
+                  color: theme.colorScheme.onSurface,
                 ),
-              ),
+              )),
+              DataCell(Text(
+                timeSpent,
+                style: TextStyle(
+                  fontSize: 13,
+                  color: theme.colorScheme.onSurface,
+                ),
+              )),
+              DataCell(Text(
+                rating,
+                style: TextStyle(
+                  fontSize: 13,
+                  color: theme.colorScheme.onSurface,
+                ),
+              )),
+              DataCell(Text(
+                lastSeenText,
+                style: TextStyle(
+                  fontSize: 13,
+                  color: lastSeenColor,
+                  fontWeight: isOnline ? FontWeight.bold : FontWeight.normal,
+                ),
+              )),
             ],
           );
         }).toList(),
@@ -295,9 +325,16 @@ class _StudentDataTableState extends State<StudentDataTable>
   }
 
   Widget _buildStatisticsTab() {
+    final theme = Theme.of(context);
     // Placeholder for statistics tab
-    return const Center(
-      child: Text('Statistics would go here'),
+    return Center(
+      child: Text(
+        'Statistics content goes here',
+        style: TextStyle(
+          fontSize: 16,
+          color: theme.colorScheme.onSurface,
+        ),
+      ),
     );
   }
 }

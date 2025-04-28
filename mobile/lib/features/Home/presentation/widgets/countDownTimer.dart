@@ -152,6 +152,8 @@ class _CountdownWithTargetState extends State<CountdownWithTarget> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Padding(
       padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8, bottom: 10),
       child: Column(
@@ -164,7 +166,7 @@ class _CountdownWithTargetState extends State<CountdownWithTarget> {
               textStyle: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Color.fromRGBO(0, 123, 85, 1),
+                color: theme.colorScheme.primary,
               ),
             ),
           ),
@@ -178,6 +180,7 @@ class _CountdownWithTargetState extends State<CountdownWithTarget> {
                 textStyle: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
+              color: theme.colorScheme.onSurface,
             )),
           ),
         ],

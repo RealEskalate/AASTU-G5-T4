@@ -141,14 +141,16 @@ class _UserDataTableState extends State<UserDataTable> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Expanded(
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Theme(
           data: Theme.of(context).copyWith(
-            dividerColor: const Color.fromRGBO(145, 158, 171, 0.2),
-            cardColor: Colors.white,
+            dividerColor: theme.colorScheme.onSurface.withOpacity(0.2),
+            cardColor: theme.colorScheme.surface,
           ),
           child: DataTable2(
             columnSpacing: 24,
@@ -156,13 +158,14 @@ class _UserDataTableState extends State<UserDataTable> {
             minWidth: 900,
             border: TableBorder(
               horizontalInside: BorderSide(
-                color: const Color.fromRGBO(145, 158, 171, 0.2),
+                color: theme.colorScheme.onSurface.withOpacity(0.2),
                 width: 1,
               ),
             ),
             headingRowHeight: 56,
             dataRowHeight: 60,
-            headingRowColor: MaterialStateProperty.all(Colors.white),
+            headingRowColor:
+                MaterialStateProperty.all(theme.colorScheme.surface),
             dividerThickness: 0,
             showBottomBorder: false,
             // Enable sorting
@@ -174,59 +177,59 @@ class _UserDataTableState extends State<UserDataTable> {
               child: Text(
                 'No data available',
                 style: GoogleFonts.publicSans(
-                  color: const Color.fromRGBO(99, 115, 129, 1),
+                  color: theme.colorScheme.onSurface.withOpacity(0.6),
                   fontSize: 16,
                 ),
               ),
             ),
             columns: [
               DataColumn2(
-                label: _buildColumnHeader('Name'),
+                label: _buildColumnHeader('Name', theme),
                 size: ColumnSize.L,
                 onSort: (columnIndex, ascending) =>
                     _sort(columnIndex, ascending),
               ),
               DataColumn2(
-                label: _buildColumnHeader('Role'),
+                label: _buildColumnHeader('Role', theme),
                 size: ColumnSize.S,
                 onSort: (columnIndex, ascending) =>
                     _sort(columnIndex, ascending),
               ),
               DataColumn2(
-                label: _buildColumnHeader('Group'),
+                label: _buildColumnHeader('Group', theme),
                 size: ColumnSize.M,
                 onSort: (columnIndex, ascending) =>
                     _sort(columnIndex, ascending),
               ),
               DataColumn2(
-                label: _buildColumnHeader('Problems'),
+                label: _buildColumnHeader('Problems', theme),
                 size: ColumnSize.S,
                 numeric: true,
                 onSort: (columnIndex, ascending) =>
                     _sort(columnIndex, ascending),
               ),
               DataColumn2(
-                label: _buildColumnHeader('Submissions'),
+                label: _buildColumnHeader('Submissions', theme),
                 size: ColumnSize.S,
                 numeric: true,
                 onSort: (columnIndex, ascending) =>
                     _sort(columnIndex, ascending),
               ),
               DataColumn2(
-                label: _buildColumnHeader('Time Spent'),
+                label: _buildColumnHeader('Time Spent', theme),
                 size: ColumnSize.S,
                 numeric: true,
                 onSort: (columnIndex, ascending) =>
                     _sort(columnIndex, ascending),
               ),
               DataColumn2(
-                label: _buildColumnHeader('University'),
+                label: _buildColumnHeader('University', theme),
                 size: ColumnSize.L,
                 onSort: (columnIndex, ascending) =>
                     _sort(columnIndex, ascending),
               ),
               DataColumn2(
-                label: _buildColumnHeader('Country'),
+                label: _buildColumnHeader('Country', theme),
                 size: ColumnSize.M,
                 onSort: (columnIndex, ascending) =>
                     _sort(columnIndex, ascending),
@@ -317,16 +320,13 @@ class _UserDataTableState extends State<UserDataTable> {
     );
   }
 
-  Widget _buildColumnHeader(String label) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Text(
-        label,
-        style: GoogleFonts.publicSans(
-          fontWeight: FontWeight.bold,
-          fontSize: 14,
-          color: const Color.fromRGBO(99, 115, 129, 1),
-        ),
+  Widget _buildColumnHeader(String text, ThemeData theme) {
+    return Text(
+      text,
+      style: GoogleFonts.publicSans(
+        fontWeight: FontWeight.w600,
+        fontSize: 14.0,
+        color: theme.colorScheme.onSurface, // Use theme color
       ),
     );
   }

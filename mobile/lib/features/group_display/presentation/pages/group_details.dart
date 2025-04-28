@@ -21,8 +21,10 @@ class _GroupDetailsState extends State<GroupDetails> {
   int _selectedIndex = 6;
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       key: _scaffoldKey,
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(kToolbarHeight),
@@ -35,9 +37,8 @@ class _GroupDetailsState extends State<GroupDetails> {
         children: [
           SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.all(18),
+              padding: const EdgeInsets.all(28.0),
               child: Column(
-                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Column(
@@ -47,8 +48,10 @@ class _GroupDetailsState extends State<GroupDetails> {
                       Text(
                         'AASTU Group 57',
                         style: GoogleFonts.publicSans(
-                          textStyle: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.w800),
+                          textStyle: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w800,
+                              color: theme.colorScheme.onBackground),
                         ),
                       ),
                       const SizedBox(
@@ -59,19 +62,20 @@ class _GroupDetailsState extends State<GroupDetails> {
                           Text(
                             'Groups',
                             style: GoogleFonts.publicSans(
-                              textStyle: const TextStyle(
+                              textStyle: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w400,
-                                  color: Colors.black),
+                                  color: theme.colorScheme.onBackground),
                             ),
                           ),
                           Text(
                             ' • G57',
                             style: GoogleFonts.publicSans(
-                              textStyle: const TextStyle(
+                              textStyle: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w400,
-                                  color: Color.fromRGBO(145, 158, 171, 1)),
+                                  color: theme.colorScheme.onBackground
+                                      .withOpacity(0.6)),
                             ),
                           ),
                         ],
@@ -93,8 +97,10 @@ class _GroupDetailsState extends State<GroupDetails> {
                           Text(
                             'Heads',
                             style: GoogleFonts.publicSans(
-                              textStyle: const TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.w800),
+                              textStyle: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w800,
+                                  color: theme.colorScheme.onBackground),
                             ),
                           ),
                           const SizedBox(
@@ -127,8 +133,10 @@ class _GroupDetailsState extends State<GroupDetails> {
                           Text(
                             'Titles',
                             style: GoogleFonts.publicSans(
-                              textStyle: const TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.w800),
+                              textStyle: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w800,
+                                  color: theme.colorScheme.onBackground),
                             ),
                           ),
                           const SizedBox(

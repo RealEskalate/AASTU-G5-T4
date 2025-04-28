@@ -10,9 +10,10 @@ class StatsDisplayWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const dividerColor = Color(0xFF1DB954); // Green color from image
-    const labelColor = Colors.grey;
-    const valueColor = Colors.black87;
+    final theme = Theme.of(context);
+    final dividerColor = theme.colorScheme.primary; // Use theme primary color
+    final labelColor = theme.colorScheme.onBackground.withOpacity(0.6);
+    final valueColor = theme.colorScheme.onBackground;
     const double dividerHeight = 40.0; // Approximate height
     const double dividerWidth = 4.0;
 

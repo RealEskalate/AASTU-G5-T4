@@ -5,12 +5,14 @@ class LeetcodeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return SingleChildScrollView(
       child: Container(
         width: MediaQuery.of(context).size.width * 0.9,
         height: 400,
         decoration: BoxDecoration(
-          color: const Color(0xFFD4EBD9), // Light mint green background
+          color: theme.colorScheme.primary.withOpacity(0.15),
           borderRadius: BorderRadius.circular(15),
         ),
         child: Padding(
@@ -22,87 +24,98 @@ class LeetcodeCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  // Logo & Daily Challenge badge
                   Row(
                     children: [
-                      const Text(
-                        'Daily problem',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFF2D3B36),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
+                      // LeetCode logo
                       Container(
+                        height: 40,
+                        width: 40,
                         decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: const Color(0xFF798780),
-                            width: 1.5,
+                          color: theme.colorScheme.background,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'LC',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: theme.colorScheme.primary,
+                            ),
                           ),
                         ),
-                        child: const Icon(
-                          Icons.access_time_rounded,
-                          size: 16,
-                          color: Color(0xFF798780),
-                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      // Daily Challenge text
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'LeetCode',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: theme.colorScheme.onBackground,
+                            ),
+                          ),
+                          Text(
+                            'Daily Challenge',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: theme.colorScheme.onBackground
+                                  .withOpacity(0.7),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.arrow_upward,
-                        size: 20,
-                        color: Color(0xFF798780),
-                      ),
-                      const SizedBox(width: 4),
-                      const Text(
-                        '0',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Color(0xFF798780),
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      const Icon(
-                        Icons.arrow_downward,
-                        size: 20,
-                        color: Color(0xFF798780),
-                      ),
-                    ],
+                  // Notification icon
+                  Icon(
+                    Icons.notifications_none,
+                    color: theme.colorScheme.onBackground,
                   ),
                 ],
               ),
-              const SizedBox(height: 4),
-              // Subtitle
-              const Text(
+              const SizedBox(height: 20),
+              // Date info
+              Text(
+                'November 14, 2023',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: theme.colorScheme.onBackground,
+                ),
+              ),
+              const SizedBox(height: 5),
+              Text(
                 'Refreshes every 24 hours and\nneeds to be solved today!',
                 style: TextStyle(
                   fontSize: 14,
-                  color: Color(0xFF798780),
+                  color: theme.colorScheme.onBackground.withOpacity(0.6),
                 ),
               ),
               const SizedBox(height: 20),
               // Problem title
-              const Text(
+              Text(
                 'Find Kth Bit In Nth Binary String',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF2D3B36),
+                  color: theme.colorScheme.onBackground,
                 ),
               ),
               const SizedBox(height: 12),
               // Tags
               Row(
                 children: [
-                  const Text(
+                  Text(
                     'Leetcode',
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFF2D3B36),
+                      color: theme.colorScheme.onBackground,
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -110,17 +123,17 @@ class LeetcodeCard extends StatelessWidget {
                     width: 4,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF2D3B36),
+                      color: theme.colorScheme.onBackground,
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
                   const SizedBox(width: 8),
-                  const Text(
+                  Text(
                     'Medium',
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFF2D3B36),
+                      color: theme.colorScheme.onBackground,
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -128,103 +141,48 @@ class LeetcodeCard extends StatelessWidget {
                     width: 4,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF2D3B36),
+                      color: theme.colorScheme.onBackground,
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
                   const SizedBox(width: 8),
-                  const Text(
-                    'Recursion',
+                  Text(
+                    'Binary Search',
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFF2D3B36),
+                      color: theme.colorScheme.onBackground,
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 30),
               // Action buttons
-              Container(
-                height: 45,
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.5),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.play_arrow_outlined,
-                      size: 20,
-                      color: Color(0xFF2D3B36),
-                    ),
-                    const SizedBox(width: 8),
-                    const Text(
-                      'Solve It Now',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xFF2D3B36),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: theme.colorScheme.primary,
+                        foregroundColor: theme.colorScheme.onPrimary,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
+                      child: const Text('Solve Challenge'),
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 12),
-              // New solution button
-              Container(
-                height: 45,
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: const Color(0xFF2D3B36).withOpacity(0.2),
-                    width: 1,
                   ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.add,
-                      size: 20,
-                      color: Color(0xFF2D3B36),
+                  const SizedBox(width: 10),
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.bookmark_border,
+                      color: theme.colorScheme.onBackground,
                     ),
-                    const SizedBox(width: 8),
-                    const Text(
-                      'New Solution',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xFF2D3B36),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Spacer(),
-              // Stats at the bottom
-              Center(
-                child: Column(
-                  children: [
-                    const Text(
-                      '374',
-                      style: TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF2D3B36),
-                      ),
-                    ),
-                    const Text(
-                      'Solved it',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Color(0xFF798780),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
           ),

@@ -22,10 +22,12 @@ class AboutCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Container(
       width: MediaQuery.of(context).size.width * 0.9,
       child: Card(
-        color: Colors.white,
+        color: theme.colorScheme.surface,
         elevation: 5,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -36,12 +38,12 @@ class AboutCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // About section header
-              const Text(
+              Text(
                 'About',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  color: theme.colorScheme.onSurface,
                 ),
               ),
               const SizedBox(height: 12),
@@ -49,51 +51,52 @@ class AboutCard extends StatelessWidget {
               // Tagline
               Text(
                 tagline,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
-                  color: Colors.black87,
+                  color: theme.colorScheme.onSurface,
                 ),
               ),
               const SizedBox(height: 16),
 
               // Location
               _buildInfoRow(
+                context,
                 Icons.location_on,
                 location,
-                Colors.black87,
               ),
               const SizedBox(height: 12),
 
               // Email
               _buildInfoRow(
+                context,
                 Icons.email,
                 email,
-                const Color(0xFF663300), // Brown color for email
+                textColor: theme.colorScheme.primary,
               ),
               const SizedBox(height: 12),
 
               // Programming language
               _buildInfoRow(
+                context,
                 Icons.code,
                 programmingLanguage,
-                Colors.black87,
               ),
               const SizedBox(height: 12),
 
               // Current position
               _buildInfoRow(
+                context,
                 Icons.people,
                 currentPosition,
-                Colors.black87,
               ),
               const SizedBox(height: 12),
 
               // Education
               _buildInfoRow(
+                context,
                 Icons.school,
                 education,
-                Colors.black87,
                 maxLines: 2,
               ),
             ],
@@ -103,15 +106,16 @@ class AboutCard extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoRow(IconData icon, String text, Color textColor,
-      {int maxLines = 1}) {
+  Widget _buildInfoRow(BuildContext context, IconData icon, String text,
+      {Color? textColor, int maxLines = 1}) {
+    final theme = Theme.of(context);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Icon(
           icon,
           size: 20,
-          color: Colors.black54,
+          color: theme.colorScheme.onSurface.withOpacity(0.6),
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -119,7 +123,7 @@ class AboutCard extends StatelessWidget {
             text,
             style: TextStyle(
               fontSize: 15,
-              color: textColor,
+              color: textColor ?? theme.colorScheme.onSurface,
               height: 1.3,
             ),
             maxLines: maxLines,

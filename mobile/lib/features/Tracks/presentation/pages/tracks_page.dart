@@ -18,10 +18,16 @@ class _TracksPageState extends State<TracksPage> {
   int _selectedIndex = 0;
 
   @override
+  void dispose() {
+    _sidebarController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(kToolbarHeight),
           child: Customappbar(

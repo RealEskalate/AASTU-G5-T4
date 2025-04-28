@@ -29,6 +29,7 @@ class ProgressCircle extends StatelessWidget {
     // Calculate the progress percentage
     final double progress = total > 0 ? solved / total : 0.0;
     final double percentValue = progress * 100;
+    final theme = Theme.of(context);
 
     return SizedBox(
       width: size,
@@ -42,9 +43,14 @@ class ProgressCircle extends StatelessWidget {
             child: CircularProgressIndicator(
               value: 1.0,
               strokeWidth: strokeWidth,
-              backgroundColor: const Color(0xFFEEEEEE),
-              valueColor:
-                  const AlwaysStoppedAnimation<Color>(Color(0xFFEEEEEE)),
+              backgroundColor: theme.brightness == Brightness.light
+                  ? const Color(0xFFEEEEEE)
+                  : const Color(0xFF333333),
+              valueColor: AlwaysStoppedAnimation<Color>(
+                theme.brightness == Brightness.light
+                    ? const Color(0xFFEEEEEE)
+                    : const Color(0xFF333333),
+              ),
             ),
           ),
 
@@ -56,8 +62,8 @@ class ProgressCircle extends StatelessWidget {
               value: progress,
               strokeWidth: strokeWidth,
               backgroundColor: Colors.transparent,
-              valueColor: const AlwaysStoppedAnimation<Color>(
-                  Color.fromRGBO(0, 171, 85, 1)),
+              valueColor:
+                  AlwaysStoppedAnimation<Color>(theme.colorScheme.primary),
             ),
           ),
 
@@ -66,55 +72,48 @@ class ProgressCircle extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // Main value text
+                displayMode == ProgressDisplayMode.count
+                    ? Text(
+                        '$solved/$total',
+                        style: GoogleFonts.publicSans(
+                          fontSize: size * 0.18,
+                          fontWeight: FontWeight.bold,
+                          color: theme.colorScheme.onSurface,
+                        ),
+                      )
+                    : Text(
+                        '${percentValue.toStringAsFixed(0)}%',
+                        style: GoogleFonts.publicSans(
+                          fontSize: size * 0.18,
+                          fontWeight: FontWeight.bold,
+                          color: theme.colorScheme.onSurface,
+                        ),
+                      ),
+
+                // Label text
                 Text(
-                  'Problems',
+                  'Solved',
                   style: GoogleFonts.publicSans(
-                    fontSize: size * 0.073, // Scale font size with circle size
-                    fontWeight: FontWeight.w500,
-                    color: Colors.grey[600],
-                  ),
-                ),
-                SizedBox(
-                    height: size * 0.018), // Scale spacing with circle size
-                Text(
-                  displayMode == ProgressDisplayMode.count
-                      ? total.toString()
-                      : '${percentValue.toStringAsFixed(1)}%',
-                  style: GoogleFonts.publicSans(
-                    fontSize: size * 0.145, // Scale font size with circle size
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    fontSize: size * 0.08,
+                    color: theme.colorScheme.onSurface.withOpacity(0.7),
                   ),
                 ),
               ],
             ),
           ),
 
-          // Settings button
+          // Optional settings icon
           if (onSettingsTap != null)
             Positioned(
-              bottom: 0,
               right: 0,
-              child: InkWell(
-                onTap: onSettingsTap,
-                child: Container(
-                  padding: EdgeInsets.all(
-                      size * 0.027), // Scale padding with circle size
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(
-                        size * 0.018), // Scale radius with circle size
-                  ),
-                  child: Text(
-                    'Settings',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize:
-                          size * 0.055, // Scale font size with circle size
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+              child: IconButton(
+                icon: Icon(
+                  Icons.settings,
+                  color: theme.colorScheme.onSurface.withOpacity(0.6),
+                  size: size * 0.12,
                 ),
+                onPressed: onSettingsTap,
               ),
             ),
         ],

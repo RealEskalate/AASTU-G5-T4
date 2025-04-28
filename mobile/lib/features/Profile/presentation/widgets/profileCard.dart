@@ -119,6 +119,8 @@ class _ProfileCardState extends State<ProfileCard>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(
@@ -208,9 +210,9 @@ class _ProfileCardState extends State<ProfileCard>
           ),
           Container(
             width: MediaQuery.of(context).size.width * 0.9,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surface,
+              borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(16),
                 bottomRight: Radius.circular(16),
               ),
@@ -223,8 +225,8 @@ class _ProfileCardState extends State<ProfileCard>
                   children: [
                     // Left scroll button
                     IconButton(
-                      icon: const Icon(Icons.chevron_left,
-                          color: Color(0xFF1E6E5F)),
+                      icon: Icon(Icons.chevron_left,
+                          color: theme.colorScheme.primary),
                       onPressed: _scrollLeft,
                       splashRadius: 20,
                     ),
@@ -236,11 +238,12 @@ class _ProfileCardState extends State<ProfileCard>
                         child: TabBar(
                           controller: _tabController,
                           isScrollable: true,
-                          indicatorColor: const Color(0xFF1E6E5F),
+                          indicatorColor: theme.colorScheme.primary,
                           indicatorWeight: 3,
                           indicatorSize: TabBarIndicatorSize.tab,
-                          labelColor: Colors.black87,
-                          unselectedLabelColor: Colors.grey,
+                          labelColor: theme.colorScheme.onSurface,
+                          unselectedLabelColor:
+                              theme.colorScheme.onSurface.withOpacity(0.6),
                           tabs: _tabs
                               .map((tab) => Tab(
                                     child: Row(
@@ -276,8 +279,8 @@ class _ProfileCardState extends State<ProfileCard>
 
                     // Right scroll button
                     IconButton(
-                      icon: const Icon(Icons.chevron_right,
-                          color: Color(0xFF1E6E5F)),
+                      icon: Icon(Icons.chevron_right,
+                          color: theme.colorScheme.primary),
                       onPressed: _scrollRight,
                       splashRadius: 20,
                     ),

@@ -366,17 +366,17 @@ class _UserManagementHeaderState extends State<UserManagementHeader>
 
   @override
   Widget build(BuildContext context) {
-    // final theme = Theme.of(context);
-    // final colorScheme = theme.colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     return Column(
       children: [
         TabBar(
           controller: _tabController,
-          labelColor: const Color.fromRGBO(0, 171, 85, 1), // Active tab color
-          unselectedLabelColor: Colors.grey, // Inactive tab color
-          indicatorColor:
-              const Color.fromRGBO(0, 171, 85, 1), // Underline color
+          labelColor: colorScheme.primary, // Use theme primary color
+          unselectedLabelColor: colorScheme.onSurface
+              .withOpacity(0.6), // Use theme color with opacity
+          indicatorColor: colorScheme.primary, // Use theme primary color
           indicatorWeight: 3.0,
           tabs: const [
             Tab(text: 'Users'),
@@ -396,7 +396,8 @@ class _UserManagementHeaderState extends State<UserManagementHeader>
                   child: Container(
                     height: 40.0, // Match the previous ToggleButtons height
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey[300]!),
+                      border: Border.all(
+                          color: colorScheme.outline.withOpacity(0.3)),
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: Row(
@@ -417,7 +418,7 @@ class _UserManagementHeaderState extends State<UserManagementHeader>
                               width: 40.0,
                               decoration: BoxDecoration(
                                 color: _isSelected[0]
-                                    ? const Color.fromRGBO(0, 171, 85, 1)
+                                    ? colorScheme.primary
                                         .withOpacity(0.1) // Selected background
                                     : Colors
                                         .transparent, // Unselected background
@@ -431,15 +432,13 @@ class _UserManagementHeaderState extends State<UserManagementHeader>
                                 size: 20.0,
                                 Icons.grid_view_rounded,
                                 color: _isSelected[0]
-                                    ? const Color.fromRGBO(
-                                        0, 171, 85, 1) // Selected icon color
-                                    : Colors.grey[600], // Unselected icon color
+                                    ? colorScheme.primary // Selected icon color
+                                    : colorScheme.onSurface.withOpacity(
+                                        0.6), // Unselected icon color
                               ),
                             ),
                           ),
                         ),
-                        // Divider line if needed
-                        // VerticalDivider(width: 1, thickness: 1, color: Colors.grey[300]),
                         Expanded(
                           child: InkWell(
                             onTap: () {
@@ -456,7 +455,7 @@ class _UserManagementHeaderState extends State<UserManagementHeader>
                               width: 40.0,
                               decoration: BoxDecoration(
                                 color: _isSelected[1]
-                                    ? const Color.fromRGBO(0, 171, 85, 1)
+                                    ? colorScheme.primary
                                         .withOpacity(0.1) // Selected background
                                     : Colors
                                         .transparent, // Unselected background
@@ -469,9 +468,9 @@ class _UserManagementHeaderState extends State<UserManagementHeader>
                               child: Icon(
                                 Icons.list_rounded,
                                 color: _isSelected[1]
-                                    ? const Color.fromRGBO(
-                                        0, 171, 85, 1) // Selected icon color
-                                    : Colors.grey[600], // Unselected icon color
+                                    ? colorScheme.primary // Selected icon color
+                                    : colorScheme.onSurface.withOpacity(
+                                        0.6), // Unselected icon color
                               ),
                             ),
                           ),
@@ -486,19 +485,21 @@ class _UserManagementHeaderState extends State<UserManagementHeader>
                   child: TextField(
                     decoration: InputDecoration(
                         hintText: 'Search user...',
-                        prefixIcon: const Icon(Icons.search),
+                        prefixIcon: Icon(Icons.search,
+                            color: colorScheme.onSurface.withOpacity(0.6)),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8.0),
-                          borderSide: BorderSide(color: Colors.grey[300]!),
+                          borderSide: BorderSide(
+                              color: colorScheme.outline.withOpacity(0.3)),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8.0),
-                          borderSide: BorderSide(color: Colors.grey[300]!),
+                          borderSide: BorderSide(
+                              color: colorScheme.outline.withOpacity(0.3)),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8.0),
-                          borderSide: BorderSide(
-                              color: const Color.fromRGBO(0, 171, 85, 1)),
+                          borderSide: BorderSide(color: colorScheme.primary),
                         ),
                         contentPadding: const EdgeInsets.symmetric(
                             vertical: 0, horizontal: 16.0) // Adjust padding
@@ -508,9 +509,7 @@ class _UserManagementHeaderState extends State<UserManagementHeader>
                     },
                   ),
                 ),
-                const SizedBox(
-                    height: 16.0), // Space between search and content
-
+                const SizedBox(height: 16.0),
                 // Conditionally display Grid or List view within an Expanded
                 Expanded(
                   child: _isSelected[0]
