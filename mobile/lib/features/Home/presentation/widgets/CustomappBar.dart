@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile/core/theme/theme_toggle.dart';
 import 'package:mobile/features/Home/presentation/widgets/sideBar.dart';
+import 'chat_dialog.dart'; // Import the new dialog widget
+import 'profile_menu_dialog.dart'; // Import the profile menu dialog
 
 class Customappbar extends StatefulWidget {
   final VoidCallback? onMenuPressed; // Add this callback parameter
@@ -17,27 +20,37 @@ class Customappbar extends StatefulWidget {
 
 class _CustomappbarState extends State<Customappbar> {
   final SidebarController _sidebarController = SidebarController();
+
+  @override
+  void dispose() {
+    _sidebarController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     // Define the image URL
     const String imageUrl =
         'https://storage.googleapis.com/a2sv_hub_bucket_2/images%2FNatnael%20Wondwoesn%20Solomon.jpeg';
     // Define the placeholder widget
-    const Widget placeholder = CircleAvatar(
+    final Widget placeholder = CircleAvatar(
       radius: 20,
-      backgroundColor: Colors.grey,
+      backgroundColor: colorScheme.onSurface.withOpacity(0.3),
       child: Icon(
         Icons.person,
-        color: Colors.white,
+        color: colorScheme.onSurface,
         size: 25,
       ),
     );
 
     return AppBar(
-      backgroundColor: Colors.white,
-      title: const Text(
+      backgroundColor: colorScheme.surface,
+      title: Text(
         '',
-        style: TextStyle(color: Colors.black),
+        style: TextStyle(color: colorScheme.onSurface),
       ),
       centerTitle: true,
       leadingWidth: 120,
@@ -47,22 +60,21 @@ class _CustomappbarState extends State<Customappbar> {
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              icon: const Icon(Icons.menu, color: Colors.black),
+              icon: Icon(Icons.menu, color: colorScheme.onSurface),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
               iconSize: 24,
               onPressed: () {
-                // widget.onMenuPressed;
                 // Use the callback if provided, otherwise open drawer directly
                 if (widget.onMenuPressed != null) {
                   widget.onMenuPressed!();
                 } else {
-                  _sidebarController.toggleSidebar;
+                  _sidebarController.toggleSidebar();
                 }
               },
             ),
             IconButton(
-              icon: const Icon(Icons.search, color: Colors.black),
+              icon: Icon(Icons.search, color: colorScheme.onSurface),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
               iconSize: 24,
@@ -74,15 +86,41 @@ class _CustomappbarState extends State<Customappbar> {
         ),
       ),
       actions: [
-        // FIXED: Using Wrap instead of Row for better flexibility
+        // Using Wrap instead of Row for better flexibility
         Wrap(
           spacing: 8, // Horizontal space between items
           children: [
+            // Dark Mode Toggle
+            ThemeToggle(useIconButton: true),
+            Builder(
+              builder: (context) => IconButton(
+                icon: Icon(
+                  Icons.settings_outlined,
+                  color: colorScheme.onSurface,
+                ),
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                tooltip: 'Settings',
+                onPressed: () {
+                  Scaffold.of(context).openEndDrawer();
+                },
+              ),
+            ),
             IconButton(
-              onPressed: () {},
-              icon: const Icon(
+              onPressed: () {
+                // Show the chat dialog
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const ChatDialog();
+                  },
+                );
+              },
+              icon: Icon(
                 Icons.star,
-                color: Colors.amber,
+                color: theme.brightness == Brightness.dark
+                    ? Colors.amber.shade300
+                    : Colors.amber,
               ),
               padding: EdgeInsets.zero, // Reduce padding
               constraints: const BoxConstraints(), // Remove constraints
@@ -91,7 +129,10 @@ class _CustomappbarState extends State<Customappbar> {
               children: [
                 IconButton(
                   onPressed: () {},
-                  icon: const FaIcon(FontAwesomeIcons.solidBell),
+                  icon: FaIcon(
+                    FontAwesomeIcons.solidBell,
+                    color: colorScheme.onSurface,
+                  ),
                   padding: EdgeInsets.zero, // Reduce padding
                   constraints: const BoxConstraints(), // Remove constraints
                 ),
@@ -105,16 +146,16 @@ class _CustomappbarState extends State<Customappbar> {
                     child: Container(
                       width: 20,
                       height: 20,
-                      decoration: const BoxDecoration(
-                        color: Colors.red,
+                      decoration: BoxDecoration(
+                        color: colorScheme.error,
                         shape: BoxShape.circle,
                       ),
                       child: Center(
                         child: Text(
                           '6',
                           style: GoogleFonts.lato(
-                            textStyle: const TextStyle(
-                              color: Colors.white,
+                            textStyle: TextStyle(
+                              color: colorScheme.onError,
                               fontSize: 12,
                               fontWeight: FontWeight.w800,
                             ),
@@ -134,7 +175,13 @@ class _CustomappbarState extends State<Customappbar> {
                   borderRadius: BorderRadius.circular(50),
                   child: GestureDetector(
                     onTap: () {
-                      // Handle profile image tap
+                      // Show the profile menu dialog
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const ProfileMenuDialog();
+                        },
+                      );
                     },
                     child: Image.network(
                       imageUrl,
@@ -142,21 +189,22 @@ class _CustomappbarState extends State<Customappbar> {
                       width: 36, // Slightly reduced size
                       height: 36, // Slightly reduced size
                       errorBuilder: (context, error, stackTrace) {
-                        // print('Error loading profile image: $error');
                         return placeholder;
                       },
                       loadingBuilder: (context, child, loadingProgress) {
                         if (loadingProgress == null) return child;
-                        return const CircleAvatar(
+                        return CircleAvatar(
                           radius: 18, // Slightly reduced size
-                          backgroundColor: Colors.grey,
+                          backgroundColor:
+                              colorScheme.onSurface.withOpacity(0.3),
                           child: SizedBox(
                             width: 20,
                             height: 20,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
-                              valueColor:
-                                  AlwaysStoppedAnimation<Color>(Colors.white),
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                colorScheme.primary,
+                              ),
                             ),
                           ),
                         );
@@ -171,10 +219,10 @@ class _CustomappbarState extends State<Customappbar> {
                     width: 12, // Reduced size slightly
                     height: 12, // Reduced size slightly
                     decoration: BoxDecoration(
-                      color: Colors.green,
+                      color: colorScheme.primary,
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: Colors.white,
+                        color: colorScheme.surface,
                         width: 2,
                       ),
                     ),

@@ -39,12 +39,14 @@ class _ConsistencyCalendarWidgetState extends State<ConsistencyCalendarWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Container(
       width: MediaQuery.of(context).size.width * 0.9438,
       child: SingleChildScrollView(
         child: Card(
           elevation: 2,
-          color: Colors.white,
+          color: theme.colorScheme.surface,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
@@ -63,6 +65,7 @@ class _ConsistencyCalendarWidgetState extends State<ConsistencyCalendarWidget> {
                           textStyle: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
+                        color: theme.colorScheme.onSurface,
                       )),
                     ),
                     // Year dropdown
@@ -70,22 +73,26 @@ class _ConsistencyCalendarWidgetState extends State<ConsistencyCalendarWidget> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey.shade300),
+                        border: Border.all(
+                            color:
+                                theme.colorScheme.onSurface.withOpacity(0.2)),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Row(
                         children: [
                           Text(
                             selectedYear.toString(),
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
+                              color: theme.colorScheme.onSurface,
                             ),
                           ),
                           const SizedBox(width: 4),
-                          const Icon(
+                          Icon(
                             Icons.arrow_drop_down,
                             size: 18,
+                            color: theme.colorScheme.onSurface,
                           ),
                         ],
                       ),
@@ -106,7 +113,8 @@ class _ConsistencyCalendarWidgetState extends State<ConsistencyCalendarWidget> {
                             month,
                             style: TextStyle(
                               fontSize: 12,
-                              color: Colors.grey.shade600,
+                              color:
+                                  theme.colorScheme.onSurface.withOpacity(0.6),
                             ),
                           ),
                         ),
@@ -127,7 +135,7 @@ class _ConsistencyCalendarWidgetState extends State<ConsistencyCalendarWidget> {
                           weekdays[rowIndex],
                           style: TextStyle(
                             fontSize: 12,
-                            color: Colors.grey.shade600,
+                            color: theme.colorScheme.onSurface.withOpacity(0.6),
                           ),
                         ),
                       ),
@@ -162,8 +170,8 @@ class _ConsistencyCalendarWidgetState extends State<ConsistencyCalendarWidget> {
                                         width: 14,
                                         height: 14,
                                         decoration: BoxDecoration(
-                                          color:
-                                              _getColorForIntensity(intensity),
+                                          color: _getColorForIntensity(
+                                              intensity, theme),
                                           borderRadius:
                                               BorderRadius.circular(2),
                                         ),
@@ -177,7 +185,8 @@ class _ConsistencyCalendarWidgetState extends State<ConsistencyCalendarWidget> {
                                           decoration: BoxDecoration(
                                             shape: BoxShape.circle,
                                             border: Border.all(
-                                              color: Colors.yellow,
+                                              color:
+                                                  theme.colorScheme.secondary,
                                               width: 2,
                                             ),
                                           ),
@@ -196,11 +205,11 @@ class _ConsistencyCalendarWidgetState extends State<ConsistencyCalendarWidget> {
                 // Legend
                 Row(
                   children: [
-                    const Text(
+                    Text(
                       'Less',
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.grey,
+                        color: theme.colorScheme.onSurface.withOpacity(0.6),
                       ),
                     ),
                     const SizedBox(width: 4),
@@ -211,17 +220,17 @@ class _ConsistencyCalendarWidgetState extends State<ConsistencyCalendarWidget> {
                         width: 14,
                         height: 14,
                         decoration: BoxDecoration(
-                          color: _getColorForIntensity(index),
+                          color: _getColorForIntensity(index, theme),
                           borderRadius: BorderRadius.circular(2),
                         ),
                       ),
                     ),
                     const SizedBox(width: 4),
-                    const Text(
+                    Text(
                       'More',
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.grey,
+                        color: theme.colorScheme.onSurface.withOpacity(0.6),
                       ),
                     ),
                   ],
@@ -235,20 +244,34 @@ class _ConsistencyCalendarWidgetState extends State<ConsistencyCalendarWidget> {
   }
 
   // Helper method to get colors based on intensity
-  Color _getColorForIntensity(int intensity) {
+  Color _getColorForIntensity(int intensity, ThemeData theme) {
+    final bool isDarkMode = theme.brightness == Brightness.dark;
+
     switch (intensity) {
       case 0:
-        return Color.fromRGBO(238, 238, 238, 1); // No activity
+        return isDarkMode
+            ? theme.colorScheme.onSurface.withOpacity(0.12)
+            : const Color.fromRGBO(238, 238, 238, 1); // No activity
       case 1:
-        return Color.fromRGBO(200, 250, 205, 1); // Light green
+        return isDarkMode
+            ? const Color.fromRGBO(50, 125, 75, 1)
+            : const Color.fromRGBO(200, 250, 205, 1); // Light green
       case 2:
-        return const Color.fromRGBO(91, 229, 132, 1); // Medium green
+        return isDarkMode
+            ? const Color.fromRGBO(60, 150, 90, 1)
+            : const Color.fromRGBO(91, 229, 132, 1); // Medium green
       case 3:
-        return const Color.fromRGBO(0, 171, 85, 1); // Dark green
+        return isDarkMode
+            ? const Color.fromRGBO(30, 180, 100, 1)
+            : const Color.fromRGBO(0, 171, 85, 1); // Dark green
       case 4:
-        return const Color.fromRGBO(0, 82, 73, 1); // Very dark green
+        return isDarkMode
+            ? const Color.fromRGBO(0, 200, 100, 1)
+            : const Color.fromRGBO(0, 82, 73, 1); // Very dark green
       default:
-        return Colors.grey.shade200;
+        return isDarkMode
+            ? theme.colorScheme.onSurface.withOpacity(0.1)
+            : Colors.grey.shade200;
     }
   }
 }

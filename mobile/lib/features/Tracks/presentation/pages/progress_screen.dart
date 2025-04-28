@@ -19,8 +19,10 @@ class ProgressScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -41,7 +43,7 @@ class ProgressScreen extends StatelessWidget {
                           style: GoogleFonts.publicSans(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                            color: theme.colorScheme.onBackground,
                           ),
                         ),
 
@@ -51,7 +53,8 @@ class ProgressScreen extends StatelessWidget {
                           style: GoogleFonts.publicSans(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: Color.fromRGBO(145, 158, 171, 1),
+                            color:
+                                theme.colorScheme.onBackground.withOpacity(0.6),
                           ),
                         ),
 
@@ -66,7 +69,7 @@ class ProgressScreen extends StatelessWidget {
                                 style: GoogleFonts.publicSans(
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.black,
+                                  color: theme.colorScheme.onBackground,
                                 ),
                               ),
                               Row(
@@ -74,13 +77,13 @@ class ProgressScreen extends StatelessWidget {
                                   Container(
                                     padding: const EdgeInsets.all(8),
                                     decoration: BoxDecoration(
-                                      color: Colors.grey[200],
+                                      color: theme.colorScheme.surfaceVariant,
                                       shape: BoxShape.circle,
                                     ),
-                                    child: const Icon(
+                                    child: Icon(
                                       Icons.arrow_upward,
                                       size: 20,
-                                      color: Colors.grey,
+                                      color: theme.colorScheme.onSurfaceVariant,
                                     ),
                                   ),
                                   const SizedBox(width: 4),
@@ -88,33 +91,34 @@ class ProgressScreen extends StatelessWidget {
                                     '49',
                                     style: GoogleFonts.publicSans(
                                       fontSize: 16,
-                                      color: Colors.grey,
+                                      color: theme.colorScheme.onBackground
+                                          .withOpacity(0.7),
                                     ),
                                   ),
                                   const SizedBox(width: 4),
                                   Container(
                                     padding: const EdgeInsets.all(8),
                                     decoration: BoxDecoration(
-                                      color: Colors.grey[200],
+                                      color: theme.colorScheme.surfaceVariant,
                                       shape: BoxShape.circle,
                                     ),
-                                    child: const Icon(
+                                    child: Icon(
                                       Icons.arrow_downward,
                                       size: 20,
-                                      color: Colors.grey,
+                                      color: theme.colorScheme.onSurfaceVariant,
                                     ),
                                   ),
                                   const SizedBox(width: 8),
                                   Container(
                                     padding: const EdgeInsets.all(8),
                                     decoration: BoxDecoration(
-                                      color: Colors.grey[200],
+                                      color: theme.colorScheme.surfaceVariant,
                                       shape: BoxShape.circle,
                                     ),
-                                    child: const Icon(
+                                    child: Icon(
                                       Icons.message_outlined,
                                       size: 20,
-                                      color: Colors.grey,
+                                      color: theme.colorScheme.onSurfaceVariant,
                                     ),
                                   ),
                                 ],
@@ -166,7 +170,7 @@ class ProgressScreen extends StatelessWidget {
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.95,
                               child: Card(
-                                color: Colors.white,
+                                color: theme.colorScheme.surface,
                                 elevation: 5,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
@@ -198,14 +202,17 @@ class ProgressScreen extends StatelessWidget {
                                                   style: GoogleFonts.publicSans(
                                                     fontSize: 24,
                                                     fontWeight: FontWeight.bold,
-                                                    color: Colors.black,
+                                                    color: theme
+                                                        .colorScheme.onSurface,
                                                   ),
                                                 ),
                                                 Text(
                                                   'Solved',
                                                   style: GoogleFonts.publicSans(
                                                     fontSize: 12,
-                                                    color: Colors.grey,
+                                                    color: theme.colorScheme
+                                                        .onBackground
+                                                        .withOpacity(0.7),
                                                   ),
                                                 ),
                                               ],
@@ -238,14 +245,17 @@ class ProgressScreen extends StatelessWidget {
                                                   style: GoogleFonts.publicSans(
                                                     fontSize: 24,
                                                     fontWeight: FontWeight.bold,
-                                                    color: Colors.black,
+                                                    color: theme
+                                                        .colorScheme.onSurface,
                                                   ),
                                                 ),
                                                 Text(
                                                   'Availble',
                                                   style: GoogleFonts.publicSans(
                                                     fontSize: 12,
-                                                    color: Colors.grey,
+                                                    color: theme.colorScheme
+                                                        .onBackground
+                                                        .withOpacity(0.7),
                                                   ),
                                                 ),
                                               ],

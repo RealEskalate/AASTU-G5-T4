@@ -42,6 +42,8 @@ class _ProblemsPageState extends State<ProblemsPage> {
 
   // Shows the filter selection dialog
   void _showFilterDialog(BuildContext context, ProblemFilters currentFilters) {
+    final theme = Theme.of(context);
+
     showDialog(
       context: context,
       // barrierDismissible: false, // Optional: Prevent closing by tapping outside
@@ -52,7 +54,9 @@ class _ProblemsPageState extends State<ProblemsPage> {
         return BlocProvider.value(
           value: BlocProvider.of<ProblemsBloc>(context), // Reuse existing Bloc
           child: AlertDialog(
-            title: const Text('Filter Problems'),
+            title: Text('Filter Problems',
+                style: TextStyle(color: theme.colorScheme.onSurface)),
+            backgroundColor: theme.colorScheme.surface,
             // Use the dedicated widget for dialog content and actions
             content: FilterDialogContent(initialFilters: currentFilters),
             actions: const [], // Actions are built into FilterDialogContent
@@ -70,6 +74,8 @@ class _ProblemsPageState extends State<ProblemsPage> {
 
   // Determines which widget to show based on the current Bloc state
   Widget _buildContentForState(ProblemsState state, BuildContext context) {
+    final theme = Theme.of(context);
+
     // Determine current filters from state, needed for the filter dialog callback
     ProblemFilters currentFilters = ProblemFilters.initial();
     ProblemsLoadSuccess?
@@ -92,7 +98,8 @@ class _ProblemsPageState extends State<ProblemsPage> {
     // Build UI based on the determined state
     if (state is ProblemsLoadInProgress && !state.isFilteringOrPaging) {
       // Initial full-screen loading
-      return const Center(child: CircularProgressIndicator());
+      return Center(
+          child: CircularProgressIndicator(color: theme.colorScheme.primary));
     } else if (state is ProblemsLoadFailure) {
       // Error state
       return _buildErrorWidget(
@@ -111,22 +118,26 @@ class _ProblemsPageState extends State<ProblemsPage> {
       );
     } else {
       // Default/Initial state or unexpected loading state without previous data
-      return const Center(child: Text('Initializing...'));
+      return Center(
+          child: Text('Initializing...',
+              style: TextStyle(color: theme.colorScheme.onBackground)));
     }
   }
 
   // Builds the UI for the error state
   Widget _buildErrorWidget(String message, BuildContext context) {
+    final theme = Theme.of(context);
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.error_outline, color: Colors.red[700], size: 48),
+            Icon(Icons.error_outline, color: theme.colorScheme.error, size: 48),
             const SizedBox(height: 16),
             Text(message,
-                style: TextStyle(color: Colors.red[700]),
+                style: TextStyle(color: theme.colorScheme.error),
                 textAlign: TextAlign.center),
             const SizedBox(height: 16),
             ElevatedButton.icon(
@@ -137,8 +148,8 @@ class _ProblemsPageState extends State<ProblemsPage> {
                   .read<ProblemsBloc>()
                   .add(const FetchProblems(refresh: true)),
               style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: Theme.of(context).primaryColor),
+                  foregroundColor: theme.colorScheme.onPrimary,
+                  backgroundColor: theme.colorScheme.primary),
             )
           ],
         ),
@@ -150,6 +161,8 @@ class _ProblemsPageState extends State<ProblemsPage> {
   Widget _buildSuccessWidget(ProblemsLoadSuccess state, BuildContext context,
       {required VoidCallback onFiltersPressed, // Callback to open filter dialog
       bool isLoadingMore = false}) {
+    final theme = Theme.of(context);
+
     // Handle cases where the list is empty (either initially or after filtering)
     if (state.problems.isEmpty) {
       return Center(
@@ -160,10 +173,8 @@ class _ProblemsPageState extends State<ProblemsPage> {
               ? 'No problems match the current filters.'
               : 'No problems available.',
           textAlign: TextAlign.center,
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium
-              ?.copyWith(color: Colors.grey[600]),
+          style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onBackground.withOpacity(0.6)),
         ),
       ));
     }
@@ -199,19 +210,14 @@ class _ProblemsPageState extends State<ProblemsPage> {
                 // Dispatch event if UI for changing size is implemented
                 context.read<ProblemsBloc>().add(ItemsPerPageChanged(newSize));
               },
-              // Pass the filter callback down to the DataTable (which passes it to the Toolbar)
-              onFiltersPressed: onFiltersPressed,
-              isLoadingMore:
-                  isLoadingMore, // Pass flag (used for overlay below)
             ),
           ),
         ),
-        // Show a semi-transparent overlay with a spinner if loading more/filtering/sorting
+        // Show loading indicator when fetching more data or updating filters
         if (isLoadingMore)
-          Positioned.fill(
-            child: Container(
-              color: Colors.black.withOpacity(0.1), // Dim the background
-              child: const Center(child: CircularProgressIndicator()),
+          const Positioned.fill(
+            child: Center(
+              child: CircularProgressIndicator(),
             ),
           ),
       ],
@@ -221,57 +227,70 @@ class _ProblemsPageState extends State<ProblemsPage> {
   // --- Main Build Method ---
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<bool>(
-      valueListenable: _sidebarController.sidebarVisibility,
-      builder: (context, isSidebarVisible, _) {
-        return Stack(
-          children: [
-            Scaffold(
-              key: _scaffoldKey,
-              backgroundColor: Colors.white, // Or your app's background color
-              appBar: PreferredSize(
-                preferredSize: const Size.fromHeight(kToolbarHeight),
-                child: Customappbar(
-                  onMenuPressed: () => _sidebarController.toggleSidebar(),
-                ),
-              ),
-              body: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // Static header for the page
-                  const ProblemHeader(),
-                  // Expanded section takes remaining space for the table/content
-                  Expanded(
-                    // BlocBuilder rebuilds the UI based on ProblemsBloc state
-                    child: BlocBuilder<ProblemsBloc, ProblemsState>(
-                      builder: (context, state) {
-                        // Delegate building the main content area based on state
-                        return _buildContentForState(state, context);
-                      },
-                    ),
+    final theme = Theme.of(context);
+
+    return Scaffold(
+      key: _scaffoldKey,
+      backgroundColor: theme.scaffoldBackgroundColor,
+      appBar: PreferredSize(
+        // Use the standardized header height
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: Customappbar(
+          onMenuPressed: () {
+            _sidebarController.toggleSidebar();
+          },
+        ),
+      ),
+      body: Stack(
+        children: [
+          // Main content area
+          Container(
+            // color: theme.scaffoldBackgroundColor, // Use scaffold BG for the main area too
+            padding: const EdgeInsets.all(16.0), // Give some breathing room
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Static header for the page
+                const ProblemHeader(),
+                // Expanded section takes remaining space for the table/content
+                Expanded(
+                  child: BlocBuilder<ProblemsBloc, ProblemsState>(
+                    builder: (context, state) {
+                      return _buildContentForState(state, context);
+                    },
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            // Conditionally display the Sidebar overlay
-            if (isSidebarVisible)
-              HubSidebar(
-                username: 'Natnael Wondwoesn Solomon', // Example data
-                userRole: 'Student',
-                userImageUrl:
-                    'https://storage.googleapis.com/a2sv_hub_bucket_2/images%2FNatnael%20Wondwoesn%20Solomon.jpeg', // Your image URL
-                selectedIndex: _selectedIndex,
-                onItemSelected: (index) {
-                  // Handle sidebar item selection (e.g., navigation)
-                  setState(() => _selectedIndex = index);
-                  _sidebarController.closeSidebar();
-                  // TODO: Implement navigation logic based on selected index
-                },
-                onClose: _sidebarController.closeSidebar,
-              ),
-          ],
-        );
-      },
+          ),
+
+          // Overlay sidebar when open
+          ValueListenableBuilder<bool>(
+            valueListenable: _sidebarController.sidebarVisibility,
+            builder: (context, isVisible, _) {
+              return AnimatedOpacity(
+                opacity: isVisible ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 300),
+                child: isVisible
+                    ? HubSidebar(
+                        username: 'Natnael Wondwoesn Solomon',
+                        userRole: 'Student',
+                        userImageUrl:
+                            'https://storage.googleapis.com/a2sv_hub_bucket_2/images%2FNatnael%20Wondwoesn%20Solomon.jpeg',
+                        selectedIndex: _selectedIndex,
+                        onItemSelected: (index) {
+                          setState(() {
+                            _selectedIndex = index;
+                          });
+                        },
+                        onClose: _sidebarController.closeSidebar,
+                      )
+                    : const SizedBox.shrink(),
+              );
+            },
+          )
+        ],
+      ),
     );
   }
 }

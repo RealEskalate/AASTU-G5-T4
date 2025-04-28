@@ -1,0 +1,340 @@
+import 'package:flutter/material.dart';
+import 'dart:math'; // Import for max function if needed for layout calculations
+
+class Student {
+  final int id;
+  final String name;
+  final String photo;
+  final int groupId;
+  final Map<String, dynamic> meta;
+  final Map<String, dynamic> title;
+  final Map<String, dynamic> lastSeen;
+
+  Student({
+    required this.id,
+    required this.name,
+    required this.photo,
+    required this.groupId,
+    required this.meta,
+    required this.title,
+    required this.lastSeen,
+  });
+
+  factory Student.fromJson(Map<String, dynamic> json) {
+    return Student(
+      id: json['id'],
+      name: json['name'],
+      photo: json['photo'],
+      groupId: json['group_id'],
+      meta: json['meta'],
+      title: json['title'],
+      lastSeen: json['last_seen'],
+    );
+  }
+}
+
+class StudentDataTable extends StatefulWidget {
+  final List<Student> students;
+
+  const StudentDataTable({Key? key, required this.students}) : super(key: key);
+
+  @override
+  _StudentDataTableState createState() => _StudentDataTableState();
+}
+
+class _StudentDataTableState extends State<StudentDataTable>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  bool isShowingStatistics = false;
+  int _sortColumnIndex = 0;
+  bool _sortAscending = true;
+  late List<Student> _sortedStudents;
+
+  @override
+  void initState() {
+    super.initState();
+    _sortedStudents = List.from(widget.students);
+    _sortStudents(); // Initial sort
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() {
+      setState(() {
+        isShowingStatistics = _tabController.index == 1;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  void _sortStudents() {
+    _sortedStudents.sort((a, b) {
+      int result = 0;
+      // Define comparison logic based on the sort column index
+      switch (_sortColumnIndex) {
+        case 0: // Name
+          result = a.name.compareTo(b.name);
+          break;
+        case 1: // Problems
+          // Assuming meta['solvedProblems_count'] is int or can be parsed
+          final aValue =
+              int.tryParse(a.meta['solvedProblems_count']?.toString() ?? '0') ??
+                  0;
+          final bValue =
+              int.tryParse(b.meta['solvedProblems_count']?.toString() ?? '0') ??
+                  0;
+          result = aValue.compareTo(bValue);
+          break;
+        case 2: // Time Spent
+          // Assuming meta['time_spent'] is int or can be parsed (e.g., total seconds)
+          // TODO: Implement proper parsing/comparison for time spent format if it's not numeric
+          final aValue =
+              int.tryParse(a.meta['time_spent']?.toString() ?? '0') ?? 0;
+          final bValue =
+              int.tryParse(b.meta['time_spent']?.toString() ?? '0') ?? 0;
+          result = aValue.compareTo(bValue);
+          break;
+        case 3: // Rating
+          // Assuming meta['rating'] is num
+          final aValue = a.meta['rating'] ?? 0;
+          final bValue = b.meta['rating'] ?? 0;
+          result = (aValue as num).compareTo(bValue as num);
+          break;
+        case 4: // Last Seen
+          // TODO: Implement proper comparison logic for last seen dates/status
+          // This is complex due to relative times and "online" status.
+          // Placeholder: sort by raw map data for now, needs refinement.
+          result = a.lastSeen.toString().compareTo(b.lastSeen.toString());
+          break;
+      }
+      return _sortAscending ? result : -result;
+    });
+  }
+
+  void _onSort(int columnIndex, bool ascending) {
+    setState(() {
+      _sortColumnIndex = columnIndex;
+      _sortAscending = ascending;
+      _sortStudents();
+    });
+  }
+
+  // Helper function to format last seen (Placeholder - needs actual implementation)
+  String _formatLastSeen(Map<String, dynamic> lastSeenData) {
+    // TODO: Implement actual logic based on the structure of lastSeenData
+    // Example: Check for an 'online' flag or format a relative time string
+    if (lastSeenData['status'] == 'online') {
+      return 'online *';
+    }
+    // Placeholder for relative time format like "19d 16h 32m"
+    return lastSeenData['relativeTime'] ?? 'N/A';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surface,
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: Column(
+          // Restore mainAxisSize if needed, as we are not using Expanded for TabBarView parent
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Tab Bar
+            Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: theme.dividerColor, width: 0.5),
+                ),
+              ),
+              child: TabBar(
+                controller: _tabController,
+                tabs: const [
+                  Tab(text: 'Students'),
+                  Tab(text: 'Statistics'),
+                ],
+                labelColor: theme.colorScheme.primary,
+                labelStyle: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+                unselectedLabelColor:
+                    theme.colorScheme.onSurface.withOpacity(0.6),
+                indicatorColor: theme.colorScheme.primary,
+                indicatorWeight: 3.0,
+              ),
+            ),
+
+            // Tab Content - Revert to SizedBox with fixed height
+            SizedBox(
+              // Revert back to SizedBox
+              height: MediaQuery.of(context).size.height *
+                  0.8, // Use the fixed height again
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  _buildStudentsTab(),
+                  _buildStatisticsTab(),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStudentsTab() {
+    final theme = Theme.of(context);
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: DataTable(
+        sortColumnIndex: _sortColumnIndex,
+        sortAscending: _sortAscending,
+        columnSpacing: 10.0,
+        horizontalMargin: 10.0,
+        headingRowHeight: 35,
+        dataRowMinHeight: 50,
+        dataRowMaxHeight: 60,
+        columns: [
+          DataColumn(
+            label: Text('Name',
+                style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onSurface)),
+            onSort: _onSort,
+          ),
+          DataColumn(
+            label: Text('Problems',
+                style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onSurface)),
+            numeric: true,
+            onSort: _onSort,
+          ),
+          DataColumn(
+            label: Text('Time',
+                style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onSurface)),
+            numeric: true,
+            onSort: _onSort,
+          ),
+          DataColumn(
+            label: Text('Rating',
+                style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onSurface)),
+            numeric: true,
+            onSort: _onSort,
+          ),
+          DataColumn(
+            label: Text('Last Seen',
+                style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onSurface)),
+            onSort: _onSort,
+          ),
+        ],
+        rows: _sortedStudents.map((student) {
+          final lastSeenText = _formatLastSeen(student.lastSeen);
+          final isOnline = lastSeenText.startsWith('online');
+          final lastSeenColor = isOnline
+              ? theme.colorScheme.primary
+              : theme.colorScheme.onSurface;
+
+          final problemsCount =
+              student.meta['solvedProblems_count']?.toString() ?? '0';
+          final timeSpent = student.meta['time_spent']?.toString() ?? '0';
+          final rating = student.meta['rating']?.toString() ?? '0';
+
+          // Abbreviate name
+          String abbreviatedName = student.name.isNotEmpty
+              ? (student.name.length > 10
+                  ? "${student.name.substring(0, 5)}..."
+                  : student.name)
+              : "";
+
+          return DataRow(
+            cells: [
+              DataCell(
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CircleAvatar(
+                      radius: 15,
+                      backgroundImage: NetworkImage(student.photo),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      student.name,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: theme.colorScheme.onSurface,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              DataCell(Text(
+                problemsCount,
+                style: TextStyle(
+                  fontSize: 13,
+                  color: theme.colorScheme.onSurface,
+                ),
+              )),
+              DataCell(Text(
+                timeSpent,
+                style: TextStyle(
+                  fontSize: 13,
+                  color: theme.colorScheme.onSurface,
+                ),
+              )),
+              DataCell(Text(
+                rating,
+                style: TextStyle(
+                  fontSize: 13,
+                  color: theme.colorScheme.onSurface,
+                ),
+              )),
+              DataCell(Text(
+                lastSeenText,
+                style: TextStyle(
+                  fontSize: 13,
+                  color: lastSeenColor,
+                  fontWeight: isOnline ? FontWeight.bold : FontWeight.normal,
+                ),
+              )),
+            ],
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget _buildStatisticsTab() {
+    final theme = Theme.of(context);
+    // Placeholder for statistics tab
+    return Center(
+      child: Text(
+        'Statistics content goes here',
+        style: TextStyle(
+          fontSize: 16,
+          color: theme.colorScheme.onSurface,
+        ),
+      ),
+    );
+  }
+}

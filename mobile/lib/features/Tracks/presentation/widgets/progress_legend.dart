@@ -13,6 +13,8 @@ class ProgressLegend extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Column(
       children: [
         // Solved problems
@@ -21,8 +23,8 @@ class ProgressLegend extends StatelessWidget {
             Container(
               width: 14,
               height: 14,
-              decoration: const BoxDecoration(
-                color: Color(0xFF4CAF50),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.primary,
                 shape: BoxShape.circle,
               ),
             ),
@@ -32,7 +34,7 @@ class ProgressLegend extends StatelessWidget {
               style: GoogleFonts.publicSans(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: Colors.black,
+                color: theme.colorScheme.onBackground,
               ),
             ),
             const Spacer(),
@@ -41,7 +43,7 @@ class ProgressLegend extends StatelessWidget {
               style: GoogleFonts.publicSans(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: Colors.black,
+                color: theme.colorScheme.onBackground,
               ),
             ),
           ],
@@ -54,7 +56,7 @@ class ProgressLegend extends StatelessWidget {
               width: 14,
               height: 14,
               decoration: BoxDecoration(
-                color: Colors.grey[200],
+                color: theme.colorScheme.surfaceVariant,
                 shape: BoxShape.circle,
               ),
             ),
@@ -64,7 +66,7 @@ class ProgressLegend extends StatelessWidget {
               style: GoogleFonts.publicSans(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: Colors.black,
+                color: theme.colorScheme.onBackground,
               ),
             ),
             const Spacer(),
@@ -73,7 +75,7 @@ class ProgressLegend extends StatelessWidget {
               style: GoogleFonts.publicSans(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: Colors.black,
+                color: theme.colorScheme.onBackground,
               ),
             ),
           ],

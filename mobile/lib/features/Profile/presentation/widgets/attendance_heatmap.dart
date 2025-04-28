@@ -18,6 +18,8 @@ class AttendanceHeatmap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     // Calculate statistics
     int present = 0;
     int absent = 0;
@@ -40,11 +42,11 @@ class AttendanceHeatmap extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
+            color: theme.shadowColor.withOpacity(0.2),
             spreadRadius: 1,
             blurRadius: 3,
             offset: const Offset(0, 1),
@@ -64,6 +66,7 @@ class AttendanceHeatmap extends StatelessWidget {
                     textStyle: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
+                  color: theme.colorScheme.onSurface,
                 )),
               ),
               GestureDetector(
@@ -80,8 +83,8 @@ class AttendanceHeatmap extends StatelessWidget {
                           : FontAwesomeIcons.toggleOff,
                       size: 30,
                       color: showDetail
-                          ? Color.fromRGBO(84, 214, 44, 1)
-                          : Colors.grey,
+                          ? theme.colorScheme.primary
+                          : theme.colorScheme.onSurface.withOpacity(0.5),
                     ),
                     const SizedBox(width: 12),
                     Text(
@@ -89,7 +92,7 @@ class AttendanceHeatmap extends StatelessWidget {
                       style: GoogleFonts.publicSans(
                           textStyle: TextStyle(
                         fontSize: 14,
-                        color: Colors.black,
+                        color: theme.colorScheme.onSurface,
                       )),
                     ),
                   ],
@@ -115,7 +118,8 @@ class AttendanceHeatmap extends StatelessWidget {
               itemBuilder: (context, index) {
                 return Container(
                   decoration: BoxDecoration(
-                    color: _getStatusColor(attendanceRecords[index].status),
+                    color:
+                        _getStatusColor(attendanceRecords[index].status, theme),
                     borderRadius: BorderRadius.circular(0),
                   ),
                 );
@@ -138,7 +142,7 @@ class AttendanceHeatmap extends StatelessWidget {
                           textStyle: TextStyle(
                         fontWeight: FontWeight.w400,
                         fontSize: 12,
-                        color: Colors.black87,
+                        color: theme.colorScheme.onSurface.withOpacity(0.8),
                       )),
                     ),
                     TextSpan(
@@ -147,7 +151,7 @@ class AttendanceHeatmap extends StatelessWidget {
                           textStyle: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
-                        color: Colors.black,
+                        color: theme.colorScheme.onSurface,
                       )),
                     ),
                   ],
@@ -166,7 +170,7 @@ class AttendanceHeatmap extends StatelessWidget {
                           textStyle: TextStyle(
                         fontWeight: FontWeight.w400,
                         fontSize: 12,
-                        color: Colors.black87,
+                        color: theme.colorScheme.onSurface.withOpacity(0.8),
                       )),
                     ),
                     TextSpan(
@@ -175,7 +179,7 @@ class AttendanceHeatmap extends StatelessWidget {
                           textStyle: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
-                        color: Colors.black,
+                        color: theme.colorScheme.onSurface,
                       )),
                     ),
                   ],
@@ -194,7 +198,7 @@ class AttendanceHeatmap extends StatelessWidget {
                           textStyle: TextStyle(
                         fontWeight: FontWeight.w400,
                         fontSize: 12,
-                        color: Colors.black87,
+                        color: theme.colorScheme.onSurface.withOpacity(0.8),
                       )),
                     ),
                     TextSpan(
@@ -203,7 +207,7 @@ class AttendanceHeatmap extends StatelessWidget {
                           textStyle: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
-                        color: Colors.black,
+                        color: theme.colorScheme.onSurface,
                       )),
                     ),
                     TextSpan(
@@ -212,7 +216,7 @@ class AttendanceHeatmap extends StatelessWidget {
                           textStyle: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
-                        color: Colors.black,
+                        color: theme.colorScheme.onSurface,
                       )),
                     ),
                   ],
@@ -225,16 +229,24 @@ class AttendanceHeatmap extends StatelessWidget {
     );
   }
 
-  Color _getStatusColor(AttendanceStatus status) {
+  Color _getStatusColor(AttendanceStatus status, ThemeData theme) {
+    final bool isDarkMode = theme.brightness == Brightness.dark;
+
     switch (status) {
       case AttendanceStatus.present:
-        return Color.fromRGBO(84, 214, 44, 1); // Green
+        return isDarkMode
+            ? const Color.fromRGBO(30, 180, 70, 1)
+            : const Color.fromRGBO(84, 214, 44, 1); // Green
       case AttendanceStatus.excused:
-        return Color.fromRGBO(255, 193, 7, 1); // Orange
+        return isDarkMode
+            ? const Color.fromRGBO(200, 150, 0, 1)
+            : const Color.fromRGBO(255, 193, 7, 1); // Orange
       case AttendanceStatus.absent:
-        return Color.fromRGBO(255, 72, 66, 1); // Red
+        return isDarkMode
+            ? const Color.fromRGBO(200, 50, 50, 1)
+            : const Color.fromRGBO(255, 72, 66, 1); // Red
       default:
-        return Colors.grey.shade300;
+        return theme.colorScheme.onSurface.withOpacity(0.2);
     }
   }
 }

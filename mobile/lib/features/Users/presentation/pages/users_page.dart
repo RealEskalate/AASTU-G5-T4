@@ -2,32 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/features/Home/presentation/widgets/CustomappBar.dart';
 import 'package:mobile/features/Home/presentation/widgets/sideBar.dart';
-import 'package:mobile/features/Tracks/presentation/pages/progress_screen.dart';
+import 'package:mobile/features/Users/presentation/widgets/user_management_header.dart';
 
-class TracksPage extends StatefulWidget {
-  const TracksPage({super.key});
+class UsersPage extends StatefulWidget {
+  const UsersPage({super.key});
 
   @override
-  State<TracksPage> createState() => _TracksPageState();
+  State<UsersPage> createState() => _UsersPageState();
 }
 
-class _TracksPageState extends State<TracksPage> {
+class _UsersPageState extends State<UsersPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   // Create a sidebar controller
   final SidebarController _sidebarController = SidebarController();
   int _selectedIndex = 0;
-
-  @override
-  void dispose() {
-    _sidebarController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(kToolbarHeight),
           child: Customappbar(
@@ -35,10 +30,45 @@ class _TracksPageState extends State<TracksPage> {
               _sidebarController.toggleSidebar();
             },
           )),
-      // drawer: HubSidebarExample(),
       body: Stack(
         children: [
-          ProgressScreen(solved: 200, available: 100, total: 300),
+          SingleChildScrollView(
+              child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Groups & Users',
+                      style: GoogleFonts.publicSans(
+                        textStyle: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w800,
+                            color: theme.colorScheme.onBackground),
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      'All',
+                      style: GoogleFonts.publicSans(
+                        textStyle: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: theme.colorScheme.onBackground
+                                .withOpacity(0.6)),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                UserManagementHeader(),
+              ],
+            ),
+          )),
           ValueListenableBuilder<bool>(
             valueListenable: _sidebarController.sidebarVisibility,
             builder: (context, isVisible, _) {

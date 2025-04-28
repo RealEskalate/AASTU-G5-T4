@@ -13,41 +13,40 @@ class ActionButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    final theme = Theme.of(context);
+
+    return Row(
       children: [
-        // Exercise Button
-        SizedBox(
-          width: double.infinity,
-          height: 50,
+        Expanded(
           child: ElevatedButton(
             onPressed: onExerciseTap,
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color.fromRGBO(0, 171, 85, 1),
-              foregroundColor: Colors.white,
+              backgroundColor: theme.colorScheme.primary,
+              foregroundColor: theme.colorScheme.onPrimary,
+              elevation: 0,
+              padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
-              elevation: 0,
             ),
             child: Text(
               'Exercise',
               style: GoogleFonts.publicSans(
                 fontSize: 16,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
         ),
-        const SizedBox(height: 12),
-        // Problems Button
-        SizedBox(
-          width: double.infinity,
-          height: 50,
-          child: OutlinedButton(
+        const SizedBox(width: 16),
+        Expanded(
+          child: ElevatedButton(
             onPressed: onProblemsTap,
-            style: OutlinedButton.styleFrom(
-              side: const BorderSide(color: Color.fromRGBO(0, 171, 85, 1)),
-              foregroundColor: const Color.fromRGBO(0, 171, 85, 1),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: theme.colorScheme.surfaceVariant,
+              foregroundColor: theme.colorScheme.onSurfaceVariant,
+              elevation: 0,
+              padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),

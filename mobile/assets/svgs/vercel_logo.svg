@@ -1,0 +1,25 @@
+<svg viewBox="0 0 377.78 109.74" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="linear-gradient" x1="456.37" y1="462.08" x2="683.85" y2="546.15" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00AB55"/>
+      <stop offset="1" stop-color="#5BE584"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-7" x1="-5.97" y1="33.6" x2="115.71" y2="76.14" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#007B55"/>
+      <stop offset="0.64" stop-color="#00AB55"/>
+      <stop offset="1" stop-color="#5BE584"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" fill-rule="nonzero">
+    <!-- Paths for letter-like shapes -->
+    <path d="M500.06,537.46V516.7a7.37,7.37,0,0,0-7.38-7.38H468.44c-4.07,0-7.38.3-7.38,4.38v-.24a7.38,7.38,0,0,1-7.38,7.38h0a7.39,7.39,0,0,1-7.38-7.38V462.22a7.38,7.38,0,0,1,7.38-7.38h0a7.37,7.37,0,0,1,7.38,7.38v25.2a7.39,7.39,0,0,0,7.38,7.38h24.24a7.38,7.38,0,0,0,7.38-7.38v-25.2a7.37,7.37,0,0,1,7.38-7.38h0a7.37,7.37,0,0,1,7.38,7.38v75.24a7.38,7.38,0,0,1-7.38,7.38h0A7.38,7.38,0,0,1,500.06,537.46Z" transform="translate(-311.05 -445.81)" fill="url(#linear-gradient)"/>
+    <path d="M599,482.84h0a7.37,7.37,0,0,1,7.38,7.38V512.8c0,22.56-18.84,33.72-35.4,33.72-16.8,0-35.52-11.16-35.52-33.72V462.22a7.38,7.38,0,0,1,7.38-7.38h0a7.37,7.37,0,0,1,7.38,7.38v49.62c0,12.36,9.48,19.56,20.76,19.56,10.56,0,20.52-7.2,20.64-19.56V490.22A7.37,7.37,0,0,1,599,482.84Z" transform="translate(-311.05 -445.81)" fill="url(#linear-gradient)"/>
+    <path d="M684.73,503.77a23,23,0,0,0-7.79-7.17c5.28-3.6,8.28-10.2,8.28-17,0-14.76-10-24.72-27.24-24.72H627v57.43a7.26,7.26,0,0,0,14.52,0v-7h7.32c14.4,0,25.08,1,25.08,13.08,0,6.07-.26,12.12-13.08,12.12a5.19,5.19,0,0,0-5.19,5.19v4a5.2,5.2,0,0,0,5.19,5.19h.88c17.64,0,27.08-10.2,27.08-26.52A25.55,25.55,0,0,0,684.73,503.77ZM658.1,491.2H641.54V468.88H658.1c8.4,0,12.36,4.68,12.36,10.68C670.46,486.16,665.3,491.2,658.1,491.2Z" transform="translate(-311.05 -445.81)" fill="url(#linear-gradient)"/>
+    <!-- Circles -->
+    <circle cx="142.64" cy="91.65" r="7.38" fill="url(#linear-gradient)"/>
+    <circle cx="287.95" cy="16.41" r="7.38" fill="url(#linear-gradient)"/>
+    <circle cx="323.36" cy="91.83" r="7.38" fill="url(#linear-gradient)"/>
+    <!-- Rounded Square -->
+    <rect width="109.74" height="109.74" rx="19.91" fill="url(#linear-gradient-7)"/>
+  </g>
+</svg>
