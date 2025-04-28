@@ -46,8 +46,26 @@ func generateSignature(method string, params map[string]string) string {
 }
 
 func FetchContestsFromCodeforces() ([]domain.Contest, error) {
+	// Fetch regular contests
+	regularContests, err := fetchContestsByType(false)
+	if err != nil {
+		return nil, err
+	}
+
+	// Fetch gym contests
+	gymContests, err := fetchContestsByType(true)
+	if err != nil {
+		return nil, err
+	}
+
+	// Combine both types of contests
+	allContests := append(regularContests, gymContests...)
+	return allContests, nil
+}
+
+func fetchContestsByType(isGym bool) ([]domain.Contest, error) {
 	params := map[string]string{
-		"gym": "false",
+		"gym": fmt.Sprintf("%v", isGym),
 	}
 	signature := generateSignature("contest.list", params)
 	params["apiSig"] = signature

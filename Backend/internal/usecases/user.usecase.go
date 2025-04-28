@@ -32,7 +32,7 @@ func (u UserUseCase) GetUserByID(ctx context.Context, id int) (domain.User, erro
 }
 
 func (u UserUseCase) CreateUser(ctx context.Context, user domain.User) (domain.User, error) {
-	
+
 	return u.UserRepository.CreateUser(ctx, user)
 }
 
@@ -71,4 +71,17 @@ func (u *UserUseCase) GetUsersByGroup(ctx context.Context, groupID int) ([]domai
 func (uc *UserUseCase) UpdateAvatar(ctx context.Context, userID int, imageURL string) error {
 
 	return uc.UserRepository.UpdateAvatar(ctx, []int{userID}, imageURL)
+}
+
+func (uc *UserUseCase) GetUserSubmissions(ctx context.Context, userID int) ([]domain.Submission, float64, int64, error) {
+	// First check if user exists
+	user, err := uc.UserRepository.GetUserByID(ctx, userID)
+	if err != nil {
+		return nil, 0, 0, err
+	}
+	if user.ID == 0 {
+		return nil, 0, 0, errors.New("user not found")
+	}
+
+	return uc.UserRepository.GetUserSubmissions(ctx, userID)
 }

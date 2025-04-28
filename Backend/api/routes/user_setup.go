@@ -14,14 +14,18 @@ import (
 
 func SetupUserGroup(api *gin.RouterGroup, cfg *config.Config, db *gorm.DB) {
 	userRepo := repositories.NewUserRepository(*db)
-	userUseCase := usecases.NewUserUseCase(userRepo)
+	submissionRepo := repositories.NewSubmissionRepository(db)
 
-	userController := controllers.NewUserController(userUseCase)
+	userUseCase := usecases.NewUserUseCase(userRepo)
+	submissionUseCase := usecases.NewSubmissionUseCase(submissionRepo)
+
+	userController := controllers.NewUserController(userUseCase, submissionUseCase)
 
 	api.GET("", userController.GetAllUsers)
 	api.POST("", userController.CreateUser)
 
 	api.GET("/:id", userController.GetUserByID)
+	api.GET("/:id/submissions", userController.GetUserSubmissions)
 
 	api.PUT("/:id", userController.UpdateUser)
 	api.DELETE("/:id", userController.DeleteUser)
@@ -30,6 +34,5 @@ func SetupUserGroup(api *gin.RouterGroup, cfg *config.Config, db *gorm.DB) {
 	api.GET("/users/group/:group_id", userController.GetUsersByGroup)
 
 	api.POST("/users/:id/avatar", userController.UploadUserImage)
-
 
 }

@@ -140,7 +140,8 @@ type UserRepository interface {
 	DeleteUser(ctx context.Context, id int) error
 	CreateUsers(ctx context.Context, users []User) ([]User, error)
 	GetUsersByGroup(ctx context.Context, groupID int) ([]User, error)
-	UpdateAvatar(ctx context.Context, ids []int, avatorURL string) error
+	UpdateAvatar(ctx context.Context, userIDs []int, imageURL string) error
+	GetUserSubmissions(ctx context.Context, userID int) ([]Submission, float64, int64, error)
 }
 
 type UserUseCase interface {
@@ -151,5 +152,6 @@ type UserUseCase interface {
 	DeleteUser(ctx context.Context, id int) error
 	CreateUsers(ctx context.Context, users []User) ([]User, error)
 	GetUsersByGroup(ctx context.Context, groupID int) ([]User, error)
-	UpdateAvatar(ctx context.Context, userID int, avatarURL string) error
+	UpdateAvatar(ctx context.Context, userID int, imageURL string) error
+	GetUserSubmissions(ctx context.Context, userID int) ([]Submission, float64, int64, error)
 }

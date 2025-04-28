@@ -13,15 +13,16 @@ import (
 )
 
 type UserController struct {
-	UserUseCase domain.UserUseCase
+	UserUseCase       domain.UserUseCase
+	SubmissionUseCase domain.SubmissionUseCase
 }
 
-func NewUserController(uuc domain.UserUseCase) *UserController {
+func NewUserController(useCase domain.UserUseCase, submissionUseCase domain.SubmissionUseCase) *UserController {
 	return &UserController{
-		UserUseCase: uuc,
+		UserUseCase:       useCase,
+		SubmissionUseCase: submissionUseCase,
 	}
 }
-
 
 func (uc *UserController) GetAllUsers(c *gin.Context) {
 	users, err := uc.UserUseCase.GetAllUsers(c.Request.Context())
@@ -194,7 +195,6 @@ func (uc *UserController) GetUsersByGroup(c *gin.Context) {
 	})
 }
 
-
 func (uc UserController) UploadUserImage(c *gin.Context) {
 	userID := c.Param("id")
 
@@ -225,5 +225,35 @@ func (uc UserController) UploadUserImage(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message":   "Image uploaded and user avatar updated successfully",
 		"image_url": imageURL,
+	})
+}
+
+func (uc *UserController) GetUserSubmissions(c *gin.Context) {
+	userID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: "Invalid user ID", Status: 400})
+		return
+	}
+
+	submissions, totalSolved, totalTimeSpent, err := uc.UserUseCase.GetUserSubmissions(c.Request.Context(), userID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error(), Status: 500})
+		return
+	}
+
+	type SubmissionStats struct {
+		Submissions    []domain.Submission `json:"submissions"`
+		TotalSolved    float64             `json:"total_solved"`
+		TotalTimeSpent int64               `json:"total_time_spent"`
+	}
+
+	c.JSON(http.StatusOK, domain.SuccessResponse{
+		Message: "User submissions retrieved successfully",
+		Data: SubmissionStats{
+			Submissions:    submissions,
+			TotalSolved:    totalSolved,
+			TotalTimeSpent: totalTimeSpent,
+		},
+		Status: 200,
 	})
 }

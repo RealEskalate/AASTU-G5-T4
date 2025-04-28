@@ -10,11 +10,15 @@ import (
 )
 
 type ContestController struct {
-	useCase domain.ContestUseCase
+	useCase     domain.ContestUseCase
+	userUseCase domain.UserUseCase
 }
 
-func NewContestController(useCase domain.ContestUseCase) *ContestController {
-	return &ContestController{useCase: useCase}
+func NewContestController(useCase domain.ContestUseCase, userUseCase domain.UserUseCase) *ContestController {
+	return &ContestController{
+		useCase:     useCase,
+		userUseCase: userUseCase,
+	}
 }
 
 func (cc *ContestController) GetAllContests(c *gin.Context) {
@@ -33,6 +37,13 @@ func (cc *ContestController) GetAllContests(c *gin.Context) {
 		return
 	}
 
+	// Get all users
+	users, err := cc.userUseCase.GetAllUsers(c.Request.Context())
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: "Failed to fetch users", Status: 500})
+		return
+	}
+
 	extractHandle := func(codeforcesURL string) string {
 		if codeforcesURL == "" {
 			return ""
@@ -44,16 +55,18 @@ func (cc *ContestController) GetAllContests(c *gin.Context) {
 		return ""
 	}
 
-	type ProblemResult struct {
-		Points                    float64 `json:"points"`
-		RejectedAttemptCount      int     `json:"rejectedAttemptCount"`
-		Type                      string  `json:"type"`
-		BestSubmissionTimeSeconds int     `json:"bestSubmissionTimeSeconds"`
-	}
-
 	type Member struct {
 		Handle string `json:"handle"`
 		ID     int    `json:"-"`
+	}
+
+	type Row struct {
+		Party struct {
+			Members []Member `json:"members"`
+		} `json:"party"`
+		Rank    int `json:"rank"`
+		Penalty int `json:"penalty"`
+		Rating  int `json:"rating"`
 	}
 
 	type ContestResponse struct {
@@ -64,20 +77,7 @@ func (cc *ContestController) GetAllContests(c *gin.Context) {
 				Name string `json:"name"`
 				Type string `json:"type"`
 			} `json:"contest"`
-			Problems []struct {
-				Index string   `json:"index"`
-				Name  string   `json:"name"`
-				Tags  []string `json:"tags"`
-			} `json:"problems"`
-			Rows []struct {
-				Party struct {
-					Members []Member `json:"members"`
-				} `json:"party"`
-				Rank           int             `json:"rank"`
-				Points         float64         `json:"points"`
-				Penalty        int             `json:"penalty"`
-				ProblemResults []ProblemResult `json:"problemResults"`
-			} `json:"rows"`
+			Rows []Row `json:"rows"`
 		} `json:"result"`
 	}
 
@@ -89,16 +89,10 @@ func (cc *ContestController) GetAllContests(c *gin.Context) {
 		contestResp.Result.Contest.Name = contest.Name
 		contestResp.Result.Contest.Type = contest.Type
 
-		contestResp.Result.Problems = []struct {
-			Index string   `json:"index"`
-			Name  string   `json:"name"`
-			Tags  []string `json:"tags"`
-		}{
-			{Index: "A", Name: "Problem A", Tags: []string{}},
-			{Index: "B", Name: "Problem B", Tags: []string{}},
-			{Index: "C", Name: "Problem C", Tags: []string{}},
-		}
+		// Map to track seen handles and their best rating
+		seenHandles := make(map[string]Row)
 
+		// Process existing ratings
 		for _, rating := range contest.Ratings {
 			if rating.User.Codeforces == "" {
 				continue
@@ -109,30 +103,7 @@ func (cc *ContestController) GetAllContests(c *gin.Context) {
 				continue
 			}
 
-			problemResults := make([]ProblemResult, len(contestResp.Result.Problems))
-			for i := range problemResults {
-				problemResults[i] = ProblemResult{
-					Points:                    0,
-					RejectedAttemptCount:      0,
-					Type:                      "FINAL",
-					BestSubmissionTimeSeconds: 0,
-				}
-			}
-
-			if rating.Rank == 1 {
-				problemResults[0].Points = 1
-				problemResults[0].BestSubmissionTimeSeconds = 2147483647
-			}
-
-			row := struct {
-				Party struct {
-					Members []Member `json:"members"`
-				} `json:"party"`
-				Rank           int             `json:"rank"`
-				Points         float64         `json:"points"`
-				Penalty        int             `json:"penalty"`
-				ProblemResults []ProblemResult `json:"problemResults"`
-			}{
+			row := Row{
 				Party: struct {
 					Members []Member `json:"members"`
 				}{
@@ -143,11 +114,46 @@ func (cc *ContestController) GetAllContests(c *gin.Context) {
 						},
 					},
 				},
-				Rank:           rating.Rank,
-				Points:         float64(rating.Points),
-				Penalty:        rating.Penalty,
-				ProblemResults: problemResults,
+				Rank:    rating.Rank,
+				Penalty: rating.Penalty,
+				Rating:  rating.Points,
 			}
+
+			// Keep the row with the best rank for each handle
+			if existingRow, exists := seenHandles[handle]; !exists || row.Rank < existingRow.Rank {
+				seenHandles[handle] = row
+			}
+		}
+
+		// Add missing users with default values
+		for _, user := range users {
+			handle := extractHandle(user.Codeforces)
+			if handle == "" {
+				continue
+			}
+
+			if _, exists := seenHandles[handle]; !exists {
+				row := Row{
+					Party: struct {
+						Members []Member `json:"members"`
+					}{
+						Members: []Member{
+							{
+								Handle: handle,
+								ID:     user.ID,
+							},
+						},
+					},
+					Rank:    0,
+					Penalty: 0,
+					Rating:  0,
+				}
+				seenHandles[handle] = row
+			}
+		}
+
+		// Convert map to slice
+		for _, row := range seenHandles {
 			contestResp.Result.Rows = append(contestResp.Result.Rows, row)
 		}
 
@@ -187,13 +193,17 @@ func (cc *ContestController) AddContest(ctx *gin.Context) {
 		return
 	}
 
-	contestID, err := cc.useCase.AddContest(ctx.Request.Context(), req.Name, req.Link)
+	contest := &domain.Contest{
+		Name:   req.Name,
+		Link:   req.Link,
+		Rating: 1,
+	}
 
-	if err != nil {
+	if err := cc.useCase.AddContest(ctx.Request.Context(), contest); err != nil {
 		ctx.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusCreated, map[string]int{"contest_id": contestID})
+	ctx.JSON(http.StatusCreated, map[string]int{"contest_id": contest.ID})
 }
 
 func (cc *ContestController) GetStandings(c *gin.Context) {
@@ -211,6 +221,56 @@ func (cc *ContestController) GetStandings(c *gin.Context) {
 
 	c.JSON(http.StatusOK, domain.SuccessResponse{
 		Message: "Standings retrieved successfully",
+		Data:    standings,
+		Status:  200,
+	})
+}
+
+func (cc *ContestController) SaveStandings(c *gin.Context) {
+	contestID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: "Invalid contest ID", Status: 400})
+		return
+	}
+
+	var standings domain.StandingsResponse
+	if err := c.ShouldBindJSON(&standings); err != nil {
+		c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: "Invalid standings data", Status: 400})
+		return
+	}
+
+	if err := cc.useCase.SaveStandings(c.Request.Context(), contestID, &standings); err != nil {
+		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error(), Status: 500})
+		return
+	}
+
+	c.JSON(http.StatusOK, domain.SuccessResponse{
+		Message: "Standings saved successfully",
+		Data:    standings,
+		Status:  200,
+	})
+}
+
+func (cc *ContestController) RefreshStandings(c *gin.Context) {
+	contestID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: "Invalid contest ID", Status: 400})
+		return
+	}
+
+	if err := cc.useCase.ClearStandingsCache(c.Request.Context(), contestID); err != nil {
+		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error(), Status: 500})
+		return
+	}
+
+	standings, err := cc.useCase.GetStandings(c.Request.Context(), contestID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error(), Status: 500})
+		return
+	}
+
+	c.JSON(http.StatusOK, domain.SuccessResponse{
+		Message: "Standings refreshed successfully",
 		Data:    standings,
 		Status:  200,
 	})
