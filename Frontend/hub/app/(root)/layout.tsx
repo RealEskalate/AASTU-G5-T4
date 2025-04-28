@@ -1,29 +1,30 @@
 import type React from "react"
-import { Inter } from "next/font/google"
+import { Sidebar } from "@/components/layout/sidebar"
+import { Navbar } from "@/components/layout/navbar"
 import { ThemeProvider } from "@/components/theme/theme-provider"
 import { SettingsPanel } from "@/components/theme/settings-panel"
 import { SettingsToggle } from "@/components/theme/settings-toggle"
 import { ReduxProvider } from "@/lib/redux/provider"
-import { Navbar } from "@/components/layout/navbar"
-import { Sidebar } from "@/components/layout/sidebar"
 
-const inter = Inter({ subsets: ["latin"] })
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <ReduxProvider>
       <ThemeProvider>
-        <div className={inter.className} style={{ display: "flex", minHeight: "100vh" }}>
-          <aside style={{ width: "250px", flexShrink: 0, backgroundColor: "#f8f9fa" }}>
-            <Sidebar className="w-64 flex-shrink-0" />
-          </aside>
-          <main style={{ flexGrow: 1, padding: "20px" }}>
+        <div className={`flex min-h-screen `}>
+          {/* Desktop sidebar - hidden on mobile */}
+          <div className="hidden md:block w-[220px] shrink-0">
+            <Sidebar />
+          </div>
+
+          {/* Main content area */}
+          <div className="flex-1 flex flex-col min-h-screen">
             <Navbar />
-            {children}
-          </main>
-          <SettingsPanel />
-          <SettingsToggle />
+            <main className="flex-1 overflow-auto bg-slate-50 dark:bg-slate-900">{children}</main>
+          </div>
         </div>
+        <SettingsToggle />
+        <SettingsPanel />
       </ThemeProvider>
     </ReduxProvider>
   )
