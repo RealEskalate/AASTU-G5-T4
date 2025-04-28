@@ -70,7 +70,24 @@ export const problemApiSlice = baseApiSlice.injectEndpoints({
       },
       providesTags: (result, error, id) => [{ type: "Problem", id }],
     }),
+
+    getProblemsByTags: builder.query<Record<string, Problem[]>, void>({
+      query: () => "/problem",
+      transformResponse: (response: any) => {
+        console.log("Raw API response for problems by tags:", response);
+
+        // Transform response to group problems by tags
+        const problems = Array.isArray(response) ? response : response.data || [];
+        return problems.reduce((acc: Record<string, Problem[]>, problem: Problem) => {
+          const tag = problem.Tag || "Uncategorized";
+          if (!acc[tag]) acc[tag] = [];
+          acc[tag].push(problem);
+          return acc;
+        }, {});
+      },
+      providesTags: ["Problem"],
+    }),
   }),
 })
 
-export const { useGetProblemsQuery, useGetProblemByIdQuery } = problemApiSlice
+export const { useGetProblemsQuery, useGetProblemByIdQuery, useGetProblemsByTagsQuery } = problemApiSlice

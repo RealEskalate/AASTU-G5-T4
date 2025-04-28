@@ -10,68 +10,7 @@ import { UserGridView } from "@/components/users/user-grid-view"
 import { UserListView } from "@/components/users/user-list-view"
 import { CountryCard } from "@/components/users/country-card"
 import { GroupList } from "@/components/groups/group-list"
-import { useGetCountriesQuery } from "@/lib/redux/api/countryApiSlice"
-
-// Mock data for users
-const usersData = [
-  {
-    id: "1",
-    name: "Asegid Shegaw",
-    group: "G5D",
-    problems: 355,
-    submissions: 389,
-    dedicatedTime: "9.24k",
-    image: "/images/profile-pic.png",
-  },
-  {
-    id: "2",
-    name: "Sifan Fita Hika",
-    group: "G52",
-    problems: 334,
-    submissions: 337,
-    dedicatedTime: "8.73k",
-    image: "/images/profile-pic.png",
-  },
-  {
-    id: "3",
-    name: "Eyasu Getaneh",
-    group: "G63",
-    problems: 231,
-    submissions: 243,
-    dedicatedTime: "4.74k",
-    image: "/images/profile-pic.png",
-  },
-  {
-    id: "4",
-    name: "Yigerem Bisrat Yemata",
-    group: "G56",
-    problems: 466,
-    submissions: 470,
-    dedicatedTime: "14.29k",
-    rating: 1400,
-    image: "/images/profile-pic.png",
-  },
-  {
-    id: "5",
-    name: "Tinsae Tadesse Anteneh",
-    group: "G56",
-    problems: 461,
-    submissions: 465,
-    dedicatedTime: "10.96k",
-    rating: 1400,
-    image: "/images/profile-pic.png",
-  },
-  {
-    id: "6",
-    name: "Melkishi Tesfaye Angassa",
-    group: "G56",
-    problems: 448,
-    submissions: 450,
-    dedicatedTime: "11.11k",
-    rating: 1400,
-    image: "/images/profile-pic.png",
-  },
-]
+import { useGetUsersQuery } from "@/lib/redux/api/userApiSlice"
 
 // Mock data for groups
 const groupsData = [
@@ -136,48 +75,7 @@ const countriesData = [
     avgRating: "1,407",
     flag: "/images/flags/ethiopia.png",
     expanded: false,
-    users: [
-      {
-        id: "e1",
-        name: "Abel Gebeyehu",
-        problems: 571,
-        timeSpent: "12,112",
-        rating: "2,284",
-        image: "/images/profile-pic.png",
-      },
-      {
-        id: "e2",
-        name: "Kenenisa Alemayehu",
-        problems: 156,
-        timeSpent: "3,050",
-        rating: "2,256",
-        image: "/images/profile-pic.png",
-      },
-      {
-        id: "e3",
-        name: "Abel Ayalew",
-        problems: 106,
-        timeSpent: "1,747",
-        rating: "2,168",
-        image: "/images/profile-pic.png",
-      },
-      {
-        id: "e4",
-        name: "Kibrnew Gedamu",
-        problems: 465,
-        timeSpent: "13,212",
-        rating: "2,150",
-        image: "/images/profile-pic.png",
-      },
-      {
-        id: "e5",
-        name: "Eba Adisu Kenga",
-        problems: 495,
-        timeSpent: "10,815",
-        rating: "2,118",
-        image: "/images/profile-pic.png",
-      },
-    ],
+    users: [],
   },
   {
     id: "sudan",
@@ -210,8 +108,8 @@ export default function UsersPage() {
   const [expandedCountries, setExpandedCountries] = useState<Record<string, boolean>>({})
   const { colorPreset, theme } = useTheme()
 
-  // Fetch countries from the API
-  const { data: countries, isLoading: isLoadingCountries, error: countriesError } = useGetCountriesQuery()
+  // Fetch users data
+  const { data: users, isLoading: isLoadingUsers, error: usersError } = useGetUsersQuery()
 
   const toggleCountryExpansion = (countryId: string) => {
     setExpandedCountries((prev) => ({
@@ -220,7 +118,8 @@ export default function UsersPage() {
     }))
   }
 
-  const filteredUsers = usersData.filter((user) => user.name.toLowerCase().includes(searchQuery.toLowerCase()))
+  // Filter users based on search query
+  const filteredUsers = users?.filter((user) => user.name.toLowerCase().includes(searchQuery.toLowerCase())) || []
 
   return (
     <div className="p-4 md:p-6 w-full">
@@ -308,7 +207,11 @@ export default function UsersPage() {
             </div>
           </div>
 
-          {viewMode === "grid" ? <UserGridView users={filteredUsers} /> : <UserListView users={filteredUsers} />}
+          {viewMode === "grid" ? (
+            <UserGridView users={filteredUsers} isLoading={isLoadingUsers} />
+          ) : (
+            <UserListView users={filteredUsers} isLoading={isLoadingUsers} />
+          )}
         </TabsContent>
 
         <TabsContent value="groups" className="mt-0">
@@ -317,46 +220,14 @@ export default function UsersPage() {
 
         <TabsContent value="countries" className="mt-0">
           <div className="space-y-6">
-            {isLoadingCountries ? (
-              <div>Loading countries...</div>
-            ) : countriesError ? (
-              <div>Error loading countries. Please try again later.</div>
-            ) : (
-              countries.map((country) => (
-                <CountryCard
-                  key={country.ID}
-                  country={{
-                    id: country.ID.toString(),
-                    name: country.Name,
-                    members: Math.floor(Math.random() * 1000), // Random member count
-                    problemsSolved: Math.floor(Math.random() * 5000).toString(), // Random problems solved
-                    timeSpent: Math.floor(Math.random() * 10000).toString(), // Random time spent
-                    avgRating: (Math.random() * 1000 + 1000).toFixed(0), // Random average rating
-                    flag: `/images/flags/${country.ShortCode.toLowerCase()}.png`,
-                    users: [
-                      {
-                        id: "dummy1",
-                        name: "Dummy User 1",
-                        problems: 100,
-                        timeSpent: "10h",
-                        rating: "1500",
-                        image: "/images/profile-pic.png",
-                      },
-                      {
-                        id: "dummy2",
-                        name: "Dummy User 2",
-                        problems: 200,
-                        timeSpent: "20h",
-                        rating: "1600",
-                        image: "/images/profile-pic.png",
-                      },
-                    ], // Dummy users for expanded data
-                  }}
-                  isExpanded={!!expandedCountries[country.ID]}
-                  onToggle={() => toggleCountryExpansion(country.ID.toString())}
-                />
-              ))
-            )}
+            {countriesData.map((country) => (
+              <CountryCard
+                key={country.id}
+                country={country}
+                isExpanded={!!expandedCountries[country.id]}
+                onToggle={() => toggleCountryExpansion(country.id)}
+              />
+            ))}
           </div>
         </TabsContent>
       </Tabs>

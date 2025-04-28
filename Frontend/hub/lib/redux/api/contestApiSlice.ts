@@ -1,20 +1,16 @@
-import { baseApiSlice } from "./baseApiSlice"
-import type { Contest, ContestsResponse, BaseResponse } from "./types"
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 
-export const contestApiSlice = baseApiSlice.injectEndpoints({
+export const contestApi = createApi({
+  reducerPath: "contestApi",
+  baseQuery: fetchBaseQuery({ baseUrl: "https://a2sv-hub-52ak.onrender.com/api/v0" }),
   endpoints: (builder) => ({
-    getContests: builder.query<Contest[], void>({
+    getContests: builder.query<any, void>({
       query: () => "/contest",
-      transformResponse: (response: ContestsResponse) => response.contests || [],
-      providesTags: ["Contest"],
     }),
-
-    getContestById: builder.query<Contest, number>({
+    getContestById: builder.query<any, number>({
       query: (id) => `/contest/${id}`,
-      transformResponse: (response: BaseResponse<Contest>) => response.data as Contest,
-      providesTags: (result, error, id) => [{ type: "Contest", id }],
     }),
   }),
 })
 
-export const { useGetContestsQuery, useGetContestByIdQuery } = contestApiSlice
+export const { useGetContestsQuery, useGetContestByIdQuery } = contestApi

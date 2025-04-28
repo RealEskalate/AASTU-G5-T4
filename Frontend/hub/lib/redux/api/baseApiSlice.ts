@@ -13,6 +13,18 @@ export const baseApiSlice = createApi({
     },
     credentials: "omit", // Don't send cookies with the request
   }),
-  tagTypes: ["Problem", "Track", "User", "Group", "Country", "Submission", "Contest", "SuperGroup", "Role", "Invite"],
+  tagTypes: [
+    "Problem",
+    "Track",
+    "User",
+    "Group",
+    "Country",
+    "Submission",
+    "Contest",
+    "SuperGroup",
+    "Role",
+    "Invite",
+    "Session",
+  ],
   endpoints: () => ({}),
 })
