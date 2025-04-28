@@ -1,12 +1,9 @@
 "use client"
-
-import Link from "next/link"
-import Image from "next/image"
 import { Bell, Search, Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useState, useRef, useEffect } from "react"
 import { MobileSidebar } from "@/components/layout/mobile-sidebar"
-import { cn } from "@/lib/utils"
+import { ProfileDropdown } from "@/components/layout/profile-dropdown"
 
 interface NavbarProps {
   notificationCount?: number
@@ -16,6 +13,7 @@ export function Navbar({ notificationCount = 0 }: NavbarProps) {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const searchRef = useRef<HTMLDivElement | null>(null)
 
+  // Handle clicks outside of the search bar
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
@@ -33,19 +31,21 @@ export function Navbar({ notificationCount = 0 }: NavbarProps) {
   }, [isSearchOpen])
 
   return (
-    <header className="h-16 border-b bg-white dark:bg-slate-900 dark:border-slate-800 flex items-center px-6 sticky top-0 z-30">
-      <div className="flex items-center gap-6 w-full">
+    <header className="h-14 border-b bg-white dark:bg-slate-900 dark:border-slate-800 flex items-center px-4 sticky top-0 z-30">
+      <div className="flex items-center gap-4 w-full">
+        {/* Mobile Sidebar Toggle */}
         <MobileSidebar />
 
+        {/* Search Overlay with Smooth Transition */}
         {isSearchOpen && (
           <div
             ref={searchRef}
-            className="absolute top-0 left-0 w-full h-16 bg-white dark:bg-slate-900 p-4 px-12 z-50 flex items-center justify-between shadow-md transition-all duration-300 border-b border-slate-200 dark:border-slate-700"
+            className="absolute top-0 left-0 w-full h-14 bg-white dark:bg-slate-900 p-3 px-10 z-50 flex items-center justify-between shadow-md transition-all duration-300"
           >
-            <Search className="h-5 w-5 text-slate-400" />
+            <Search className="h-4 w-4 text-slate-400" />
             <input
               type="text"
-              className="w-full px-4 py-2 bg-transparent text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none border border-slate-300 dark:border-slate-600 rounded-md"
+              className="w-full px-4 py-2 bg-transparent text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none"
               placeholder="Search..."
             />
             <Button onClick={() => setIsSearchOpen(false)} className="ml-3 bg-green-500 hover:bg-green-600 text-white">
@@ -54,45 +54,37 @@ export function Navbar({ notificationCount = 0 }: NavbarProps) {
           </div>
         )}
 
-        <div className="flex-1 max-w-lg">
+        {/* Search button */}
+        <div className="flex-1 max-w-md">
           <Button
             variant="ghost"
             onClick={() => setIsSearchOpen(true)}
             className="flex items-center gap-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300"
           >
-            <Search className="h-5 w-5" />
+            <Search className="h-4 w-4" />
             <span className="hidden md:inline">Search...</span>
           </Button>
         </div>
 
-        <div className="ml-auto flex items-center gap-6">
-          <Button variant="ghost" size="icon" className="h-10 w-10 text-yellow-500">
-            <Star className="h-6 w-6" />
+        {/* Right side items */}
+        <div className="ml-auto flex items-center gap-4">
+          {/* Star button */}
+          <Button variant="ghost" size="icon" className="h-9 w-9 text-yellow-500">
+            <Star className="h-5 w-5" />
           </Button>
 
-          <Button variant="ghost" size="icon" className="relative h-10 w-10">
-            <Bell className="h-6 w-6" />
+          {/* Notifications */}
+          <Button variant="ghost" size="icon" className="relative h-9 w-9">
+            <Bell className="h-5 w-5" />
             {notificationCount > 0 && (
-              <span
-                className={cn(
-                  "absolute top-0 right-0 h-5 w-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center",
-                  notificationCount > 0 && "animate-pulse"
-                )}
-              >
+              <span className="absolute top-0 right-0 h-4 w-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
                 {notificationCount > 9 ? "9+" : notificationCount}
               </span>
             )}
           </Button>
 
-          <Link href="/profile" className="h-10 w-10 rounded-full bg-slate-200 overflow-hidden hover:ring-2 ring-theme transition-all">
-            <Image
-              src="/images/profile-pic.png"
-              alt="User"
-              width={40}
-              height={40}
-              className="h-full w-full object-cover"
-            />
-          </Link>
+          {/* User profile dropdown */}
+          <ProfileDropdown />
         </div>
       </div>
     </header>
