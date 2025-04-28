@@ -144,16 +144,6 @@
   @apply left-auto right-0 border-l border-r-0;
 }
 
-[dir="rtl"] .main-content {
-  @apply ml-0 mr-[220px];
-}
-
-@media (max-width: 768px) {
-  [dir="rtl"] .main-content {
-    @apply mr-0;
-  }
-}
-
 /* Theme color application */
 .bg-theme {
   background-color: hsl(var(--theme-color));
@@ -190,4 +180,11 @@
   margin-left: auto;
   margin-right: auto;
   transition: width 0.3s ease, max-width 0.3s ease;
+}
+
+/* Ensure content doesn't shift */
+.fixed-width-container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
 }

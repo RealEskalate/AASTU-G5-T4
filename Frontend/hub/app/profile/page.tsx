@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { MapPin, Mail, Code, Users, Building, ArrowUp, ArrowDown } from "lucide-react"
@@ -10,6 +10,8 @@ import { ConsistencyCalendar } from "@/components/consistency-calendar"
 import { ProfileLinks } from "@/components/profile-links"
 import { DataTable, DifficultyBadge, ExternalLinkButton } from "@/components/data-table"
 import { useTheme } from "@/components/theme/theme-provider"
+import { useGetProblemsQuery } from "@/lib/redux/api/problemApiSlice" // Import the hook
+import { useGetSubmissionsQuery } from "@/lib/redux/api/submissionApiSlice" // Import the hook
 
 // Mock data for attendance
 const generateMockAttendanceData = () => {
@@ -26,7 +28,7 @@ const generateMockAttendanceData = () => {
     data.push({
       date: `${day} ${month}`,
       time: `${hour}:${minute.toString().padStart(2, "0")} ${ampm}`,
-      status: Math.random() > 0.98 ? "absent" : Math.random() > 0.95 ? "excused" : "present" as "absent" | "excused" | "present",
+      status: Math.random() > 0.98 ? "absent" : Math.random() > 0.95 ? "excused" : "present",
     })
   }
 
@@ -51,97 +53,73 @@ export default function Profile() {
   ]
 
   // Mock data for problems tab
-  const problemsData = [
+  const { data: problems, isLoading: isLoadingProblems, error: problemsError } = useGetProblemsQuery()
+  const [submissions, setSubmissions] = useState([])
+
+  // Fetch submissions for all problem IDs
+  useEffect(() => {
+    if (!problems || problems.length === 0) {
+      setSubmissions([])
+      return
+    }
+
+    const fetchSubmissions = async () => {
+      const allSubmissions = []
+      for (const problem of problems) {
+        try {
+          const response = await fetch(
+            `https://a2sv-hub-52ak.onrender.com/api/v0/submission/problem?problemID=${problem.ID}`
+          )
+          const data = await response.json()
+          if (data?.submissions && Array.isArray(data.submissions)) {
+            const mappedSubmissions = data.submissions.map((submission) => ({
+              problemName: problem.Name,
+              language: submission.Language || "N/A",
+              timeSpent: submission.TimeSpent || "N/A",
+              added: submission.CreatedAt ? new Date(submission.CreatedAt).toLocaleString() : "N/A",
+            }))
+            allSubmissions.push(...mappedSubmissions)
+          }
+        } catch (error) {
+          console.warn(`Skipping problem ID ${problem.ID} due to error or no submissions.`)
+        }
+      }
+      setSubmissions(allSubmissions)
+    }
+
+    fetchSubmissions()
+  }, [problems])
+
+  const submissionsColumns = [
     {
-      difficulty: "Easy",
-      name: "Insertion Sort",
-      tag: "Sorting",
-      solved: "-",
-      added: "1y",
-      vote: 1,
-      link: "#",
+      key: "problemName",
+      title: "Problem Name",
     },
     {
-      difficulty: "Easy",
-      name: "Sorting the Sentence",
-      tag: "Sorting",
-      solved: "-",
-      added: "1y",
-      vote: 6,
-      link: "#",
+      key: "language",
+      title: "Language",
     },
     {
-      difficulty: "Easy",
-      name: "How Many Numbers Are Smaller Than the Current Number",
-      tag: "Array, Hash Table",
-      solved: "-",
-      added: "1y",
-      vote: 0,
-      link: "#",
+      key: "timeSpent",
+      title: "Time Spent (mins)",
+      align: "right" as const,
     },
     {
-      difficulty: "Easy",
-      name: "Find Target Indices After Sorting Array",
-      tag: "Sorting",
-      solved: "-",
-      added: "1y",
-      vote: 3,
-      link: "#",
-    },
-    {
-      difficulty: "Medium",
-      name: "Sort Colors",
-      tag: "Sorting",
-      solved: "-",
-      added: "1y",
-      vote: 2,
-      link: "#",
+      key: "added",
+      title: "Added",
+      align: "right" as const,
     },
   ]
 
-  // Mock data for submissions tab
-  const submissionsData = [
-    {
-      name: "F-OR Encryption",
-      time_spent: 8,
-      tries: 1,
-      language: "Python",
-      in_contest: 1,
-      added: "2mo",
-    },
-    {
-      name: "My Calendar I",
-      time_spent: 19,
-      tries: 3,
-      language: "Python",
-      in_contest: 0,
-      added: "5mo",
-    },
-    {
-      name: "Reach a Number",
-      time_spent: 45,
-      tries: 2,
-      language: "Python",
-      in_contest: 0,
-      added: "5mo",
-    },
-    {
-      name: "Set Matrix Zeroes",
-      time_spent: 11,
-      tries: 2,
-      language: "Python",
-      in_contest: 0,
-      added: "5mo",
-    },
-    {
-      name: "Number of Good Leaf Nodes Pairs",
-      time_spent: 19,
-      tries: 1,
-      language: "Python",
-      in_contest: 0,
-      added: "5mo",
-    },
-  ]
+  const problemsData = problems
+    ? problems.map((problem) => ({
+        difficulty: problem.Difficulty.toLowerCase(),
+        name: problem.Name,
+        tag: problem.Tag,
+        platform: problem.Platform,
+        link: problem.Link,
+      }))
+    : []
 
   // Mock data for contests
   const contestsData = [
@@ -204,39 +182,6 @@ export default function Profile() {
       title: "Link",
       align: "right" as const,
       render: (value: string) => <ExternalLinkButton href={value} />,
-    },
-  ]
-
-  // Column definitions for submissions tab
-  const submissionsColumns = [
-    {
-      key: "name",
-      title: "Name",
-    },
-    {
-      key: "time_spent",
-      title: "Time spent",
-      align: "right" as const,
-    },
-    {
-      key: "tries",
-      title: "Tries",
-      align: "center" as const,
-    },
-    {
-      key: "language",
-      title: "Language",
-      align: "right" as const,
-    },
-    {
-      key: "in_contest",
-      title: "In contest",
-      align: "right" as const,
-    },
-    {
-      key: "added",
-      title: "Added",
-      align: "right" as const,
     },
   ]
 
@@ -430,7 +375,11 @@ export default function Profile() {
               </Button>
             </div>
           </div>
-          <DataTable columns={problemsColumns} data={problemsData} />
+          {isLoadingProblems ? (
+            <div className="text-center text-slate-500 dark:text-slate-400">Loading problems...</div>
+          ) : (
+            <DataTable columns={problemsColumns} data={problemsData} />
+          )}
         </div>
       )}
 
@@ -450,7 +399,15 @@ export default function Profile() {
               </Button>
             </div>
           </div>
-          <DataTable columns={submissionsColumns} data={submissionsData} />
+          {isLoadingProblems ? (
+            <div className="text-center text-slate-500 dark:text-slate-400">Loading problems...</div>
+          ) : problemsError ? (
+            <div className="text-center text-red-500">Error loading problems. Please try again later.</div>
+          ) : submissions.length > 0 ? (
+            <DataTable columns={submissionsColumns} data={submissions} />
+          ) : (
+            <div className="text-center text-slate-500 dark:text-slate-400">No submissions available.</div>
+          )}
         </div>
       )}
 

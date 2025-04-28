@@ -199,13 +199,12 @@ export function SettingsPanel() {
 
         <div className="mb-6">
           <h3 className="text-sm font-medium mb-4 dark:text-white">Stretch</h3>
-          <div className="flex gap-4 justify-center border dark:border-slate-700 rounded-lg p-2 cursor-pointer">
-            <div className="flex-1 flex items-center justify-center" onClick={() => handleStretchChange("decrease")}>
-              <span className="text-lg dark:text-white">&lt;</span>
-            </div>
-            <div className="flex-1 flex items-center justify-center" onClick={() => handleStretchChange("increase")}>
-              <span className="text-lg dark:text-white">&gt;</span>
-            </div>
+          <div
+            className="flex gap-4 justify-center border dark:border-slate-700 rounded-lg p-2 cursor-pointer"
+            onClick={() => handleStretchChange("increase")}
+          >
+            <span className="text-lg dark:text-white">&lt;</span>
+            <span className="text-lg dark:text-white">&gt;</span>
           </div>
           <div className="mt-2 text-center text-xs text-slate-500 dark:text-slate-400">
             Stretch Level: {stretchLevel}

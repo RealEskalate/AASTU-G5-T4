@@ -23,6 +23,7 @@ const nextConfig = {
     unoptimized: true,
   },
   experimental: {
+    appDir: true, // Ensure app directory is enabled
     webpackBuildWorker: true,
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
