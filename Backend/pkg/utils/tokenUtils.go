@@ -9,18 +9,18 @@ import (
 )
 
 type TokenService struct {
-    config config.Config
+	config config.Config
 }
 
 func NewTokenService(config config.Config) *TokenService {
-    return &TokenService{
-        config: config,
-    }
+	return &TokenService{
+		config: config,
+	}
 }
 
-
-func (t *TokenService) GenerateInviteAccessToken(userId int, roleId int) (string, error) {
+func (t *TokenService) GenerateAccessToken(userID int, roleID int) (string, error) {
 	claims := jwt.MapClaims{
+
 		"sub":     userId,                        
 		"role_id": roleId,                     
 		"iat":     time.Now().Unix(),
@@ -31,7 +31,20 @@ func (t *TokenService) GenerateInviteAccessToken(userId int, roleId int) (string
 	if err != nil {
 		return "", err
 	}
+	return tokenString, nil
+}
 
+func (t *TokenService) GenerateRefreshToken(userID int) (string, error) {
+	claims := jwt.MapClaims{
+		"sub": userID,
+		"iat": time.Now().Unix(),
+		"exp": time.Now().Add(time.Hour * 24 * 7).Unix(), // 7 days expiry
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	tokenString, err := token.SignedString([]byte(t.config.JWTSecret))
+	if err != nil {
+		return "", err
+	}
 	return tokenString, nil
 }
 
@@ -40,7 +53,7 @@ func (t *TokenService) VerifyJWT(tokenString string) (int, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
-		return []byte(t.config.JWTSecret) , nil
+		return []byte(t.config.JWTSecret), nil
 	})
 
 	if err != nil {
@@ -56,13 +69,21 @@ func (t *TokenService) VerifyJWT(tokenString string) (int, error) {
 		return 0, fmt.Errorf("invalid claims format")
 	}
 
-	userId, ok := claims["sub"].(float64)
+	userID, ok := claims["sub"].(float64)
 	if !ok {
 		return 0, fmt.Errorf("missing or invalid userId in token")
-	}	
+	}
 
-	return int(userId), nil
+	return int(userID), nil
 }
 
+func (ts *TokenService) GenerateInviteAccessToken(userID int, roleID int) (string, error) {
+	claims := jwt.MapClaims{
+		"user_id": userID,
+		"role_id": roleID,
+		"exp":     time.Now().Add(time.Hour * 24).Unix(), 
+	}
 
-
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	return token.SignedString([]byte(ts.config.JWTSecret))
+}

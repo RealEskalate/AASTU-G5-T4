@@ -142,6 +142,7 @@ type UserRepository interface {
 	GetUsersByGroup(ctx context.Context, groupID int) ([]User, error)
 	UpdateAvatar(ctx context.Context, userIDs []int, imageURL string) error
 	GetUserSubmissions(ctx context.Context, userID int) ([]Submission, float64, int64, error)
+	GetUserByEmail(ctx context.Context, email string) (User, error)
 }
 
 type UserUseCase interface {
