@@ -136,12 +136,11 @@ func (r *UserRepository) CountUsersByCountry(ctx context.Context, countryID int)
 		Count(&count).Error
 	return int(count), err
 
-
+}
 func (r *UserRepository) GetUserSubmissions(ctx context.Context, userID int) ([]domain.Submission, float64, int64, error) {
 	var submissions []domain.Submission
 	var totalTimeSpent int64
 
-	
 	if err := r.db.WithContext(ctx).
 		Where("user_id = ?", userID).
 		Find(&submissions).Error; err != nil {
