@@ -41,21 +41,6 @@ type Attendance struct {
 	Session   Session   `gorm:"foreignKey:SessionID"`
 }
 
-type Stipend struct {
-	ID        int       `gorm:"primaryKey"`
-	FundID    int       `gorm:"type:integer"`
-	UserID    int       `gorm:"type:integer"`
-	Paid      bool      `gorm:"default:false"`
-	CreatedAt time.Time `gorm:"type:timestamp"`
-	UpdatedAt time.Time `gorm:"type:timestamp"`
-	SessionID int       `gorm:"type:integer"`
-	Share     float32   `gorm:"type:real"`
-	Fund      Fund      `gorm:"foreignKey:FundID"`
-	User      User      `gorm:"foreignKey:UserID"`
-	Session   Session   `gorm:"foreignKey:SessionID"`
-}
-
-
 // session usecase
 
 type SessionUseCase interface {
@@ -64,7 +49,7 @@ type SessionUseCase interface {
 	CreateSession(session dtos.CreateSessionDTOS) (*dtos.SessionDTOS, *ErrorResponse)
 	UpdateSession(id string, session dtos.UpdateSessionDTOS) (*dtos.SessionDTOS, *ErrorResponse)
 	DeleteSession(id string) *ErrorResponse
-	GetSessionByLecturer(lecturer_id int) (*dtos.SessionDTOS, *ErrorResponse) 
+	GetSessionByLecturer(lecturer_id int) (*dtos.SessionDTOS, *ErrorResponse)
 }
 
 type SessionRepository interface {
@@ -78,11 +63,10 @@ type SessionRepository interface {
 	DeleteSession(session *Session) error
 }
 
-
 type AttendanceUseCase interface {
 	TakeAttendance(attendance dtos.CreateAttendanceDTOS) (*dtos.AttendanceDTOS, *ErrorResponse)
 	TakeMassAttendance(attendances dtos.CreateMassAttendanceDTOS) ([]dtos.AttendanceDTOS, *ErrorResponse)
-	GetAllAttendances(filters map[string]interface{}) ([]dtos.AttendanceDTOS, *ErrorResponse) 
+	GetAllAttendances(filters map[string]interface{}) ([]dtos.AttendanceDTOS, *ErrorResponse)
 	GetAttendanceByID(id string) (*dtos.AttendanceDTOS, *ErrorResponse)
 	UpdateAttendance(id string, attendance dtos.UpdateAttendanceDTOS) (*dtos.AttendanceDTOS, *ErrorResponse)
 	DeleteAttendance(id string) *ErrorResponse
@@ -95,5 +79,5 @@ type AttendanceRepository interface {
 	GetAllAttendances(filters map[string]interface{}) ([]Attendance, error)
 	GetAttendanceByID(id string) (*Attendance, error)
 	UpdateAttendance(attendance *Attendance) error
-	DeleteAttendance(attendance *Attendance) error 
+	DeleteAttendance(attendance *Attendance) error
 }
