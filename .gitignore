@@ -1,2 +1,3 @@
-.env
 *.sum
+config.bat
+node_modules

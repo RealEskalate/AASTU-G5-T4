@@ -50,3 +50,19 @@ type ProblemUseCase interface {
 	DeleteProblem(ctx context.Context, id int) error
 	GetProblemsByNameAndFilters(ctx context.Context, name string, filter map[string]interface{}) ([]Problem, error)
 }
+
+type DailyProblemRepository interface {
+	CreateDailyProblem(ctx context.Context, dailyProblem DailyProblem) (DailyProblem, error)
+	GetDailyProblemByID(ctx context.Context, id int) (DailyProblem, error)
+	GetDailyProblemsByDate(ctx context.Context, date string) ([]DailyProblem, error)
+	UpdateDailyProblem(ctx context.Context, dailyProblem DailyProblem) error
+	DeleteDailyProblem(ctx context.Context, id int) error
+}
+
+type DailyProblemUseCase interface {
+    CreateDailyProblem(ctx context.Context, dailyProblem DailyProblem) (DailyProblem, error)
+    GetDailyProblemByID(ctx context.Context, id int) (DailyProblem, error)
+    GetDailyProblemsByDate(ctx context.Context, date string) ([]DailyProblem, error)
+    UpdateDailyProblem(ctx context.Context, id int, dailyProblem DailyProblem) error
+    DeleteDailyProblem(ctx context.Context, id int) error
+}
