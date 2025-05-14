@@ -13,7 +13,7 @@ import (
 func SetupAttendanceGroup(attendanceRoute *gin.RouterGroup, db *gorm.DB) {
 	attendanceRepository := repositories.NewAttendanceRepository(db, context.TODO())
 	sessionRepository := repositories.NewSessionRepository(db, context.TODO())
-	userRepository := repositories.NewUserRepository(*db)
+	userRepository := repositories.NewUserRepository(db)
 	attendanceUseCase := usecases.NewAttendanceUseCase(attendanceRepository, sessionRepository, userRepository, context.TODO())
 	attendanceController := controllers.NewAttendanceController(attendanceUseCase)
 
