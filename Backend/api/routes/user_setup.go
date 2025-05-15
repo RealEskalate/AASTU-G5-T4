@@ -7,12 +7,14 @@ import (
 	"A2SVHUB/internal/repositories"
 	"A2SVHUB/internal/usecases"
 	"A2SVHUB/pkg/config"
+	"A2SVHUB/pkg/middleware"
+	"A2SVHUB/pkg/utils"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
-func SetupUserGroup(api *gin.RouterGroup, cfg *config.Config, db *gorm.DB) {
+func SetupUserGroup(api *gin.RouterGroup, cfg *config.Config, db *gorm.DB, tokenService *utils.TokenService) {
 	userRepo := repositories.NewUserRepository(db)
 	submissionRepo := repositories.NewSubmissionRepository(db)
 
@@ -20,6 +22,10 @@ func SetupUserGroup(api *gin.RouterGroup, cfg *config.Config, db *gorm.DB) {
 	submissionUseCase := usecases.NewSubmissionUseCase(submissionRepo)
 
 	userController := controllers.NewUserController(userUseCase, submissionUseCase)
+
+	// Middleware
+	authMiddleware := middleware.AuthMiddleware(tokenService)
+	api.Use(authMiddleware)
 
 	api.GET("", userController.GetAllUsers)
 	api.POST("", userController.CreateUser)
