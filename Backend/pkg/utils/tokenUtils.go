@@ -21,8 +21,8 @@ func NewTokenService(config config.Config) *TokenService {
 func (t *TokenService) GenerateAccessToken(userID int, roleID int) (string, error) {
 	claims := jwt.MapClaims{
 
-		"sub":     userId,                        
-		"role_id": roleId,                     
+		"sub":     userID,                        
+		"role_id": roleID,                     
 		"iat":     time.Now().Unix(),
 		"exp":     time.Now().Add(time.Hour * 24 * 10).Unix(),             
 	}
